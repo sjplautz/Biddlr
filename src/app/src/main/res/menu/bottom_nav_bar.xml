@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/itemHome"
+        android:enabled="true"
+        android:icon="@drawable/baseline_home_24"
+        android:title="@string/strHome"
+        android:visible="true" />
+    <item
+        android:id="@+id/itemExplore"
+        android:enabled="true"
+        android:icon="@drawable/baseline_search_24"
+        android:title="@string/strExplore"
+        android:visible="true" />
+    <item
+        android:id="@+id/itemMyJobs"
+        android:enabled="true"
+        android:icon="@drawable/baseline_build_24"
+        android:title="@string/strMyJobs"
+        android:visible="true" />
+    <item
+        android:id="@+id/itemProfile"
+        android:icon="@drawable/baseline_person_24"
+        android:title="@string/strProfile" />
+    <item
+        android:id="@+id/itemMessages"
+        android:icon="@drawable/baseline_message_24"
+        android:title="@string/strMessages" />
+</menu>

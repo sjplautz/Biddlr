@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Biddlr</string>
+    <string name="strLogin">Login</string>
+    <string name="strHome">Home</string>
+    <string name="strMyJobs">My Jobs</string>
+    <string name="strExplore">Explore</string>
+    <string name="strProfile">Profile</string>
+    <string name="strMessages">Messages</string>
 </resources>
