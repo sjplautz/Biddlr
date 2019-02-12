@@ -12,18 +12,18 @@ public class Job {
     private String title;
     private String description;
     private int posterID;
-    private int selectedBidderID;
+    private Integer selectedBidderID;
     private String photoURL;
     private String location;
     private Date expirationDate;
     private double startingPrice;
-    private double currentBid;
-    private Dictionary<int, double> bids; // <bidderID, bidValue>
+    private Double currentBid;
+    private Dictionary<Integer, Double> bids; // <bidderID, bidValue>
 
     // Initializers
     public Job(int jobID, String title, String description, int posterID, int selectedBidderID,
                String photoURL, String location, Date expirationDate, JobStatus status, double startingPrice,
-               double currentBid, Dictionary<int, double> bids) {
+               double currentBid, Dictionary<Integer, Double> bids) {
         this.jobID = jobID;
         this.status = status;
         this.title = title;
@@ -99,7 +99,7 @@ public class Job {
         return this.currentBid;
     }
 
-    public Map<int, double> getBids() {
+    public Dictionary<Integer, Double> getBids() {
         return this.bids;
     }
 
