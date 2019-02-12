@@ -1,6 +1,7 @@
 package classes;
 
 import java.util.Date;
+import java.util.Dictionary;
 
 import enums.JobStatus;
 
@@ -17,12 +18,12 @@ public class Job {
     private Date expirationDate;
     private double startingPrice;
     private double currentBid;
-    private Map<int, double> bids; // <bidderID, bidValue>
+    private Dictionary<int, double> bids; // <bidderID, bidValue>
 
     // Initializers
     public Job(int jobID, String title, String description, int posterID, int selectedBidderID,
                String photoURL, String location, Date expirationDate, JobStatus status, double startingPrice,
-               double currentBid, Map<int, double> bids) {
+               double currentBid, Dictionary<int, double> bids) {
         this.jobID = jobID;
         this.status = status;
         this.title = title;
@@ -102,6 +103,19 @@ public class Job {
         return this.bids;
     }
 
+    // Modifiers
+    public void updateJobStatus(JobStatus status) {
+        this.status = status;
+    }
 
+
+    public void setSelectedBidder(int bidderID) {
+        this.selectedBidderID = bidderID;
+    }
+
+    public void addBid(int bidderId, double bid) {
+        this.bids.put(bidderId, bid);
+        this.currentBid = bid < this.currentBid ? bid : this.currentBid;
+    }
 
 }
