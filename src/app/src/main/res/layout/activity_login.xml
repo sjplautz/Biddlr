@@ -6,50 +6,88 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+
+
     <EditText
         android:id="@+id/txtUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
-        android:layout_marginLeft="84dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="160dp"
         android:layout_marginEnd="85dp"
-        android:layout_marginRight="85dp"
         android:ems="10"
+        android:hint="@string/prompt_email"
         android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="prompt_email" />
+
 
     <EditText
         android:id="@+id/txtPassword"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
         android:layout_marginStart="85dp"
-        android:layout_marginLeft="85dp"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginRight="84dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="85dp"
         android:ems="10"
+        android:hint="@string/prompt_password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/txtUsername"
+        android:autofillHints="prompt_password"/>
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
+        style="?android:textAppearanceSmall"
+        android:layout_width="256dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginLeft="148dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginRight="148dp"
-        android:layout_marginBottom="221dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="180dp"
         android:text="@string/strLogin"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPassword"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/btnCreateUser"
+        style="?android:textAppearanceSmall"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="130dp"
+        android:text="@string/strCreateUser"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/btnForgetPass"
+        style="?android:textAppearanceSmall"
+        android:layout_width="155dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="76dp"
+        android:text="@string/strForgetPass"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/btnCreateUser"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+
+
+
 
 </android.support.constraint.ConstraintLayout>

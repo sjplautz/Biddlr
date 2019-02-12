@@ -1,9 +1,17 @@
 <resources>
-    <string name="app_name">Biddlr</string>
+    <string name="app_name">BIDDLR</string>
     <string name="strLogin">Login</string>
     <string name="strHome">Home</string>
     <string name="strMyJobs">My Jobs</string>
     <string name="strExplore">Explore</string>
     <string name="strProfile">Profile</string>
     <string name="strMessages">Messages</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="strCreateUser">Create User</string>
+    <string name="strForgetPass">Forget Password</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
