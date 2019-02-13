@@ -26,7 +26,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         Fragment mapFragment = new MapFragment();
         FragmentTransaction trans = getChildFragmentManager().beginTransaction();
-        trans.add(R.id.mapView, mapFragment).commit();
+        //FIXME Causes issues when API Key doesn't exist
+//        trans.add(R.id.mapView, mapFragment).commit();
 
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
