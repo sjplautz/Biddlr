@@ -22,7 +22,7 @@ public class Job implements Parcelable {
     private Date expirationDate;
     private Double startingPrice;
     private Double currentBid;
-    private HashMap<Integer, Double> bids; //Dictionary<Integer, Double> bids; // <bidderID, bidValue>
+    private HashMap<Integer, Double> bids;  // <bidderID, bidValue>
 
     // Initializers
     public Job(int jobID, String title, String description, int posterID, int selectedBidderID,
@@ -80,20 +80,6 @@ public class Job implements Parcelable {
         dest.writeSerializable(this.bids);
     }
 
-//                writeStringArray(new String[] {
-//                this.jobID.toString(),
-//                Integer.toString(this.status.ordinal()),
-//                this.title,
-//                this.description,
-//                this.posterID.toString(),
-//                this.selectedBidderID.toString(),
-//                this.photoURL,
-//                this.location,
-//                this.expirationDate.toString(),
-//                this.startingPrice.toString(),
-//                this.currentBid.toString(),
-//                this.bids.toString()})
-
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public Job createFromParcel(Parcel in) {
             return new Job(in);
@@ -104,10 +90,6 @@ public class Job implements Parcelable {
     };
 
     public Job(Parcel src){
-//        String[] data = new String[12];
-
-//        in.readStringArray(data);
-        // the order needs to be the same as in writeToParcel() method
         this.jobID = src.readInt();
         this.status = JobStatus.values()[src.readInt()];
         this.title = src.readString();
@@ -124,7 +106,7 @@ public class Job implements Parcelable {
 
 
     // Accessors
-    public int getJobID() {
+    public Integer getJobID() {
         return this.jobID;
     }
 
@@ -140,11 +122,11 @@ public class Job implements Parcelable {
         return this.description;
     }
 
-    public int getPosterID() {
+    public Integer getPosterID() {
         return this.posterID;
     }
 
-    public int getSelectedBidderID() {
+    public Integer getSelectedBidderID() {
         return this.selectedBidderID;
     }
 
@@ -160,12 +142,12 @@ public class Job implements Parcelable {
         return this.expirationDate;
     }
 
-    public double getStartingPrice() {
+    public Double getStartingPrice() {
         return this.startingPrice;
     }
 
-    public double getCurrentBid() {
-        return this.currentBid;
+    public Double getCurrentBid() {
+        return this.currentBid == null ? 0 : this.currentBid;
     }
 
     public HashMap<Integer, Double> getBids() {
