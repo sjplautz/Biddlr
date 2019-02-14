@@ -42,7 +42,7 @@
         android:layout_alignLeft="@+id/imgJobPic"
         android:layout_alignTop="@+id/txtJobTitle"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="57dp"
+        android:layout_marginLeft="66dp"
         android:layout_marginTop="26dp"
         android:textSize="10sp" />
 
@@ -52,8 +52,28 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/imgJobPic"
         android:layout_alignTop="@+id/txtLocation"
-        android:layout_marginLeft="56dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginLeft="66dp"
+        android:layout_marginTop="14dp"
         android:textSize="10sp" />
+
+    <ImageView
+        android:id="@+id/imgLocation"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignLeft="@+id/imgJobPic"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="27dp"
+        app:srcCompat="@drawable/baseline_place_24" />
+
+    <ImageView
+        android:id="@+id/imgTime"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignLeft="@+id/imgJobPic"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="40dp"
+        app:srcCompat="@drawable/baseline_schedule_24" />
 
 </RelativeLayout>
