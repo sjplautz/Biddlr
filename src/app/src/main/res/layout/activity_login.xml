@@ -7,7 +7,6 @@
     tools:context=".LoginActivity">
 
 
-
     <EditText
         android:id="@+id/txtUsername"
         android:layout_width="wrap_content"
@@ -15,14 +14,14 @@
         android:layout_marginStart="85dp"
         android:layout_marginTop="160dp"
         android:layout_marginEnd="85dp"
+        android:autofillHints="prompt_email"
         android:ems="10"
         android:hint="@string/prompt_email"
-        android:inputType="none"
+        android:inputType="none|textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="prompt_email" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <EditText
@@ -46,41 +45,40 @@
         style="?android:textAppearanceSmall"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="85dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="80dp"
-        android:layout_marginBottom="180dp"
+        android:accessibilityHeading="false"
+        android:backgroundTint="@color/colorPrimary"
         android:text="@string/strLogin"
+        android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 
     <Button
         android:id="@+id/btnCreateUser"
         style="?android:textAppearanceSmall"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="130dp"
+        android:layout_marginStart="68dp"
+        android:backgroundTint="@color/colorPrimary"
         android:text="@string/strCreateUser"
+        android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     <Button
         android:id="@+id/btnForgetPass"
         style="?android:textAppearanceSmall"
         android:layout_width="155dp"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="76dp"
+        android:backgroundTint="@color/colorPrimary"
         android:text="@string/strForgetPass"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

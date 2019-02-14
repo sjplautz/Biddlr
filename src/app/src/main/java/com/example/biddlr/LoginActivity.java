@@ -21,5 +21,16 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(nextScreen, 0);
             }
         });
+
+
+
+            Button btnCreateUser = findViewById(R.id.btnCreateUser);
+            btnCreateUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent nextScreen = new Intent(v.getContext(), CreateUserActivity.class);
+                   startActivityForResult(nextScreen, 0);
+             }
+            });
     }
 }
