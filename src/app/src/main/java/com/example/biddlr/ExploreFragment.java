@@ -1,6 +1,7 @@
 package com.example.biddlr;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,12 +17,10 @@ import classes.Job;
 
 public class ExploreFragment extends Fragment {
     private List<Job> jobList;
-    private RecyclerView recycler;
     private JobListAdapter adapter;
 
     public static ExploreFragment newInstance() {
-        ExploreFragment fragment = new ExploreFragment();
-        return fragment;
+        return new ExploreFragment();
     }
 
     @Override
@@ -30,16 +29,25 @@ public class ExploreFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //FIXME jobList should be instantiated elsewhere
         jobList = new ArrayList<>();
+
+        //Get view
         View v = inflater.inflate(R.layout.fragment_explore, container, false);
 
         adapter = new JobListAdapter(jobList);
-        recycler = v.findViewById(R.id.listJob);
+        RecyclerView recycler = v.findViewById(R.id.listJob);
+
+        //TODO determine if LinearLayout is the right way to do this
+        //How does the layout manager work with the RecyclerView
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
         recycler.setLayoutManager(manager);
+
+        //TODO do we care about the ItemAnimator?
         recycler.setItemAnimator(new DefaultItemAnimator());
+
         recycler.setAdapter(adapter);
 
         prepareSampleData();
