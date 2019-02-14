@@ -5,6 +5,10 @@ import java.util.Dictionary;
 
 import enums.JobStatus;
 
+//TODO need to add a way for bids to be associated with an ID,
+//once a bid is selected, the job needs to be able to call getSelectedBidderID
+//this will not work as currently constructed. We may consider adding a bid object
+
 public class Job {
 
     private int jobID;
