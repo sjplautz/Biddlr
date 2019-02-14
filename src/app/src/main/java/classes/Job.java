@@ -1,33 +1,33 @@
 package classes;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.HashMap;
 
 import enums.JobStatus;
 
-//TODO need to add a way for bids to be associated with an ID,
-//once a bid is selected, the job needs to be able to call getSelectedBidderID
-//this will not work as currently constructed. We may consider adding a bid object
+public class Job implements Parcelable {
 
-public class Job {
-
-    private int jobID;
+    private Integer jobID;
     private JobStatus status;
     private String title;
     private String description;
-    private int posterID;
+    private Integer posterID;
     private Integer selectedBidderID;
     private String photoURL;
     private String location;
     private Date expirationDate;
-    private double startingPrice;
+    private Double startingPrice;
     private Double currentBid;
-    private Dictionary<Integer, Double> bids; // <bidderID, bidValue>
+    private HashMap<Integer, Double> bids; //Dictionary<Integer, Double> bids; // <bidderID, bidValue>
 
     // Initializers
     public Job(int jobID, String title, String description, int posterID, int selectedBidderID,
                String photoURL, String location, Date expirationDate, JobStatus status, double startingPrice,
-               double currentBid, Dictionary<Integer, Double> bids) {
+               double currentBid, HashMap<Integer, Double> bids) {
         this.jobID = jobID;
         this.status = status;
         this.title = title;
@@ -57,6 +57,71 @@ public class Job {
         this.currentBid = null;
         this.bids = null;
     }
+
+    // Parcable
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.jobID);
+        dest.writeInt(this.status.ordinal());
+        dest.writeString(this.title);
+        dest.writeString(this.description);
+        dest.writeInt(this.posterID);
+        dest.writeInt(this.selectedBidderID);
+        dest.writeString(this.photoURL);
+        dest.writeString(this.location);
+        dest.writeLong(this.expirationDate.getTime());
+        dest.writeDouble(this.startingPrice);
+        dest.writeDouble(this.currentBid);
+        dest.writeSerializable(this.bids);
+    }
+
+//                writeStringArray(new String[] {
+//                this.jobID.toString(),
+//                Integer.toString(this.status.ordinal()),
+//                this.title,
+//                this.description,
+//                this.posterID.toString(),
+//                this.selectedBidderID.toString(),
+//                this.photoURL,
+//                this.location,
+//                this.expirationDate.toString(),
+//                this.startingPrice.toString(),
+//                this.currentBid.toString(),
+//                this.bids.toString()})
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Job createFromParcel(Parcel in) {
+            return new Job(in);
+        }
+        public Job[] newArray(int size) {
+            return new Job[size];
+        }
+    };
+
+    public Job(Parcel src){
+//        String[] data = new String[12];
+
+//        in.readStringArray(data);
+        // the order needs to be the same as in writeToParcel() method
+        this.jobID = src.readInt();
+        this.status = JobStatus.values()[src.readInt()];
+        this.title = src.readString();
+        this.description = src.readString();
+        this.posterID = src.readInt();
+        this.selectedBidderID = src.readInt();
+        this.photoURL = src.readString();
+        this.location = src.readString();
+        this.expirationDate = new Date(src.readLong());
+        this.startingPrice = src.readDouble();
+        this.currentBid = src.readDouble();
+        this.bids = (HashMap<Integer, Double>) src.readSerializable();
+    }
+
 
     // Accessors
     public int getJobID() {
@@ -103,7 +168,7 @@ public class Job {
         return this.currentBid;
     }
 
-    public Dictionary<Integer, Double> getBids() {
+    public HashMap<Integer, Double> getBids() {
         return this.bids;
     }
 
