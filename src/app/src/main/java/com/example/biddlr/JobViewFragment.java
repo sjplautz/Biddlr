@@ -17,11 +17,6 @@ public class JobViewFragment extends Fragment {
     private static final String JOB_FRAGMENT_KEY = "job_fragment_key";
     private Job job;
 
-    public static JobViewFragment newInstance() {
-        JobViewFragment fragment = new JobViewFragment();
-        return fragment;
-    }
-
     public static JobViewFragment newInstance(Job job) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(JOB_FRAGMENT_KEY, job);
@@ -40,8 +35,20 @@ public class JobViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         job = getArguments().getParcelable(JOB_FRAGMENT_KEY);
         View v = inflater.inflate(R.layout.fragment_job_view, container, false);
+
         TextView txtJobTitle = (TextView) v.findViewById(R.id.txtJobTitle);
         txtJobTitle.setText(job.getTitle());
+
+        TextView txtJobDescription = (TextView) v.findViewById(R.id.txtJobDescription);
+        txtJobDescription.setText(job.getDescription());
+
+        TextView txtJobAskingPrice = (TextView) v.findViewById(R.id.txtJobAskingPrice);
+        String start = "$" + job.getStartingPrice();
+        txtJobAskingPrice.setText(start);
+
+        TextView txtJobCurrentBid = (TextView) v.findViewById(R.id.txtJobCurrentBid);
+        String current = "$" + job.getCurrentBid();
+        txtJobCurrentBid.setText(current);
 
         return v;
     }
