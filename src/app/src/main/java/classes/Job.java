@@ -1,29 +1,33 @@
 package classes;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.HashMap;
 
 import enums.JobStatus;
 
-public class Job {
+public class Job implements Parcelable {
 
-    private int jobID;
+    private Integer jobID;
     private JobStatus status;
     private String title;
     private String description;
-    private int posterID;
+    private Integer posterID;
     private Integer selectedBidderID;
     private String photoURL;
     private String location;
     private Date expirationDate;
-    private double startingPrice;
+    private Double startingPrice;
     private Double currentBid;
-    private Dictionary<Integer, Double> bids; // <bidderID, bidValue>
+    private HashMap<Integer, Double> bids;  // <bidderID, bidValue>
 
     // Initializers
     public Job(int jobID, String title, String description, int posterID, int selectedBidderID,
                String photoURL, String location, Date expirationDate, JobStatus status, double startingPrice,
-               double currentBid, Dictionary<Integer, Double> bids) {
+               double currentBid, HashMap<Integer, Double> bids) {
         this.jobID = jobID;
         this.status = status;
         this.title = title;
@@ -54,8 +58,55 @@ public class Job {
         this.bids = null;
     }
 
+    // Parcable
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.jobID);
+        dest.writeInt(this.status.ordinal());
+        dest.writeString(this.title);
+        dest.writeString(this.description);
+        dest.writeInt(this.posterID);
+        dest.writeInt(this.selectedBidderID);
+        dest.writeString(this.photoURL);
+        dest.writeString(this.location);
+        dest.writeLong(this.expirationDate.getTime());
+        dest.writeDouble(this.startingPrice);
+        dest.writeDouble(this.currentBid);
+        dest.writeSerializable(this.bids);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Job createFromParcel(Parcel in) {
+            return new Job(in);
+        }
+        public Job[] newArray(int size) {
+            return new Job[size];
+        }
+    };
+
+    public Job(Parcel src){
+        this.jobID = src.readInt();
+        this.status = JobStatus.values()[src.readInt()];
+        this.title = src.readString();
+        this.description = src.readString();
+        this.posterID = src.readInt();
+        this.selectedBidderID = src.readInt();
+        this.photoURL = src.readString();
+        this.location = src.readString();
+        this.expirationDate = new Date(src.readLong());
+        this.startingPrice = src.readDouble();
+        this.currentBid = src.readDouble();
+        this.bids = (HashMap<Integer, Double>) src.readSerializable();
+    }
+
+
     // Accessors
-    public int getJobID() {
+    public Integer getJobID() {
         return this.jobID;
     }
 
@@ -71,11 +122,11 @@ public class Job {
         return this.description;
     }
 
-    public int getPosterID() {
+    public Integer getPosterID() {
         return this.posterID;
     }
 
-    public int getSelectedBidderID() {
+    public Integer getSelectedBidderID() {
         return this.selectedBidderID;
     }
 
@@ -91,15 +142,15 @@ public class Job {
         return this.expirationDate;
     }
 
-    public double getStartingPrice() {
+    public Double getStartingPrice() {
         return this.startingPrice;
     }
 
-    public double getCurrentBid() {
-        return this.currentBid;
+    public Double getCurrentBid() {
+        return this.currentBid == null ? 0 : this.currentBid;
     }
 
-    public Dictionary<Integer, Double> getBids() {
+    public HashMap<Integer, Double> getBids() {
         return this.bids;
     }
 

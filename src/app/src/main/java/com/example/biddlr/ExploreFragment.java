@@ -36,7 +36,7 @@ public class ExploreFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_explore, container, false);
 
         adapter = new JobListAdapter(jobList);
-        recycler = v.findViewById(R.id.listJob);
+        recycler = v.findViewById(R.id.exploreRecycler);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
         recycler.setLayoutManager(manager);
         recycler.setItemAnimator(new DefaultItemAnimator());
