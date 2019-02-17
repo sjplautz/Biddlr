@@ -66,7 +66,7 @@ public class ExploreFragment extends Fragment {
     }
 
     private void prepareSampleData() {
-        Job j1 = new Job(0, "This is the first job", null, 0, "job1", "123 Main St.", LocalDateTime.now().plusHours(1), 20.0);
+        Job j1 = new Job(0, "This is the first job", "Hello. I posted a job here. Take a look if you please.", 0, "job1", "123 Main St.", LocalDateTime.now().plusHours(1), 20.0);
         jobList.add(j1);
 
         Job j2 = new Job(0, "This is the second job", null, 0, "job2", null, LocalDateTime.now().plusHours(1), 999.0);
