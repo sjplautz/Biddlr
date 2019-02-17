@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import classes.Job;
@@ -40,7 +41,7 @@ public class JobViewFragment extends Fragment {
         txtJobTitle.setText(job.getTitle());
 
         TextView txtJobDescription = (TextView) v.findViewById(R.id.txtJobDescription);
-        txtJobDescription.setText(job.getFormattedExpirationDate());
+        txtJobDescription.setText(job.getDescription());
 
         TextView txtJobAskingPrice = (TextView) v.findViewById(R.id.txtJobAskingPrice);
         String start = "$" + job.getStartingPrice();
@@ -49,6 +50,8 @@ public class JobViewFragment extends Fragment {
         TextView txtJobCurrentBid = (TextView) v.findViewById(R.id.txtJobCurrentBid);
         String current = "$" + job.getCurrentBid();
         txtJobCurrentBid.setText(current);
+
+        ImageView imgProfile = (ImageView) v.findViewById(R.id.imgProfile);
 
         return v;
     }
