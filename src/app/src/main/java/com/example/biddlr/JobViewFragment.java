@@ -40,7 +40,7 @@ public class JobViewFragment extends Fragment {
         txtJobTitle.setText(job.getTitle());
 
         TextView txtJobDescription = (TextView) v.findViewById(R.id.txtJobDescription);
-        txtJobDescription.setText(job.getDescription());
+        txtJobDescription.setText(job.getFormattedExpirationDate());
 
         TextView txtJobAskingPrice = (TextView) v.findViewById(R.id.txtJobAskingPrice);
         String start = "$" + job.getStartingPrice();

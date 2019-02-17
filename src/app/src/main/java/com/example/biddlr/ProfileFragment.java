@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -42,7 +45,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showJobView() {
-        Date date = new Date(2019, 2, 12);
+        LocalDateTime date = LocalDateTime.of(2019,2,20,8,0);
         Job tempJob = new Job(0, "Wash Windows", "I need someone to wash the windows outside my building.",
                 1, "thisisaphotoURL", "123 Main Stree Tuscaloosa, AL", date, 20.0);
         Fragment jobViewFrag = JobViewFragment.newInstance(tempJob);
