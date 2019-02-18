@@ -59,6 +59,7 @@ public class HomeFragment extends Fragment {
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
                 trans.replace(R.id.frameNull, jobFrag);
+                trans.addToBackStack(null);
                 trans.commit();
             }
 
