@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import classes.DatabaseManager;
+
 public class HomeActivity extends AppCompatActivity {
     BottomNavigationView nav;
 
@@ -23,6 +25,9 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Set up dummy database
+        DatabaseManager.setUp();
 
         nav = findViewById(R.id.menuNav);
         nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

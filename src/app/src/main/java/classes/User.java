@@ -2,6 +2,7 @@ package classes;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class User {
 
@@ -35,6 +36,21 @@ public class User {
         this.postedJobs = postedJobs;
         this.activeJobs = activeJobs;
         this.completedJobs = completedJobs;
+    }
+
+    public User(Integer userID, String password, String firstName, String lastName) {
+        this.userID = userID;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = null;
+        this.bio = null;
+        this.profilePic = null;
+        this.bidderRating = null;
+        this.posterRating = null;
+        this.postedJobs = null;
+        this.activeJobs = null;
+        this.completedJobs = null;
     }
 
     // Accessors
