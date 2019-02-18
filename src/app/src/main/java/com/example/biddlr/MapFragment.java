@@ -104,12 +104,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         //gets the devices location and sets the map view to be centered on the location returned
         getDeviceLocation();
-
-        /*
-        //centering the starting map view on user's location
-        CameraPosition CurrentLocation = CameraPosition.builder().target(new LatLng(latitude, longitude)).zoom(DEFAULT_ZOOM).bearing(0).tilt(40).build();
-        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(CurrentLocation));
-        */
     }
 
     //requests location permissions at runtime
