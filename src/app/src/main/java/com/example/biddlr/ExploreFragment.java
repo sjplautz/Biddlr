@@ -40,11 +40,11 @@ public class ExploreFragment extends Fragment {
 
         adapter = new JobListAdapter(jobList);
         recycler = v.findViewById(R.id.exploreRecycler);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext().getApplicationContext());
         recycler.setLayoutManager(manager);
         recycler.setItemAnimator(new DefaultItemAnimator());
         recycler.setAdapter(adapter);
-        recycler.addOnItemTouchListener(new JobListTouchListener(getContext(), recycler, new JobListTouchListener.ClickListener() {
+        recycler.addOnItemTouchListener(new JobListTouchListener(getContext().getApplicationContext(), recycler, new JobListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
                 Job job = jobList.get(pos);
@@ -52,6 +52,7 @@ public class ExploreFragment extends Fragment {
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
                 trans.replace(R.id.frameNull, jobFrag);
+                trans.addToBackStack(null);
                 trans.commit();
             }
 
