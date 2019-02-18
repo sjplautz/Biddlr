@@ -43,6 +43,12 @@ public class JobViewFragment extends Fragment {
         TextView txtJobDescription = (TextView) v.findViewById(R.id.txtJobDescription);
         txtJobDescription.setText(job.getDescription());
 
+        TextView txtJobLocation = (TextView) v.findViewById(R.id.txtJobLocation);
+        txtJobLocation.setText(job.getLocation());
+
+        TextView txtTimeToExpiration = (TextView) v.findViewById(R.id.txtTimeToExpiration);
+        txtTimeToExpiration.setText(job.getFormattedDateFromNow());
+
         TextView txtJobAskingPrice = (TextView) v.findViewById(R.id.txtJobAskingPrice);
         String start = "$" + job.getStartingPrice();
         txtJobAskingPrice.setText(start);
@@ -52,6 +58,10 @@ public class JobViewFragment extends Fragment {
         txtJobCurrentBid.setText(current);
 
         ImageView imgProfile = (ImageView) v.findViewById(R.id.imgProfile);
+        imgProfile.setImageResource(R.drawable.baseline_person_24);
+
+        ImageView imgJob = (ImageView) v.findViewById(R.id.imgJob);
+        imgJob.setImageResource(R.drawable.job1);
 
         return v;
     }
