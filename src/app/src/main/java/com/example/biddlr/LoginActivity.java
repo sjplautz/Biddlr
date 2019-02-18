@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
+//craete pass
         Button btnCreateUser = findViewById(R.id.btnCreateUser);
         btnCreateUser.setOnClickListener(new View.OnClickListener() {
             @Override
