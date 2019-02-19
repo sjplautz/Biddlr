@@ -17,13 +17,20 @@
     <string name="strSubmit">SUBMIT</string>
 
 
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="strJobView">JOB VIEW</string>
     <string name="btnContact">CONTACT</string>
-    <string name="txtJobAskingPrice" >Asking Price:</string>
-    <string name="txtJobCurrentBid" >Current Bid:</string>
+    <string name="txtJobAskingPrice">Asking Price:</string>
+    <string name="txtJobCurrentBid">Current Bid:</string>
     <string name="btnPlaceBid">PLACE A BID</string>
+    <string name="strJobTitle">Job Title</string>
+    <string name="strJobDesc">Job Description</string>
+    <string name="strLocation">Job Location</string>
+    <string name="strDate">Date</string>
+    <string name="strTime">Time</string>
+    <string name="strStartingPrice">Starting Price</string>
+    <string name="strCreateJob">Create Job</string>
+    <string name="exampleBio">This is an example bio. The user will give a short description about their experience or technical knowledge and jobs they are interested in.</string>
 
 </resources>
