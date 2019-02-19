@@ -1,5 +1,6 @@
 package com.example.biddlr;
 
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -52,16 +53,12 @@ public class HomeActivity extends AppCompatActivity {
                         selectedFrag = ExploreFragment.newInstance();
                         tag = "EXPLORE";
                         break;
-                    case R.id.itemMyJobs:
-                        selectedFrag = MyJobsFragment.newInstance();
-                        tag = "MYJOBS";
-                        break;
                     case R.id.itemProfile:
                         selectedFrag = ProfileFragment.newInstance();
                         tag = "PROFILE";
                         break;
                     case R.id.itemMessages:
-                        selectedFrag = ProfileFragment.newInstance();
+                        selectedFrag = MessagesFragment.newInstance();
                         tag = "MESSAGES";
                         break;
                 }

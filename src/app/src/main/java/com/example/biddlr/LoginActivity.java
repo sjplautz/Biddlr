@@ -15,6 +15,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getSupportActionBar().hide();
+
         Button btnLogin = findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void actionLogin() {
-        UtilityInterfaceTools.hideSoftKeyboard(LoginActivity.this);
+        //UtilityInterfaceTools.hideSoftKeyboard(LoginActivity.this);
         EditText txtEmail = findViewById(R.id.txtUsername);
         EditText txtPassword = findViewById(R.id.txtPassword);
 
@@ -62,13 +64,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void actionCreateUser() {
-        UtilityInterfaceTools.hideSoftKeyboard(LoginActivity.this);
+      //  UtilityInterfaceTools.hideSoftKeyboard(LoginActivity.this);
         startActivity(new Intent(LoginActivity.this, CreateUserActivity.class));
        // finish();
     }
 
     private void actionForgetPass() {
-        UtilityInterfaceTools.hideSoftKeyboard(LoginActivity.this);
+      //  UtilityInterfaceTools.hideSoftKeyboard(LoginActivity.this);
         startActivity(new Intent(LoginActivity.this, ForgetPassActivity.class));
        // finish();
     }
