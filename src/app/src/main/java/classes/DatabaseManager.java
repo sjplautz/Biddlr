@@ -36,8 +36,9 @@ public class DatabaseManager {
         return shared.jobs;
     }
 
+    //adds job to front of shared jobs lists
     public void addJob(Job job) {
-        shared.jobs.add(job);
+        shared.jobs.add(0, job);
     }
 
     // Users
