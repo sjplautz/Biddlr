@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BIDDLR</string>
+    <string name="app_name">Biddlr</string>
     <string name="strLogin">Login</string>
     <string name="strHome">Home</string>
     <string name="strMyJobs">My Jobs</string>
@@ -10,11 +10,12 @@
     <string name="prompt_fname">First Name</string>
     <string name="prompt_lname">Last Name</string>
     <string name="prompt_password">Password</string>
-    <string name="strCreateUser">Create User</string>
-    <string name="strForgetPass">Forget Password</string>
+    <string name="strCreateUser">Create Account</string>
+    <string name="strForgetPass">Forgot Password</string>
     <string name="enter_password">Enter Password</string>
     <string name="reenter_password">Re-Enter Password</string>
     <string name="strSubmit">SUBMIT</string>
+    <string name="message_invalid_credentials">Invalid email or password.</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
