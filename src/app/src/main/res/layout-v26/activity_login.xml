@@ -20,7 +20,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnForgetPass"
+        app:layout_constraintTop_toBottomOf="@+id/btnCreateUser"
         app:layout_constraintVertical_bias="0.26"
         app:srcCompat="@drawable/logo" />
 
@@ -82,22 +82,6 @@
         app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 
     <Button
-        android:id="@+id/btnCreateUser"
-        style="?android:textAppearanceSmall"
-        android:layout_width="258dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="75dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="75dp"
-        android:backgroundTint="@color/white"
-        android:text="@string/strCreateUser"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
-
-    <Button
         android:id="@+id/btnForgetPass"
         style="?android:textAppearanceSmall"
         android:layout_width="258dp"
@@ -111,7 +95,23 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCreateUser" />
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+
+    <Button
+        android:id="@+id/btnCreateUser"
+        style="?android:textAppearanceSmall"
+        android:layout_width="258dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="75dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/strCreateUser"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnForgetPass" />
 
 
 </android.support.constraint.ConstraintLayout>
