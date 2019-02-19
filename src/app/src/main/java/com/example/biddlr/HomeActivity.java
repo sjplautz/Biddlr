@@ -27,7 +27,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         // Set up dummy database
-        DatabaseManager.setUp();
+        DatabaseManager.shared.setUp();
+
 
         nav = findViewById(R.id.menuNav);
         nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
