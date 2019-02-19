@@ -25,5 +25,6 @@
     <string name="txtJobAskingPrice" >Asking Price:</string>
     <string name="txtJobCurrentBid" >Current Bid:</string>
     <string name="btnPlaceBid">PLACE A BID</string>
+    <string name="exampleBio">This is an example bio. The user will give a short description about their experience or technical knowledge and jobs they are interested in.</string>
 
 </resources>
