@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import classes.Job;
@@ -28,7 +29,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
             jobPicture = v.findViewById(R.id.imgJobPic);
             jobTitle = v.findViewById(R.id.txtJobTitle);
             jobPrice = v.findViewById(R.id.txtStartingPrice);
-            jobLocation = v.findViewById(R.id.txtLocation);
+            jobLocation = v.findViewById(R.id.txtJobLocation);
             jobTime = v.findViewById(R.id.txtTimeRemaining);
         }
     }

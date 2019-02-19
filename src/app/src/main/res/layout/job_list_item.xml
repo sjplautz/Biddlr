@@ -36,14 +36,14 @@
         android:layout_marginRight="9dp" />
 
     <TextView
-        android:id="@+id/txtLocation"
+        android:id="@+id/txtJobLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/imgJobPic"
         android:layout_alignTop="@+id/txtJobTitle"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="66dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginLeft="74dp"
+        android:layout_marginTop="23dp"
         android:textSize="10sp" />
 
     <TextView
@@ -51,8 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/imgJobPic"
-        android:layout_alignTop="@+id/txtLocation"
-        android:layout_marginLeft="66dp"
+        android:layout_alignTop="@+id/txtJobLocation"
+        android:layout_marginLeft="74dp"
         android:layout_marginTop="14dp"
         android:textSize="10sp" />
 

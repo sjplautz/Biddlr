@@ -150,7 +150,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         Job job = new Job(0, title, desc, 0, "job1", location, LocalDateTime.now().plusHours(2), startingPrice);
-        DatabaseManager.addJob(job);
+        DatabaseManager.shared.addJob(job);
 
         closeDialog();
     }
