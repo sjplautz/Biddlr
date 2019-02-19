@@ -4,35 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".LoginActivity">
 
     <ImageView
         android:id="@+id/imglogo"
-        android:layout_width="139dp"
-        android:layout_height="105dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="100dp"
+        android:layout_width="228dp"
+        android:layout_height="141dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="50dp"
         android:layout_weight="1"
+        android:contentDescription="TODO"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo"
-        android:contentDescription="TODO" />
+
+        app:layout_constraintTop_toBottomOf="@+id/btnForgetPass"
+
+        app:layout_constraintVertical_bias="0.26"
+        app:srcCompat="@drawable/logo" />
 
     <EditText
         android:id="@+id/txtUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="85dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="85dp"
         android:autofillHints="prompt_email"
+        android:backgroundTint="@android:color/background_light"
         android:ems="10"
         android:hint="@string/prompt_email"
-        android:inputType="none|textEmailAddress"
+        android:inputType="textEmailAddress"
+        android:textColor="@android:color/background_light"
+        android:textColorHint="@android:color/background_light"
+        android:textColorLink="@android:color/background_light"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,29 +51,32 @@
         android:layout_width="wrap_content"
         android:layout_height="46dp"
         android:layout_marginStart="85dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="85dp"
+        android:autofillHints="prompt_password"
+        android:backgroundTint="@android:color/background_light"
         android:ems="10"
         android:hint="@string/prompt_password"
         android:inputType="textPassword"
+        android:textColor="@android:color/background_light"
+        android:textColorHint="@android:color/background_light"
+        android:textColorLink="@android:color/background_light"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUsername"
-        android:autofillHints="prompt_password"/>
+        app:layout_constraintTop_toBottomOf="@+id/txtUsername" />
 
     <Button
         android:id="@+id/btnLogin"
         style="?android:textAppearanceSmall"
-        android:layout_width="256dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="75dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="75dp"
         android:accessibilityHeading="false"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@android:color/background_light"
         android:text="@string/strLogin"
-        android:textColor="@color/white"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,32 +85,34 @@
     <Button
         android:id="@+id/btnCreateUser"
         style="?android:textAppearanceSmall"
-        android:layout_width="120dp"
+        android:layout_width="258dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="75dp"
+        android:backgroundTint="@android:color/background_light"
         android:text="@string/strCreateUser"
-        android:textColor="@color/white"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     <Button
         android:id="@+id/btnForgetPass"
         style="?android:textAppearanceSmall"
-        android:layout_width="155dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="76dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:layout_width="258dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="74dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="75dp"
+        android:backgroundTint="@android:color/background_light"
         android:text="@string/strForgetPass"
-        android:textColor="@color/white"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/btnCreateUser"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
-
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCreateUser" />
 
 
 </android.support.constraint.ConstraintLayout>
