@@ -32,5 +32,14 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(nextScreen, 0);
             }
         });
+
+        Button btnForgetPass = findViewById(R.id.btnForgetPass);
+        btnForgetPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent nextScreen = new Intent(v.getContext(), ForgetPassActivity.class);
+                startActivityForResult(nextScreen, 0);
+            }
+        });
     }
 }
