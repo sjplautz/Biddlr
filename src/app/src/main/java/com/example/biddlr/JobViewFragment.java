@@ -9,9 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
+import classes.DatabaseManager;
 import classes.Job;
+import classes.User;
 
 
 public class JobViewFragment extends Fragment {
@@ -56,6 +59,13 @@ public class JobViewFragment extends Fragment {
         TextView txtJobCurrentBid = (TextView) v.findViewById(R.id.txtJobCurrentBid);
         String current = "$" + job.getCurrentBid();
         txtJobCurrentBid.setText(current);
+
+        TextView txtPosterName = (TextView) v.findViewById(R.id.txtPosterName);
+        User poster = DatabaseManager.shared.getUsers().get(0);
+        txtPosterName.setText(poster.getFirstName() + " " + poster.getLastName());
+
+        RatingBar rtgPosterRating = (RatingBar) v.findViewById(R.id.rtgPosterRating);
+        rtgPosterRating.setRating(poster.getPosterRating().floatValue());
 
         ImageView imgProfile = (ImageView) v.findViewById(R.id.imgProfile);
         imgProfile.setImageResource(R.drawable.baseline_person_24);

@@ -34,7 +34,8 @@ public class HomeActivity extends AppCompatActivity {
         bar = getSupportActionBar();
 
         // Set up dummy database
-        DatabaseManager.setUp();
+        DatabaseManager.shared.setUp();
+
 
         nav = findViewById(R.id.menuNav);
         nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

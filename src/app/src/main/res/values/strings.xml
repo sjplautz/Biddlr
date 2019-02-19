@@ -31,5 +31,6 @@
     <string name="strTime">Time</string>
     <string name="strStartingPrice">Starting Price</string>
     <string name="strCreateJob">Create Job</string>
+    <string name="exampleBio">This is an example bio. The user will give a short description about their experience or technical knowledge and jobs they are interested in.</string>
 
 </resources>

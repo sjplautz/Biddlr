@@ -1,10 +1,18 @@
 package classes;
 
+import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.lang.reflect.Array;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class User {
+import enums.JobStatus;
+
+public class User implements Parcelable {
 
     // Properties
     private Integer userID;
@@ -51,6 +59,52 @@ public class User {
         this.postedJobs = null;
         this.activeJobs = null;
         this.completedJobs = null;
+    }
+
+    // Parcable
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.userID);
+        dest.writeString(this.password);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
+        dest.writeString(this.email);
+        dest.writeString(this.bio);
+        dest.writeString(this.profilePic);
+        dest.writeDouble(this.bidderRating);
+        dest.writeDouble(this.posterRating);
+        dest.writeList(this.postedJobs);
+        dest.writeList(this.activeJobs);
+        dest.writeList(this.completedJobs);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    public User(Parcel src){
+        this.userID = src.readInt();
+        this.password = src.readString();
+        this.firstName = src.readString();
+        this.lastName = src.readString();
+        this.email = src.readString();
+        this.bio = src.readString();
+        this.profilePic = src.readString();
+        this.bidderRating = src.readDouble();
+        this.posterRating = src.readDouble();
+        src.readList(this.postedJobs, Integer.class.getClassLoader());
+        src.readList(this.activeJobs, Integer.class.getClassLoader());
+        src.readList(this.completedJobs, Integer.class.getClassLoader());
     }
 
     // Accessors
