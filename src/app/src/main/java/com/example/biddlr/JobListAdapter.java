@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import classes.Job;
@@ -58,7 +59,8 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         holder.jobTitle.setText(job.getTitle());
 
         //Set job price
-        String price = "$" + job.getStartingPrice();
+        //TODO Set a formatter on the price input
+        String price = "$" + String.format("%.2f", job.getStartingPrice());
         holder.jobPrice.setText(price);
 
         //Set job location
@@ -66,11 +68,32 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
             holder.jobLocation.setText(job.getLocation());
 
         //FIXME Set job time
-        holder.jobTime.setText("Time");
+        String time = timeLeft(job.getExpirationDate());
+        holder.jobTime.setText(time);
     }
 
     @Override
     public int getItemCount(){
         return jobsList.size();
+    }
+
+    private String timeLeft(LocalDateTime expDate){
+        if(expDate.isBefore(LocalDateTime.now())){
+            return "Expired";
+        }
+
+        String unit = "min";
+        long time = LocalDateTime.now().until(expDate, ChronoUnit.MINUTES);
+
+        if(time > 60){
+            unit = "hrs";
+            time /= 60;
+            if(time > 24){
+                unit = "days";
+                time /= 24;
+            }
+        }
+
+        return time + " " + unit;
     }
 }
