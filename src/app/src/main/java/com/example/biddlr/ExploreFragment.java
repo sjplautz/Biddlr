@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,6 +46,12 @@ public class ExploreFragment extends Fragment {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext().getApplicationContext());
         recycler.setLayoutManager(manager);
         recycler.setItemAnimator(new DefaultItemAnimator());
+
+        //adding a divider between recyclerview list items
+        DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recycler_divider));
+        recycler.addItemDecoration(divider);
+
         recycler.setAdapter(adapter);
         recycler.addOnItemTouchListener(new JobListTouchListener(getContext().getApplicationContext(), recycler, new JobListTouchListener.ClickListener() {
             @Override

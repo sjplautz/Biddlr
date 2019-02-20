@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -58,6 +60,11 @@ public class ProfileFragment extends Fragment {
 
         //Sets the layout for the recycler view to inflate with
         recycler = v.findViewById(R.id.completedJobsRecycler);
+
+        //adding a divider between recyclerview list items
+        DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recycler_divider));
+        recycler.addItemDecoration(divider);
 
         //Set the layout parameters
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());

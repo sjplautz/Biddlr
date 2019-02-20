@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void actionForgetPass() {
       //  UtilityInterfaceTools.hideSoftKeyboard(LoginActivity.this);
-        startActivity(new Intent(LoginActivity.this, ForgetPassActivity.class));
+        startActivity(new Intent(LoginActivity.this, ForgotPassActivity.class));
        // finish();
     }
 }

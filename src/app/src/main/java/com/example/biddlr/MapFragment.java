@@ -26,8 +26,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -99,8 +97,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         updateLocationUI();
 
         //adding two sample map markers, will eventually be done automatically upon job creation
-        mMap.addMarker(new MarkerOptions().position(new LatLng(DEFAULT_LAT - .001, DEFAULT_LONG + .001 )).title("Sample Job Pin 1"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(DEFAULT_LAT - .004, DEFAULT_LONG - .003 )).title("Sample Job Pin 2"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(DEFAULT_LAT - .001, DEFAULT_LONG + .001 )).title("Window Washing"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(DEFAULT_LAT - .004, DEFAULT_LONG - .003 )).title("Lawn Mowing"));
 
         //gets the devices location and sets the map view to be centered on the location returned
         getDeviceLocation();

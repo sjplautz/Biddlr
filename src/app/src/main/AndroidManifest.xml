@@ -28,7 +28,7 @@
         </activity>
         <activity android:name=".HomeActivity" />
         <activity android:name=".CreateUserActivity" />
-        <activity android:name=".ForgetPassActivity" />
+        <activity android:name=".ForgotPassActivity" />
 
         <!--Maps API-->
         <meta-data

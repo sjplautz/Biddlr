@@ -17,6 +17,7 @@ public class CreateUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createuser);
+        getSupportActionBar().hide();
         Button buttonSubmit = (Button) findViewById(R.id.btnSubmit);
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

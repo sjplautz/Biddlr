@@ -10,7 +10,7 @@
         android:id="@+id/DefaultProfileImage"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,44 +22,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:isIndicator="true"
         android:numStars="5"
         android:progressBackgroundTint="@android:color/holo_orange_dark"
         android:progressTint="@android:color/holo_orange_dark"
         android:secondaryProgressTint="@android:color/holo_orange_dark"
         android:stepSize="1"
-        app:layout_constraintBottom_toTopOf="@+id/btnContact"
-        app:layout_constraintEnd_toStartOf="@+id/ProfileBio"
+        app:layout_constraintBottom_toBottomOf="@+id/DefaultProfileImage"
         app:layout_constraintStart_toEndOf="@+id/DefaultProfileImage"
         app:layout_constraintTop_toBottomOf="@id/myProfileName" />
 
     <Button
         android:id="@+id/btnContact"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="0dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/btnContact"
-        app:layout_constraintBottom_toTopOf="@+id/separator1"
-        app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DefaultProfileImage" />
-
-    <View
-        android:id="@+id/separator1"
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="24dp"
-        android:background="#A9A9A9"
-        app:layout_constraintBottom_toTopOf="@+id/JobsCompletedText"
+        app:layout_constraintBottom_toBottomOf="@+id/userRatingBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnContact" />
+        app:layout_constraintTop_toTopOf="@+id/DefaultProfileImage"
+        app:layout_constraintWidth_percent=".35" />
 
     <TextView
         android:id="@+id/myProfileName"
@@ -72,20 +55,20 @@
         app:layout_constraintBottom_toTopOf="@+id/userRatingBar"
         app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
         app:layout_constraintStart_toEndOf="@+id/DefaultProfileImage"
-        app:layout_constraintTop_toTopOf="@+id/DefaultProfileImage" />
+        app:layout_constraintTop_toTopOf="@id/DefaultProfileImage" />
 
     <TextView
         android:id="@+id/ProfileBio"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="5dp"
         android:text="@string/exampleBio"
-        app:layout_constraintBottom_toBottomOf="@+id/btnContact"
+        app:layout_constraintBottom_toTopOf="@+id/JobsCompletedText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/userRatingBar"
-        app:layout_constraintTop_toTopOf="@+id/DefaultProfileImage" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/DefaultProfileImage"
+        app:layout_constraintTop_toBottomOf="@+id/DefaultProfileImage" />
 
     <TextView
         android:id="@+id/reviewSection"
@@ -93,37 +76,36 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Empty Reviews Section"
+        android:text="No User Reviews"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/completedJobsRecycler" />
+        app:layout_constraintTop_toBottomOf="@id/completedJobsRecycler"
+        app:layout_constraintHeight_percent=".28" />
 
     <TextView
         android:id="@+id/JobsCompletedText"
         android:layout_width="wrap_content"
-        android:layout_height="17dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Jobs Completed"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintBottom_toTopOf="@id/completedJobsRecycler"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/separator1" />
+        app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
+        app:layout_constraintStart_toStartOf="@+id/ProfileBio"
+        app:layout_constraintTop_toBottomOf="@id/ProfileBio" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/completedJobsRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/reviewSection"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent=".45"
+        app:layout_constraintHeight_percent=".42"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/JobsCompletedText"
         tools:listitem="@layout/recycler_view_item_1" />
