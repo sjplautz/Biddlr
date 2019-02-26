@@ -24,18 +24,22 @@
         android:layout_height="73dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:fontFamily="sans-serif"
         android:text="@string/strSubmit"
         android:textColor="@color/white" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/txtDialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btnClose"
         android:layout_centerInParent="true"
+        android:layout_marginLeft="16dp"
+        android:layout_toEndOf="@+id/btnClose"
+        android:fontFamily="sans-serif-medium"
         android:text="@string/strCreateJob"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="36sp"
+        android:textSize="20sp"
         android:textStyle="normal" />
 </RelativeLayout>
