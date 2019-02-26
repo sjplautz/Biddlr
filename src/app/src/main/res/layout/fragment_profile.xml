@@ -18,16 +18,11 @@
 
     <RatingBar
         android:id="@+id/userRatingBar"
-        style="?android:attr/ratingBarStyleSmall"
+        style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:isIndicator="true"
-        android:numStars="5"
-        android:progressBackgroundTint="@android:color/holo_orange_dark"
-        android:progressTint="@android:color/holo_orange_dark"
-        android:secondaryProgressTint="@android:color/holo_orange_dark"
-        android:stepSize="1"
+        android:progressTint="@android:color/holo_orange_light"
         app:layout_constraintBottom_toBottomOf="@+id/DefaultProfileImage"
         app:layout_constraintStart_toEndOf="@+id/DefaultProfileImage"
         app:layout_constraintTop_toBottomOf="@id/myProfileName" />
@@ -64,35 +59,23 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/exampleBio"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/JobsCompletedText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@id/DefaultProfileImage"
         app:layout_constraintTop_toBottomOf="@+id/DefaultProfileImage" />
 
     <TextView
-        android:id="@+id/reviewSection"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="No User Reviews"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/completedJobsRecycler"
-        app:layout_constraintHeight_percent=".28" />
-
-    <TextView
         android:id="@+id/JobsCompletedText"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Jobs Completed"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/completedJobsRecycler"
-        app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
         app:layout_constraintStart_toStartOf="@+id/ProfileBio"
         app:layout_constraintTop_toBottomOf="@id/ProfileBio" />
 
@@ -103,9 +86,9 @@
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/reviewSection"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent=".42"
+        app:layout_constraintHeight_percent=".50"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/JobsCompletedText"
         tools:listitem="@layout/recycler_view_item_1" />

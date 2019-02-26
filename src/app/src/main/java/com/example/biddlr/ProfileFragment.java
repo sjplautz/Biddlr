@@ -54,9 +54,10 @@ public class ProfileFragment extends Fragment {
         ImageView imgProfile = (ImageView) v.findViewById(R.id.DefaultProfileImage);
         imgProfile.setImageResource(R.drawable.baseline_person_24);
 
-        //setting the padding inside the bio view
-        //bio = v.findViewById(R.id.ProfileBio);
-        //bio.setPadding(15,5,15,5);
+        //setting the star count in the user rating bar
+        RatingBar userRating = (RatingBar) v.findViewById(R.id.userRatingBar);
+        double default_rating = 4.5;
+        userRating.setRating((float)default_rating);
 
         //Sets the layout for the recycler view to inflate with
         recycler = v.findViewById(R.id.completedJobsRecycler);
