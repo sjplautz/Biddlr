@@ -189,6 +189,7 @@ public class Job implements Parcelable {
         long hours = temp.until( this.expirationDate, ChronoUnit.HOURS);
 //        temp = temp.plusHours( hours );
 
+        if (hours < 0) { return "Expired"; };
         if (days > 0) {
             return days + " days";
         }
