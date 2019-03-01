@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorPrimary"
-            android:enabled="false"
+            android:enabled="true"
             android:inputType="textShortMessage|none"
             android:textColorLink="@color/colorPrimary" />
     </android.support.design.widget.TextInputLayout>
