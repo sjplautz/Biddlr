@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,75 +7,88 @@
     android:layout_alignLeft="@id/imgJobPic"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical"
-    android:paddingTop="16dp"
-    android:paddingBottom="10dp"
-    android:background="@drawable/border">
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imgJobPic"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:paddingLeft="4dp" />
-
-    <TextView
-        android:id="@+id/txtJobTitle"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imgJobPic"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="57dp"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/txtStartingPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="7dp"
-        android:layout_marginRight="9dp" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/txtJobLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imgJobPic"
-        android:layout_alignTop="@+id/txtJobTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="74dp"
-        android:layout_marginTop="23dp"
-        android:textSize="10sp" />
+            <TextView
+                android:id="@+id/txtJobLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toTopOf="@+id/txtTimeRemaining"
+                app:layout_constraintLeft_toRightOf="@+id/imgLocation" />
 
-    <TextView
-        android:id="@+id/txtTimeRemaining"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imgJobPic"
-        android:layout_alignTop="@+id/txtJobLocation"
-        android:layout_marginLeft="74dp"
-        android:layout_marginTop="14dp"
-        android:textSize="10sp" />
+            <TextView
+                android:id="@+id/txtTimeRemaining"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/imgTime" />
 
-    <ImageView
-        android:id="@+id/imgLocation"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_alignLeft="@+id/imgJobPic"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="52dp"
-        android:layout_marginTop="27dp"
-        app:srcCompat="@drawable/baseline_place_24" />
+            <ImageView
+                android:id="@+id/imgTime"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/imgJobPic"
+                app:layout_constraintTop_toBottomOf="@+id/imgLocation"
+                app:srcCompat="@drawable/baseline_schedule_24" />
 
-    <ImageView
-        android:id="@+id/imgTime"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_alignLeft="@+id/imgJobPic"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="52dp"
-        android:layout_marginTop="40dp"
-        app:srcCompat="@drawable/baseline_schedule_24" />
+            <TextView
+                android:id="@+id/txtStartingPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/txtJobTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@+id/imgJobPic"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imgJobPic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imgLocation"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toRightOf="@+id/imgJobPic"
+                app:layout_constraintTop_toBottomOf="@+id/txtJobTitle"
+                app:srcCompat="@drawable/baseline_place_24" />
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>

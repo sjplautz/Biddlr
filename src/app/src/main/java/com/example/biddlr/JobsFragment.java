@@ -1,0 +1,39 @@
+package com.example.biddlr;
+
+import android.content.Context;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class JobsFragment extends Fragment {
+    public static JobsFragment newInstance() {
+        JobsFragment fragment = new JobsFragment();
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_jobs, container, false);
+
+        TabLayout tabsJobs = v.findViewById(R.id.tabsJobs);
+        ViewPager pagerJobs = v.findViewById(R.id.pagerJobs);
+
+        JobsPagerAdapter adapter = new JobsPagerAdapter(getFragmentManager());
+        pagerJobs.setAdapter(adapter);
+
+        tabsJobs.setupWithViewPager(pagerJobs);
+        return v;
+    }
+}
