@@ -3,6 +3,16 @@ package classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -11,6 +21,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+
+import org.json.*;
 
 import enums.JobStatus;
 
@@ -24,6 +37,7 @@ public class Job implements Parcelable {
     private Integer selectedBidderID;
     private String photoURL;
     private String location;
+    private LatLng coordinates;
     private LocalDateTime expirationDate;
     private Double startingPrice;
     private Double currentBid;
@@ -57,6 +71,7 @@ public class Job implements Parcelable {
         this.selectedBidderID = null;
         this.photoURL = photoURL;
         this.location = location;
+        this.coordinates = geocode(location);
         this.expirationDate = expirationDate;
         this.startingPrice = startingPrice;
         this.currentBid = null;
@@ -194,6 +209,132 @@ public class Job implements Parcelable {
             return days + " days";
         }
         return hours + " hours";
+    }
+
+    /*
+    //method used to execute http request within job class
+    public static JSONObject httpRequest(String targetURL, String urlParameters) {
+        HttpURLConnection connection = null;
+        String request = targetURL;
+
+        //error handling in event of incompatible encoding type
+        try{
+            request += URLEncoder.encode(urlParameters,"UTF-8");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            //Create connection
+            URL url = new URL(request);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type",
+                    "application/x-www-form-urlencoded");
+            connection.setRequestProperty("Content-Language", "en-US");
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
+
+            //Get Input
+            InputStream dataInputStream = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(dataInputStream));
+            StringBuilder in = new StringBuilder();
+            String line;
+            while((line = reader.readLine()) != null){
+                in.append(line);
+                in.append(System.lineSeparator());
+            }
+            reader.close();
+
+            //Build JSON object with returned results
+            JSONObject json = new JSONObject(in.toString());
+            return json;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+    */
+
+    public static JSONObject httpRequest(String path, String address){
+
+        String returned;
+        JSONObject result;
+
+        //Combining path and address for full http request
+        String request = path;
+        try{
+            request += URLEncoder.encode(address,"UTF-8");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+        //Instantiate new instance of Async Task get request class
+        HttpGetRequest getRequest = new HttpGetRequest();
+
+        //perform do in background method to offload from main thread to new networking thread
+        try{
+            returned = getRequest.execute(path).get();
+        }
+        catch(InterruptedException e){
+            e.printStackTrace();
+            return null;
+        }
+        catch(ExecutionException e){
+            e.printStackTrace();
+            return null;
+        }
+
+        try{
+            result = new JSONObject(returned);
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+
+
+    //forward geocode for retrieving coordinates from address
+    public static LatLng geocode(String address){
+        String apiKey = "NypbUMfluOKXSv4v02Gq1Er3kIA9AfVB";
+        String requestPath = "http://www.mapquestapi.com/geocoding/v1/address?key="+apiKey+"&location=";
+        LatLng coordinates;
+        double lat = 0;
+        double lng = 0;
+
+        //get a json response object using httpRequest to Mapquest API
+        JSONObject response = httpRequest(requestPath, address);
+
+        //Parse the response object to extract lat and lng
+        try{
+            //navigate through JSON object to get to desired attributes
+            JSONArray results = response.getJSONArray("results");
+            JSONArray locations = results.getJSONArray(1);
+            JSONObject location = locations.getJSONObject(1);
+
+            lat = location.getDouble("lat");
+            lng = location.getDouble("lng");
+
+            coordinates = new LatLng(lat, lng);
+            return coordinates;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
