@@ -1,6 +1,7 @@
 package classes;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -18,6 +19,7 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         String urlString = params[0];
+        Log.d("INIT", "value of passed in address in get request class: " + urlString);
         String result;
         String inputLine;
 

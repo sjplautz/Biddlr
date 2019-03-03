@@ -2,6 +2,7 @@ package classes;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -21,6 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import org.json.*;
@@ -211,59 +213,6 @@ public class Job implements Parcelable {
         return hours + " hours";
     }
 
-    /*
-    //method used to execute http request within job class
-    public static JSONObject httpRequest(String targetURL, String urlParameters) {
-        HttpURLConnection connection = null;
-        String request = targetURL;
-
-        //error handling in event of incompatible encoding type
-        try{
-            request += URLEncoder.encode(urlParameters,"UTF-8");
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return null;
-        }
-
-        try {
-            //Create connection
-            URL url = new URL(request);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
-            connection.setRequestProperty("Content-Language", "en-US");
-            connection.setUseCaches(false);
-            connection.setDoOutput(true);
-
-            //Get Input
-            InputStream dataInputStream = connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(dataInputStream));
-            StringBuilder in = new StringBuilder();
-            String line;
-            while((line = reader.readLine()) != null){
-                in.append(line);
-                in.append(System.lineSeparator());
-            }
-            reader.close();
-
-            //Build JSON object with returned results
-            JSONObject json = new JSONObject(in.toString());
-            return json;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
-    }
-    */
-
     public static JSONObject httpRequest(String path, String address){
 
         String returned;
@@ -273,6 +222,7 @@ public class Job implements Parcelable {
         String request = path;
         try{
             request += URLEncoder.encode(address,"UTF-8");
+            Log.d("INITIALIZE", "request string: " + request);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -284,7 +234,7 @@ public class Job implements Parcelable {
 
         //perform do in background method to offload from main thread to new networking thread
         try{
-            returned = getRequest.execute(path).get();
+            returned = getRequest.execute(request).get();
         }
         catch(InterruptedException e){
             e.printStackTrace();
@@ -297,6 +247,9 @@ public class Job implements Parcelable {
 
         try{
             result = new JSONObject(returned);
+
+            //print out returned string to terminal for debugging
+            Log.d("OUTPUT", returned);
         }
         catch(JSONException e){
             e.printStackTrace();
@@ -318,6 +271,7 @@ public class Job implements Parcelable {
         //get a json response object using httpRequest to Mapquest API
         JSONObject response = httpRequest(requestPath, address);
 
+        /*
         //Parse the response object to extract lat and lng
         try{
             //navigate through JSON object to get to desired attributes
@@ -334,7 +288,8 @@ public class Job implements Parcelable {
         catch (Exception e){
             e.printStackTrace();
             return null;
-        }
+        }*/
+    return null;
     }
 
 }
