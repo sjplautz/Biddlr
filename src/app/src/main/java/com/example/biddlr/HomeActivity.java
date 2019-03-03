@@ -1,5 +1,6 @@
 package com.example.biddlr;
 
+import android.content.Intent;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,13 +11,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.MenuBuilder;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.time.LocalDateTime;
 
@@ -159,9 +163,35 @@ public class HomeActivity extends AppCompatActivity {
         double startingPrice = Double.parseDouble(startingPriceText);
 
 
-        Job job = new Job(0, title, desc, 0, "job1", location, LocalDateTime.now().plusHours(2), startingPrice);
+        Job job = new Job(title, desc, 0, "job1", location, LocalDateTime.now().plusHours(2), startingPrice);
         DatabaseManager.shared.addJob(job);
 
         closeDialog();
+    }
+
+    // When user clicks 3 dots
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    // When user selects item
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.logout:
+                DatabaseManager.shared.mAuth.signOut();
+                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                finish();
+                Toast.makeText(this, "You are signed out!", Toast.LENGTH_LONG).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
