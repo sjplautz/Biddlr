@@ -31,7 +31,7 @@ import enums.JobStatus;
 
 public class Job implements Parcelable {
 
-    private Integer jobID;
+    private String jobID;
     private JobStatus status;
     private String title;
     private String description;
@@ -46,10 +46,10 @@ public class Job implements Parcelable {
     private HashMap<Integer, Double> bids;  // <bidderID, bidValue>
 
     // Initializers
-    public Job(int jobID, String title, String description, int posterID, int selectedBidderID,
+    public Job(String title, String description, int posterID, int selectedBidderID,
                String photoURL, String location, LocalDateTime expirationDate, JobStatus status, double startingPrice,
                double currentBid, HashMap<Integer, Double> bids) {
-        this.jobID = jobID;
+        this.jobID = null;
         this.status = status;
         this.title = title;
         this.description = description;
@@ -63,9 +63,9 @@ public class Job implements Parcelable {
         this.bids = bids;
     }
 
-    public Job(int jobID, String title, String description, int posterID, String photoURL, String location,
+    public Job(String title, String description, int posterID, String photoURL, String location,
                LocalDateTime expirationDate, double startingPrice) {
-        this.jobID = jobID;
+        this.jobID = null;
         this.status = JobStatus.IN_BIDDING;
         this.title = title;
         this.description = description;
@@ -88,7 +88,7 @@ public class Job implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.jobID);
+        dest.writeString(this.jobID);
         dest.writeInt(this.status.ordinal());
         dest.writeString(this.title);
         dest.writeString(this.description);
@@ -112,7 +112,7 @@ public class Job implements Parcelable {
     };
 
     public Job(Parcel src){
-        this.jobID = src.readInt();
+        this.jobID = src.readString();
         this.status = JobStatus.values()[src.readInt()];
         this.title = src.readString();
         this.description = src.readString();
@@ -128,7 +128,7 @@ public class Job implements Parcelable {
 
 
     // Accessors
-    public Integer getJobID() {
+    public String getJobID() {
         return this.jobID;
     }
 
@@ -177,6 +177,12 @@ public class Job implements Parcelable {
     }
 
     // Modifiers
+
+
+    public void setJobID(String jobID) {
+        this.jobID = jobID;
+    }
+
     public void updateJobStatus(JobStatus status) {
         this.status = status;
     }
