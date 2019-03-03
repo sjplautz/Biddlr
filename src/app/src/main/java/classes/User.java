@@ -15,7 +15,7 @@ import enums.JobStatus;
 public class User implements Parcelable {
 
     // Properties
-    private Integer userID;
+    private String userID;
     private String password;
     private String firstName;
     private String lastName;
@@ -29,10 +29,10 @@ public class User implements Parcelable {
     private ArrayList<Integer> completedJobs;
 
     // Initializers
-    public User(Integer userID, String password, String firstName, String lastName, String email,
+    public User(String password, String firstName, String lastName, String email,
                 String bio, String profilePic, Double bidderRating, Double posterRating,
                 ArrayList<Integer> postedJobs, ArrayList<Integer> activeJobs, ArrayList<Integer> completedJobs) {
-        this.userID = userID;
+        this.userID = null;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -46,8 +46,8 @@ public class User implements Parcelable {
         this.completedJobs = completedJobs;
     }
 
-    public User(Integer userID, String password, String firstName, String lastName) {
-        this.userID = userID;
+    public User(String password, String firstName, String lastName) {
+        this.userID = null;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -69,7 +69,7 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.userID);
+        dest.writeString(this.userID);
         dest.writeString(this.password);
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
@@ -93,7 +93,7 @@ public class User implements Parcelable {
     };
 
     public User(Parcel src){
-        this.userID = src.readInt();
+        this.userID = src.readString();
         this.password = src.readString();
         this.firstName = src.readString();
         this.lastName = src.readString();
@@ -108,7 +108,7 @@ public class User implements Parcelable {
     }
 
     // Accessors
-    public Integer getUserID() {
+    public String getUserID() {
         return this.userID;
     }
 
