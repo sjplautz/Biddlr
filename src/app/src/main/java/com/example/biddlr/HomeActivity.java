@@ -130,15 +130,28 @@ public class HomeActivity extends AppCompatActivity {
         String title = txtTitle.getText().toString();
         if(title.trim().isEmpty()) return;
 
+        TextView txtDate = findViewById(R.id.txtDate);
+        TextView txtTime = findViewById(R.id.txtTime);
+
+        String date[] = txtDate.getText().toString().split("/");
+        String time[] = txtTime.getText().toString().split("[:, ]");
+
+        int year = Integer.parseInt(date[2]);
+        int month = Integer.parseInt(date[0]);
+        int day = Integer.parseInt(date[1]);
+        int hour = Integer.parseInt(time[0]);
+        hour = time[2].equals("PM") ? 24 - hour : 12 - hour;
+        int min = Integer.parseInt(time[1]);
+
+        LocalDateTime expDate= LocalDateTime.of(year, month, day, hour, min);
+
+        System.out.println(expDate.toString());
+
         TextView txtDesc = findViewById(R.id.txtDescription);
         String desc = txtDesc.getText().toString();
 
         TextView txtLocation = findViewById(R.id.txtLocation);
         String location = txtLocation.getText().toString();
-
-        //TODO Implement a DatePicker and a TimePicker for these two fields
-//                        TextView txtDate = findViewById(R.id.txtDate);
-//                        TextView txtTime = findViewById(R.id.txtTime);
 
         TextView txtStartingPrice = findViewById(R.id.txtStartPrice);
         String startingPriceText = txtStartingPrice.getText().toString();
