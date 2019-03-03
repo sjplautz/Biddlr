@@ -61,11 +61,11 @@ public class JobViewFragment extends Fragment {
         txtJobCurrentBid.setText(current);
 
         TextView txtPosterName = (TextView) v.findViewById(R.id.txtPosterName);
-        User poster = DatabaseManager.shared.getUsers().get(0);
-        txtPosterName.setText(poster.getFirstName() + " " + poster.getLastName());
+//        User poster = DatabaseManager.shared.getUsers().get(0);
+        txtPosterName.setText("Poster");//poster.getFirstName() + " " + poster.getLastName());
 
         RatingBar rtgPosterRating = (RatingBar) v.findViewById(R.id.rtgPosterRating);
-        rtgPosterRating.setRating(poster.getPosterRating().floatValue());
+        rtgPosterRating.setRating(5);//poster.getPosterRating().floatValue());
 
         ImageView imgProfile = (ImageView) v.findViewById(R.id.imgProfile);
         imgProfile.setImageResource(R.drawable.baseline_person_24);
