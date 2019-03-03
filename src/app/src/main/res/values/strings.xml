@@ -36,5 +36,6 @@
     <string name="exampleBio">This is an example bio. The user will give a short description about their experience or technical knowledge and jobs they are interested in.</string>
     <string name="strDateFormat">MM/DD/YYYY</string>
     <string name="strTimeFormat">HH:MM</string>
+    <string name="action_logout">Log out</string>
 
 </resources>

@@ -92,41 +92,41 @@ public class ProfileFragment extends Fragment {
         }));
 
         //populate the prefab data for demo
-        prepareSampleData();
+//        prepareSampleData();
 
         return v;
     }
 
     private void prepareSampleData() {
-        Job j1 = new Job(0, "This is the first job", null, 0, "job1", "123 Main St.", LocalDateTime.now().plusHours(1), 20.0);
-        jobList.add(j1);
-
-        Job j2 = new Job(0, "This is the second job", null, 0, "job2", null, LocalDateTime.now().plusHours(1), 999.0);
-        jobList.add(j2);
-
-        Job j3 = new Job(0, "This is the first job", null, 0, "job1", "Somewhere", LocalDateTime.now().plusHours(1), 20.0);
-        jobList.add(j3);
-
-        Job j4 = new Job(0, "This is the second job", null, 0, "job2", "Here", LocalDateTime.now().plusHours(1), 999.0);
-        jobList.add(j4);
-
-        Job j5 = new Job(0, "This is the first job", null, 0, "job1", null, LocalDateTime.now().plusHours(1), 20.0);
-        jobList.add(j5);
-
-        Job j6 = new Job(0, "This is the second job", null, 0, "job2", "There", LocalDateTime.now().plusHours(1), 999.0);
-        jobList.add(j6);
-
-        Job j7 = new Job(0, "This is the first job", null, 0, "job1", null, LocalDateTime.now().plusHours(1), 20.0);
-        jobList.add(j7);
-
-        Job j8 = new Job(0, "This is the second job", null, 0, "job2", "Anywhere", LocalDateTime.now().plusHours(1), 999.0);
-        jobList.add(j8);
-
-        Job j9 = new Job(0, "This is the first job", null, 0, "job1", null, LocalDateTime.now().plusHours(1), 20.0);
-        jobList.add(j9);
-
-        Job j10 = new Job(0, "This is the second job", null, 0, "job2", null, LocalDateTime.now().plusHours(1), 999.0);
-        jobList.add(j10);
+//        Job j1 = new Job(0, "This is the first job", null, 0, "job1", "123 Main St.", LocalDateTime.now().plusHours(1), 20.0);
+//        jobList.add(j1);
+//
+//        Job j2 = new Job(0, "This is the second job", null, 0, "job2", null, LocalDateTime.now().plusHours(1), 999.0);
+//        jobList.add(j2);
+//
+//        Job j3 = new Job(0, "This is the first job", null, 0, "job1", "Somewhere", LocalDateTime.now().plusHours(1), 20.0);
+//        jobList.add(j3);
+//
+//        Job j4 = new Job(0, "This is the second job", null, 0, "job2", "Here", LocalDateTime.now().plusHours(1), 999.0);
+//        jobList.add(j4);
+//
+//        Job j5 = new Job(0, "This is the first job", null, 0, "job1", null, LocalDateTime.now().plusHours(1), 20.0);
+//        jobList.add(j5);
+//
+//        Job j6 = new Job(0, "This is the second job", null, 0, "job2", "There", LocalDateTime.now().plusHours(1), 999.0);
+//        jobList.add(j6);
+//
+//        Job j7 = new Job(0, "This is the first job", null, 0, "job1", null, LocalDateTime.now().plusHours(1), 20.0);
+//        jobList.add(j7);
+//
+//        Job j8 = new Job(0, "This is the second job", null, 0, "job2", "Anywhere", LocalDateTime.now().plusHours(1), 999.0);
+//        jobList.add(j8);
+//
+//        Job j9 = new Job(0, "This is the first job", null, 0, "job1", null, LocalDateTime.now().plusHours(1), 20.0);
+//        jobList.add(j9);
+//
+//        Job j10 = new Job(0, "This is the second job", null, 0, "job2", null, LocalDateTime.now().plusHours(1), 999.0);
+//        jobList.add(j10);
 
         adapter.notifyDataSetChanged();
     }
