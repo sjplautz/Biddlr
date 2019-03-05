@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
 
 import classes.DatabaseManager;
 import classes.Job;
@@ -76,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         //TODO Make a image picker
+        //TODO Also move this to first two fragments
         FloatingActionButton btnNewJob = findViewById(R.id.btnNewJob);
         btnNewJob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,14 +142,38 @@ public class HomeActivity extends AppCompatActivity {
         String date[] = txtDate.getText().toString().split("/");
         String time[] = txtTime.getText().toString().split("[:, ]");
 
-        int year = Integer.parseInt(date[2]);
-        int month = Integer.parseInt(date[0]);
-        int day = Integer.parseInt(date[1]);
-        int hour = Integer.parseInt(time[0]);
-        hour = time[2].equals("PM") ? 24 - hour : 12 - hour;
-        int min = Integer.parseInt(time[1]);
+        //TODO Don't allow entering of dates in the past through the DatePicker
+        int year, month, day;
 
-        LocalDateTime expDate= LocalDateTime.of(year, month, day, hour, min);
+        //If date TextView is empty, use a week from the current date
+        //Else use the date in the TextView
+        if(date.length == 0){
+            Calendar expDate = Calendar.getInstance();
+            expDate.add(Calendar.DAY_OF_MONTH, 7);
+            year = expDate.get(Calendar.YEAR);
+            month = expDate.get(Calendar.MONTH);
+            day = expDate.get(Calendar.DAY_OF_MONTH);
+        }
+        else {
+            year = Integer.parseInt(date[2]);
+            month = Integer.parseInt(date[0]);
+            day = Integer.parseInt(date[1]);
+        }
+
+        int hour, minute;
+
+        //If time is empty, set the time to noon
+        if(time.length == 0){
+            hour = 12;
+            minute = 0;
+        }
+        else{
+            hour = Integer.parseInt(time[0]);
+            hour = time[2].equals("PM") ? 24 - hour : 12 - hour;
+            minute = Integer.parseInt(time[1]);
+        }
+
+        LocalDateTime expDate= LocalDateTime.of(year, month, day, hour, minute);
 
         System.out.println(expDate.toString());
 
