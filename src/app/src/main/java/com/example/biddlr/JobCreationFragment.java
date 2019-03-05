@@ -1,15 +1,17 @@
 package com.example.biddlr;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+//TODO Move submission code here
 public class JobCreationFragment extends DialogFragment {
     public static JobCreationFragment newInstance() {
         JobCreationFragment fragment = new JobCreationFragment();
@@ -25,6 +27,16 @@ public class JobCreationFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_job_creation, container, false);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        String date = now.format(DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+        TextView txtDate = v.findViewById(R.id.txtDate);
+        txtDate.setText(date);
+
+        String time = now.format(DateTimeFormatter.ofPattern("hh:mm a"));
+        TextView txtTime = v.findViewById(R.id.txtTime);
+        txtTime.setText(time);
 
         ImageButton btnDate = v.findViewById(R.id.btnDate);
         btnDate.setOnClickListener(new View.OnClickListener() {

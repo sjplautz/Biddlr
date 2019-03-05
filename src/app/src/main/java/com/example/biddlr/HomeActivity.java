@@ -1,29 +1,26 @@
 package com.example.biddlr;
 
 import android.content.Intent;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.MenuBuilder;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import classes.DatabaseManager;
 import classes.Job;
@@ -139,43 +136,12 @@ public class HomeActivity extends AppCompatActivity {
         TextView txtDate = findViewById(R.id.txtDate);
         TextView txtTime = findViewById(R.id.txtTime);
 
-        String date[] = txtDate.getText().toString().split("/");
-        String time[] = txtTime.getText().toString().split("[:, ]");
+        String date = txtDate.getText().toString();
+        String time = txtTime.getText().toString();
 
-        //TODO Don't allow entering of dates in the past through the DatePicker
-        int year, month, day;
-
-        //If date TextView is empty, use a week from the current date
-        //Else use the date in the TextView
-        if(date.length == 0){
-            Calendar expDate = Calendar.getInstance();
-            expDate.add(Calendar.DAY_OF_MONTH, 7);
-            year = expDate.get(Calendar.YEAR);
-            month = expDate.get(Calendar.MONTH);
-            day = expDate.get(Calendar.DAY_OF_MONTH);
-        }
-        else {
-            year = Integer.parseInt(date[2]);
-            month = Integer.parseInt(date[0]);
-            day = Integer.parseInt(date[1]);
-        }
-
-        int hour, minute;
-
-        //If time is empty, set the time to noon
-        if(time.length == 0){
-            hour = 12;
-            minute = 0;
-        }
-        else{
-            hour = Integer.parseInt(time[0]);
-            hour = time[2].equals("PM") ? 24 - hour : 12 - hour;
-            minute = Integer.parseInt(time[1]);
-        }
-
-        LocalDateTime expDate= LocalDateTime.of(year, month, day, hour, minute);
-
-        System.out.println(expDate.toString());
+        LocalDate lDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+        LocalTime lTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("hh:mm a"));
+        LocalDateTime expDate = LocalDateTime.of(lDate, lTime);
 
         TextView txtDesc = findViewById(R.id.txtDescription);
         String desc = txtDesc.getText().toString();
@@ -188,8 +154,7 @@ public class HomeActivity extends AppCompatActivity {
         if(startingPriceText.trim().isEmpty()) return;
         double startingPrice = Double.parseDouble(startingPriceText);
 
-
-        Job job = new Job(title, desc, 0, "job1", location, LocalDateTime.now().plusHours(2), startingPrice);
+        Job job = new Job(title, desc, 0, "job1", location, expDate, startingPrice);
         DatabaseManager.shared.addJob(job);
 
         closeDialog();
