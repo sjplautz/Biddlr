@@ -1,28 +1,26 @@
 package com.example.biddlr;
 
 import android.content.Intent;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.MenuBuilder;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import classes.DatabaseManager;
 import classes.Job;
@@ -53,9 +51,9 @@ public class HomeActivity extends AppCompatActivity {
                         selectedFrag = HomeFragment.newInstance();
                         tag = "HOME";
                         break;
-                    case R.id.itemExplore:
+                    case R.id.itemJobs:
                         selectedFrag = JobsFragment.newInstance();
-                        tag = "EXPLORE";
+                        tag = "JOBS";
                         break;
                     case R.id.itemProfile:
                         selectedFrag = ProfileFragment.newInstance();
@@ -76,13 +74,6 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         //TODO Make a image picker
-        FloatingActionButton btnNewJob = findViewById(R.id.btnNewJob);
-        btnNewJob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialog();
-            }
-        });
 
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.frameNull, HomeFragment.newInstance());
@@ -94,11 +85,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void openDialog(){
+    public void openDialog(){
         Fragment frag = JobCreationFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(android.R.id.content, frag, "DIALOG");
-        transaction.addToBackStack(null);
+        transaction.addToBackStack("DIALOG");
         transaction.commit();
 
         bar.setCustomView(R.layout.dialog_action_bar);
@@ -137,19 +128,12 @@ public class HomeActivity extends AppCompatActivity {
         TextView txtDate = findViewById(R.id.txtDate);
         TextView txtTime = findViewById(R.id.txtTime);
 
-        String date[] = txtDate.getText().toString().split("/");
-        String time[] = txtTime.getText().toString().split("[:, ]");
+        String date = txtDate.getText().toString();
+        String time = txtTime.getText().toString();
 
-        int year = Integer.parseInt(date[2]);
-        int month = Integer.parseInt(date[0]);
-        int day = Integer.parseInt(date[1]);
-        int hour = Integer.parseInt(time[0]);
-        hour = time[2].equals("PM") ? 24 - hour : 12 - hour;
-        int min = Integer.parseInt(time[1]);
-
-        LocalDateTime expDate= LocalDateTime.of(year, month, day, hour, min);
-
-        System.out.println(expDate.toString());
+        LocalDate lDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/uuuu"));
+        LocalTime lTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("hh:mm a"));
+        LocalDateTime expDate = LocalDateTime.of(lDate, lTime);
 
         TextView txtDesc = findViewById(R.id.txtDescription);
         String desc = txtDesc.getText().toString();
@@ -162,8 +146,7 @@ public class HomeActivity extends AppCompatActivity {
         if(startingPriceText.trim().isEmpty()) return;
         double startingPrice = Double.parseDouble(startingPriceText);
 
-
-        Job job = new Job(title, desc, 0, "job1", location, LocalDateTime.now().plusHours(2), startingPrice);
+        Job job = new Job(title, desc, 0, "job1", location, expDate, startingPrice);
         DatabaseManager.shared.addJob(job);
 
         closeDialog();

@@ -7,27 +7,31 @@ import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.widget.TextView;
 
-import java.util.Calendar;
-import java.util.Locale;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class TimePicker extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
     @Override
     public Dialog onCreateDialog(Bundle savedInstance){
-        final Calendar cal = Calendar.getInstance();
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int min = cal.get(Calendar.MINUTE);
+        TextView txtTime = getActivity().findViewById(R.id.txtTime);
+        String time = txtTime.getText().toString();
+        LocalTime currTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("hh:mm a"));
+
+        int hour = currTime.getHour();
+        int min = currTime.getMinute();
 
         return new TimePickerDialog(getActivity(), this, hour, min, DateFormat.is24HourFormat(getActivity()));
     }
 
     @Override
     public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
+        LocalTime selectedTime = LocalTime.of(hourOfDay, minute);
+
+        //TODO Add warning if time is set past current time and date is current date
+
         TextView txtTime = getActivity().findViewById(R.id.txtTime);
 
-        int hour12 = hourOfDay > 12 ? hourOfDay - 12 : hourOfDay;
-        char m = hourOfDay > 11 ? 'P' : 'A';
-
-        String time = String.format(Locale.ENGLISH, "%d:%02d %cM", hour12, minute, m);
+        String time = selectedTime.format(DateTimeFormatter.ofPattern("hh:mm a"));
         txtTime.setText(time);
     }
 }

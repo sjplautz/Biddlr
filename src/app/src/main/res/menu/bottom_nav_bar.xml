@@ -9,10 +9,10 @@
         android:title="@string/strHome"
         android:visible="true" />
     <item
-        android:id="@+id/itemExplore"
+        android:id="@+id/itemJobs"
         android:enabled="true"
         android:icon="@drawable/baseline_search_24"
-        android:title="@string/strExplore"
+        android:title="@string/strJobs"
         android:visible="true" />
     <item
         android:id="@+id/itemProfile"

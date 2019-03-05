@@ -1,8 +1,7 @@
 package com.example.biddlr;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,15 +10,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,23 +26,31 @@ public class HomeFragment extends Fragment {
     private RecyclerView recycler;
     private JobListAdapter adapter;
 
-    private String TAG = "HOME_FRAGMENT";
-
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        jobList = DatabaseManager.shared.getJobs();
+        jobList = DatabaseManager.shared.getJobs();
         adapter = new JobListAdapter(jobList);
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+
+        FloatingActionButton btnCreateNewJob = v.findViewById(R.id.btnCreateNewJob);
+        btnCreateNewJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity)getActivity()).openDialog();
+            }
+        });
 
         //Sets the layout for the recycler view to inflate with
         recycler = v.findViewById(R.id.homeRecycler);

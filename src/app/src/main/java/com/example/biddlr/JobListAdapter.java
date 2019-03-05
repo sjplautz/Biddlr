@@ -68,7 +68,6 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         if(job.getLocation() != null)
             holder.jobLocation.setText(job.getLocation());
 
-        //FIXME Set job time
         String time = timeLeft(job.getExpirationDate());
         holder.jobTime.setText(time);
     }
