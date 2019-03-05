@@ -3,8 +3,9 @@ package com.example.biddlr;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class JobsPagerAdapter extends FragmentPagerAdapter {
+public class JobsPagerAdapter extends FragmentStatePagerAdapter {
     private String titles[] = {"Explore", "My Jobs"};
 
     public JobsPagerAdapter(FragmentManager fm){
@@ -15,11 +16,9 @@ public class JobsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int i) {
         switch(i){
             case 0:
-                ExploreFragment exploreFrag = new ExploreFragment();
-                return exploreFrag;
+                return ExploreFragment.newInstance();
             case 1:
-                MyJobsFragment myJobsFrag = new MyJobsFragment();
-                return myJobsFrag;
+                return MyJobsFragment.newInstance();
             default:
                 return null;
         }
@@ -27,7 +26,7 @@ public class JobsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return titles.length;
     }
 
     @Override
