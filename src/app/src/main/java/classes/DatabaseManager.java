@@ -1,6 +1,7 @@
 package classes;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,6 +12,9 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,8 +32,10 @@ public class DatabaseManager {
 
     public void setUp() {
         shared.mAuth = FirebaseAuth.getInstance();
-        shared.jobRef = FirebaseDatabase.getInstance().getReference("job");
-        shared.userRef = FirebaseDatabase.getInstance().getReference("user");
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        shared.jobRef = database.getReference("job");
+        shared.userRef = database.getReference("user");
 
         shared.jobs = new ArrayList<Job>();
 //        shared.jobs.add( new Job("Window Washing", "Lorem ipsum dolor sit amet, illum recteque his at, veniam verear ne ius, ad mea aliquam definitionem. Has elitr splendide argumentum in. Qui ei tantas doctus sensibus. Case efficiantur ex duo.",0,"job1","123 Main St", LocalDateTime.of(2019, 2,22,12,30),20));
@@ -52,7 +58,6 @@ public class DatabaseManager {
 //        shared.users.add( new User(1,"password", "Jane", "Doe"));
     }
 
-    // Jobs
     public ArrayList<Job> getJobs() {
         return shared.jobs;
     }
@@ -60,13 +65,13 @@ public class DatabaseManager {
     //adds job to front of shared jobs lists
     public void addJob(Job job) {
         //This will get removed
-        shared.jobs.add(0, job);
+//        shared.jobs.add(0, job);
 
         String id = shared.jobRef.push().getKey();
         job.setJobID(id);
         shared.jobRef.child(id).setValue(job);
     }
-
+    
     // Users
     public ArrayList<User> getUsers() {
         return shared.users;

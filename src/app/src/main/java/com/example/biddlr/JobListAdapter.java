@@ -10,13 +10,14 @@ import android.widget.TextView;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 import classes.Job;
 
 
 public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> {
-    private List<Job> jobsList;
+    private List<Job> jobsList = new ArrayList<Job>();
 
     class JobViewHolder extends RecyclerView.ViewHolder{
         private ImageView jobPicture;

@@ -40,12 +40,14 @@ public class Job implements Parcelable {
     private String photoURL;
     private String location;
     private LatLng coordinates;
-    private LocalDateTime expirationDate;
+    private String expirationDate;
     private Double startingPrice;
     private Double currentBid;
     private HashMap<Integer, Double> bids;  // <bidderID, bidValue>
 
     // Initializers
+    public Job() { }
+
     public Job(String title, String description, int posterID, int selectedBidderID,
                String photoURL, String location, LocalDateTime expirationDate, JobStatus status, double startingPrice,
                double currentBid, HashMap<Integer, Double> bids) {
@@ -57,7 +59,7 @@ public class Job implements Parcelable {
         this.selectedBidderID = selectedBidderID;
         this.photoURL = photoURL;
         this.location = location;
-        this.expirationDate = expirationDate;
+        this.expirationDate = expirationDate.toString();
         this.startingPrice = startingPrice;
         this.currentBid = currentBid;
         this.bids = bids;
@@ -74,7 +76,7 @@ public class Job implements Parcelable {
         this.photoURL = photoURL;
         this.location = location;
         this.coordinates = geocode(location);
-        this.expirationDate = expirationDate;
+        this.expirationDate = expirationDate.toString();
         this.startingPrice = startingPrice;
         this.currentBid = null;
         this.bids = null;
@@ -96,7 +98,7 @@ public class Job implements Parcelable {
         dest.writeInt(this.selectedBidderID);
         dest.writeString(this.photoURL);
         dest.writeString(this.location);
-        dest.writeString(this.expirationDate.toString());
+        dest.writeString(this.expirationDate);
         dest.writeDouble(this.startingPrice);
         dest.writeDouble(this.currentBid);
         dest.writeSerializable(this.bids);
@@ -120,7 +122,7 @@ public class Job implements Parcelable {
         this.selectedBidderID = src.readInt();
         this.photoURL = src.readString();
         this.location = src.readString();
-        this.expirationDate = LocalDateTime.parse(src.readString());
+        this.expirationDate = src.readString();
         this.startingPrice = src.readDouble();
         this.currentBid = src.readDouble();
         this.bids = (HashMap<Integer, Double>) src.readSerializable();
@@ -161,7 +163,7 @@ public class Job implements Parcelable {
     }
 
     public LocalDateTime getExpirationDate() {
-        return this.expirationDate;
+        return LocalDateTime.parse(this.expirationDate);
     }
 
     public Double getStartingPrice() {
@@ -199,17 +201,17 @@ public class Job implements Parcelable {
 
     public String getFormattedExpirationDate() {
         // We can mak our own formatter
-        return this.expirationDate.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
+        return getExpirationDate().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
     }
 
     public String getFormattedDateFromNow() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime temp = LocalDateTime.from( now );
 
-        long days = temp.until( this.expirationDate, ChronoUnit.DAYS);
+        long days = temp.until( getExpirationDate(), ChronoUnit.DAYS);
 //        temp = temp.plusDays( days );
 
-        long hours = temp.until( this.expirationDate, ChronoUnit.HOURS);
+        long hours = temp.until( getExpirationDate(), ChronoUnit.HOURS);
 //        temp = temp.plusHours( hours );
 
         if (hours < 0) { return "Expired"; };
