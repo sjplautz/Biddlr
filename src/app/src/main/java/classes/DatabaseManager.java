@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class DatabaseManager {
 
@@ -27,17 +28,13 @@ public class DatabaseManager {
     private ArrayList<Job> jobs;
     private ArrayList<User> users;
     public FirebaseAuth mAuth;
+    public FirebaseDatabase database;
     public DatabaseReference jobRef;
     public DatabaseReference userRef;
 
     public void setUp() {
         shared.mAuth = FirebaseAuth.getInstance();
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        shared.jobRef = database.getReference("job");
-        shared.userRef = database.getReference("user");
-
-        shared.jobs = new ArrayList<Job>();
 //        shared.jobs.add( new Job("Window Washing", "Lorem ipsum dolor sit amet, illum recteque his at, veniam verear ne ius, ad mea aliquam definitionem. Has elitr splendide argumentum in. Qui ei tantas doctus sensibus. Case efficiantur ex duo.",0,"job1","123 Main St", LocalDateTime.of(2019, 2,22,12,30),20));
 //        shared.jobs.add( new Job("Lawn Mowing", "Lorem ipsum dolor sit amet, illum recteque his at, veniam verear ne ius, ad mea aliquam definitionem. Has elitr splendide argumentum in. Qui ei tantas doctus sensibus. Case efficiantur ex duo.",0,"job1","123 Main St", LocalDateTime.of(2019, 2,22,12,30),20));
 //        shared.jobs.add( new Job("Sort Change", "Lorem ipsum dolor sit amet, illum recteque his at, veniam verear ne ius, ad mea aliquam definitionem. Has elitr splendide argumentum in. Qui ei tantas doctus sensibus. Case efficiantur ex duo.",0,"job1","123 Main St", LocalDateTime.of(2019, 2,22,12,30),20));
@@ -58,15 +55,40 @@ public class DatabaseManager {
 //        shared.users.add( new User(1,"password", "Jane", "Doe"));
     }
 
+    public void setJobListener() {
+        shared.database = FirebaseDatabase.getInstance();
+        shared.jobRef = database.getReference("job");
+        shared.jobs = new ArrayList<Job>();
+
+        ChildEventListener jobChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Job job = dataSnapshot.getValue(Job.class);
+                Log.d("FIREBASE", "job: " + job);
+                shared.jobs.add(0, job);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        };
+        DatabaseManager.shared.jobRef.addChildEventListener(jobChildEventListener);
+    }
+
     public ArrayList<Job> getJobs() {
         return shared.jobs;
     }
 
     //adds job to front of shared jobs lists
     public void addJob(Job job) {
-        //This will get removed
-//        shared.jobs.add(0, job);
-
         String id = shared.jobRef.push().getKey();
         job.setJobID(id);
         shared.jobRef.child(id).setValue(job);

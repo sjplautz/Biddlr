@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 
 import classes.DatabaseManager;
 import classes.Job;
+import classes.LocalDateTimeWrapped;
 
 public class HomeActivity extends AppCompatActivity {
     BottomNavigationView nav;
@@ -35,10 +36,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         bar = getSupportActionBar();
-
-        // Set up dummy database
-        DatabaseManager.shared.setUp();
-
 
         nav = findViewById(R.id.menuNav);
         nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -146,7 +143,7 @@ public class HomeActivity extends AppCompatActivity {
         if(startingPriceText.trim().isEmpty()) return;
         double startingPrice = Double.parseDouble(startingPriceText);
 
-        Job job = new Job(title, desc, 0, "job1", location, expDate, startingPrice);
+        Job job = new Job(title, desc,"job1", location, expDate, startingPrice);
         DatabaseManager.shared.addJob(job);
 
         closeDialog();

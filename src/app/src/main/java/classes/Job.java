@@ -8,21 +8,12 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import org.json.*;
@@ -35,12 +26,12 @@ public class Job implements Parcelable {
     private JobStatus status;
     private String title;
     private String description;
-    private Integer posterID;
-    private Integer selectedBidderID;
+    private String posterID;
+    private String selectedBidderID;
     private String photoURL;
     private String location;
-    private LatLng coordinates;
-    private String expirationDate;
+    private LatLngWrapped coordinates;
+    private LocalDateTimeWrapped expirationDate;
     private Double startingPrice;
     private Double currentBid;
     private HashMap<Integer, Double> bids;  // <bidderID, bidValue>
@@ -48,10 +39,11 @@ public class Job implements Parcelable {
     // Initializers
     public Job() { }
 
-    public Job(String title, String description, int posterID, int selectedBidderID,
-               String photoURL, String location, LocalDateTime expirationDate, JobStatus status, double startingPrice,
+    // Required init
+    public Job(String jobID, String title, String description, String posterID, String selectedBidderID,
+               String photoURL, String location, LatLngWrapped coordinates, LocalDateTimeWrapped expirationDate, JobStatus status, double startingPrice,
                double currentBid, HashMap<Integer, Double> bids) {
-        this.jobID = null;
+        this.jobID = jobID;
         this.status = status;
         this.title = title;
         this.description = description;
@@ -59,26 +51,28 @@ public class Job implements Parcelable {
         this.selectedBidderID = selectedBidderID;
         this.photoURL = photoURL;
         this.location = location;
-        this.expirationDate = expirationDate.toString();
+        this.coordinates = coordinates;
+        this.expirationDate = expirationDate;
         this.startingPrice = startingPrice;
         this.currentBid = currentBid;
         this.bids = bids;
     }
 
-    public Job(String title, String description, int posterID, String photoURL, String location,
+    // General init
+    public Job(String title, String description, String photoURL, String location,
                LocalDateTime expirationDate, double startingPrice) {
         this.jobID = null;
         this.status = JobStatus.IN_BIDDING;
         this.title = title;
         this.description = description;
-        this.posterID = posterID;
+        this.posterID = DatabaseManager.shared.mAuth.getCurrentUser().getUid();
         this.selectedBidderID = null;
         this.photoURL = photoURL;
         this.location = location;
         this.coordinates = geocode(location);
-        this.expirationDate = expirationDate.toString();
+        this.expirationDate = new LocalDateTimeWrapped(expirationDate);
         this.startingPrice = startingPrice;
-        this.currentBid = null;
+        this.currentBid = startingPrice;
         this.bids = null;
     }
 
@@ -94,11 +88,12 @@ public class Job implements Parcelable {
         dest.writeInt(this.status.ordinal());
         dest.writeString(this.title);
         dest.writeString(this.description);
-        dest.writeInt(this.posterID);
-        dest.writeInt(this.selectedBidderID);
+        dest.writeString(this.posterID);
+        dest.writeString(this.selectedBidderID);
         dest.writeString(this.photoURL);
         dest.writeString(this.location);
-        dest.writeString(this.expirationDate);
+        dest.writeString(new LatLng(this.coordinates.lat, this.coordinates.lng).toString());
+        dest.writeString(this.expirationDate.localDateTime);
         dest.writeDouble(this.startingPrice);
         dest.writeDouble(this.currentBid);
         dest.writeSerializable(this.bids);
@@ -118,100 +113,142 @@ public class Job implements Parcelable {
         this.status = JobStatus.values()[src.readInt()];
         this.title = src.readString();
         this.description = src.readString();
-        this.posterID = src.readInt();
-        this.selectedBidderID = src.readInt();
+        this.posterID = src.readString();
+        this.selectedBidderID = src.readString();
         this.photoURL = src.readString();
         this.location = src.readString();
-        this.expirationDate = src.readString();
+        this.coordinates = new LatLngWrapped(src.readString());
+        this.expirationDate = new LocalDateTimeWrapped(src.readString());
         this.startingPrice = src.readDouble();
         this.currentBid = src.readDouble();
         this.bids = (HashMap<Integer, Double>) src.readSerializable();
     }
 
-
-    // Accessors
+    // Getters and Setters
     public String getJobID() {
-        return this.jobID;
+        return jobID;
     }
-
-    public JobStatus getJobStatus() {
-        return this.status;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public Integer getPosterID() {
-        return this.posterID;
-    }
-
-    public Integer getSelectedBidderID() {
-        return this.selectedBidderID;
-    }
-
-    public String getPhotoURL() {
-        return this.photoURL;
-    }
-
-    public String getLocation() {
-        return this.location;
-    }
-
-    public LocalDateTime getExpirationDate() {
-        return LocalDateTime.parse(this.expirationDate);
-    }
-
-    public Double getStartingPrice() {
-        return this.startingPrice;
-    }
-
-    public Double getCurrentBid() {
-        return this.currentBid == null ? 0 : this.currentBid;
-    }
-
-    public HashMap<Integer, Double> getBids() {
-        return this.bids;
-    }
-
-    // Modifiers
-
 
     public void setJobID(String jobID) {
         this.jobID = jobID;
     }
 
-    public void updateJobStatus(JobStatus status) {
+    public JobStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(JobStatus status) {
         this.status = status;
     }
 
-
-    public void setSelectedBidder(int bidderID) {
-        this.selectedBidderID = bidderID;
+    public String getTitle() {
+        return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPosterID() {
+        return posterID;
+    }
+
+    public void setPosterID(String posterID) {
+        this.posterID = posterID;
+    }
+
+    public String getSelectedBidderID() {
+        return selectedBidderID;
+    }
+
+    public void setSelectedBidderID(String selectedBidderID) {
+        this.selectedBidderID = selectedBidderID;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public LatLngWrapped getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(LatLngWrapped coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public LocalDateTimeWrapped getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(LocalDateTimeWrapped expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public Double getStartingPrice() {
+        return startingPrice;
+    }
+
+    public void setStartingPrice(Double startingPrice) {
+        this.startingPrice = startingPrice;
+    }
+
+    public Double getCurrentBid() {
+        return currentBid;
+    }
+
+    public void setCurrentBid(Double currentBid) {
+        this.currentBid = currentBid;
+    }
+
+    public HashMap<Integer, Double> getBids() {
+        return bids;
+    }
+
+    public void setBids(HashMap<Integer, Double> bids) {
+        this.bids = bids;
+    }
+
+
+    // Custom Methods
     public void addBid(int bidderId, double bid) {
         this.bids.put(bidderId, bid);
         this.currentBid = bid < this.currentBid ? bid : this.currentBid;
     }
 
-    public String getFormattedExpirationDate() {
+    public String formatExpirationDate() {
         // We can mak our own formatter
-        return getExpirationDate().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
+        return LocalDateTime.parse(getExpirationDate().getLocalDateTime()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
     }
 
-    public String getFormattedDateFromNow() {
+    public String formatDateFromNow() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime temp = LocalDateTime.from( now );
 
-        long days = temp.until( getExpirationDate(), ChronoUnit.DAYS);
+        long days = temp.until( LocalDateTime.parse(getExpirationDate().getLocalDateTime()), ChronoUnit.DAYS);
 //        temp = temp.plusDays( days );
 
-        long hours = temp.until( getExpirationDate(), ChronoUnit.HOURS);
+        long hours = temp.until( LocalDateTime.parse(getExpirationDate().getLocalDateTime()), ChronoUnit.HOURS);
 //        temp = temp.plusHours( hours );
 
         if (hours < 0) { return "Expired"; };
@@ -268,7 +305,7 @@ public class Job implements Parcelable {
 
 
     //forward geocode for retrieving coordinates from address
-    public static LatLng geocode(String address){
+    public static LatLngWrapped geocode(String address){
         String apiKey = "NypbUMfluOKXSv4v02Gq1Er3kIA9AfVB";
         String requestPath = "http://www.mapquestapi.com/geocoding/v1/address?key="+apiKey+"&location=";
         LatLng coordinates;
@@ -293,7 +330,7 @@ public class Job implements Parcelable {
             Log.d("VERIFICATION", "latitude: " + lat + " longitude: " + lng);
 
             coordinates = new LatLng(lat, lng);
-            return coordinates;
+            return new LatLngWrapped(lat, lng);
         }
         catch (Exception e){
             e.printStackTrace();

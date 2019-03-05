@@ -17,7 +17,7 @@ import classes.Job;
 
 
 public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> {
-    private List<Job> jobsList = new ArrayList<Job>();
+    private List<Job> jobsList;
 
     class JobViewHolder extends RecyclerView.ViewHolder{
         private ImageView jobPicture;
@@ -68,7 +68,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         if(job.getLocation() != null)
             holder.jobLocation.setText(job.getLocation());
 
-        String time = timeLeft(job.getExpirationDate());
+        String time = timeLeft(job.getExpirationDate().toLocalDateTime());
         holder.jobTime.setText(time);
     }
 

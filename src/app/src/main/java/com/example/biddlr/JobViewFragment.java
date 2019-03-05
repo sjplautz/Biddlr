@@ -50,7 +50,7 @@ public class JobViewFragment extends Fragment {
         txtJobLocation.setText(job.getLocation());
 
         TextView txtTimeToExpiration = (TextView) v.findViewById(R.id.txtTimeToExpiration);
-        txtTimeToExpiration.setText(job.getFormattedDateFromNow());
+        txtTimeToExpiration.setText(job.formatDateFromNow());
 
         TextView txtJobAskingPrice = (TextView) v.findViewById(R.id.txtJobAskingPrice);
         String start = "$" + job.getStartingPrice();

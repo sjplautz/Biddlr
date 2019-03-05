@@ -29,8 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseManager.shared.setUp();
-
         setContentView(R.layout.activity_login);
 
         getSupportActionBar().hide();
@@ -70,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // update UI to start app with current user
         if (currentUser != null) {
+            DatabaseManager.shared.setJobListener();
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }
@@ -91,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = DatabaseManager.shared.mAuth.getCurrentUser();
+                            DatabaseManager.shared.setJobListener();
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             finish();
                         } else {

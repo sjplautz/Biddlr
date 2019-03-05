@@ -89,29 +89,6 @@ public class ExploreFragment extends Fragment {
             }
         }));
 
-        ChildEventListener jobChildEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Map<String, Job> map = (Map<String, Job>) dataSnapshot.getValue();
-                Log.d("JOB", "values: " + map.values());
-                jobList.addAll(map.values());
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
-        };
-        DatabaseManager.shared.jobRef.addChildEventListener(jobChildEventListener);
-
         //prepareSampleData();
         return v;
     }
