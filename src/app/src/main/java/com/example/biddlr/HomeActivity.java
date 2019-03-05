@@ -51,9 +51,9 @@ public class HomeActivity extends AppCompatActivity {
                         selectedFrag = HomeFragment.newInstance();
                         tag = "HOME";
                         break;
-                    case R.id.itemExplore:
+                    case R.id.itemJobs:
                         selectedFrag = JobsFragment.newInstance();
-                        tag = "EXPLORE";
+                        tag = "JOBS";
                         break;
                     case R.id.itemProfile:
                         selectedFrag = ProfileFragment.newInstance();
@@ -74,14 +74,6 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         //TODO Make a image picker
-        //TODO Also move this to first two fragments
-        FloatingActionButton btnNewJob = findViewById(R.id.btnNewJob);
-        btnNewJob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialog();
-            }
-        });
 
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.frameNull, HomeFragment.newInstance());
@@ -93,11 +85,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void openDialog(){
+    public void openDialog(){
         Fragment frag = JobCreationFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(android.R.id.content, frag, "DIALOG");
-        transaction.addToBackStack(null);
+        transaction.addToBackStack("DIALOG");
         transaction.commit();
 
         bar.setCustomView(R.layout.dialog_action_bar);

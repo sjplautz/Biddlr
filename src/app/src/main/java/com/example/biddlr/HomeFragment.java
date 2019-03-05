@@ -1,6 +1,7 @@
 package com.example.biddlr;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -42,6 +43,14 @@ public class HomeFragment extends Fragment {
         adapter = new JobListAdapter(jobList);
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+
+        FloatingActionButton btnCreateNewJob = v.findViewById(R.id.btnCreateNewJob);
+        btnCreateNewJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity)getActivity()).openDialog();
+            }
+        });
 
         //Sets the layout for the recycler view to inflate with
         recycler = v.findViewById(R.id.homeRecycler);

@@ -3,6 +3,7 @@ package com.example.biddlr;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -29,11 +30,19 @@ public class JobsFragment extends Fragment {
 
         TabLayout tabsJobs = v.findViewById(R.id.tabsJobs);
         ViewPager pagerJobs = v.findViewById(R.id.pagerJobs);
+        FloatingActionButton btnCreateNewJobs = v.findViewById(R.id.btnCreateNewJob);
 
         JobsPagerAdapter adapter = new JobsPagerAdapter(getFragmentManager());
         pagerJobs.setAdapter(adapter);
 
         tabsJobs.setupWithViewPager(pagerJobs);
+
+        btnCreateNewJobs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity)getActivity()).openDialog();
+            }
+        });
         return v;
     }
 }

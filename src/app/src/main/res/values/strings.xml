@@ -37,5 +37,6 @@
     <string name="strDateFormat">MM/DD/YYYY</string>
     <string name="strTimeFormat">HH:MM</string>
     <string name="action_logout">Log out</string>
+    <string name="strJobs">Jobs</string>
 
 </resources>
