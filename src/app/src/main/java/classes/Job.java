@@ -308,7 +308,7 @@ public class Job implements Parcelable {
     public static LatLngWrapped geocode(String address){
         String apiKey = "NypbUMfluOKXSv4v02Gq1Er3kIA9AfVB";
         String requestPath = "http://www.mapquestapi.com/geocoding/v1/address?key="+apiKey+"&location=";
-        LatLngWrapped coordinates;
+        LatLng coordinates;
         double lat = 0;
         double lng = 0;
 
@@ -329,8 +329,8 @@ public class Job implements Parcelable {
 
             Log.d("VERIFICATION", "latitude: " + lat + " longitude: " + lng);
 
-            coordinates = new LatLngWrapped(lat, lng);
-            return coordinates;
+            coordinates = new LatLng(lat, lng);
+            return new LatLngWrapped(lat, lng);
         }
         catch (Exception e){
             e.printStackTrace();
