@@ -245,7 +245,7 @@ public class Job implements Parcelable {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime temp = LocalDateTime.from( now );
 
-        long days = temp.until( getExpirationDate().toLocalDateTime()), ChronoUnit.DAYS);
+        long days = temp.until( getExpirationDate().toLocalDateTime(), ChronoUnit.DAYS);
 //        temp = temp.plusDays( days );
 
         long hours = temp.until( LocalDateTime.parse(getExpirationDate().getLocalDateTime()), ChronoUnit.HOURS);
