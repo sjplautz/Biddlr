@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 public class HttpGetRequest extends AsyncTask<String, Void, String> {
     private static final String REQUEST_METHOD = "GET";
@@ -26,9 +27,16 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
         try{
             //Create URL object to hold passed in URL
             URL myUrl = new URL(urlString);
+            HttpURLConnection connection;
 
             //Create the connection
-            HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
+            try{
+                connection = (HttpURLConnection) myUrl.openConnection();
+            }
+            catch(UnknownHostException e){
+                Log.e("SPECIAL", "unknown host");
+                return null;
+            }
 
             //Set methods and timeouts
             connection.setRequestMethod(REQUEST_METHOD);
