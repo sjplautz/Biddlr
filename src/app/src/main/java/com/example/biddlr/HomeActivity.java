@@ -1,6 +1,8 @@
 package com.example.biddlr;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.nio.ByteBuffer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -118,6 +121,14 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void submitDialog(){
+        ImageButton btnImagePicker = findViewById(R.id.btnImagePicker);
+        Bitmap image = ((BitmapDrawable) btnImagePicker.getDrawable()).getBitmap();
+
+        int size = image.getRowBytes() * image.getHeight();
+        ByteBuffer buffer = ByteBuffer.allocate(size);
+        image.copyPixelsToBuffer(buffer);
+        byte[] imgArr = buffer.array();
+
         TextView txtTitle = findViewById(R.id.txtTitle);
         String title = txtTitle.getText().toString();
         if(title.trim().isEmpty()) return;
