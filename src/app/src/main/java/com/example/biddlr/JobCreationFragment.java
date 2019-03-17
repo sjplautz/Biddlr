@@ -2,6 +2,7 @@ package com.example.biddlr;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetDialog;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -131,13 +133,16 @@ public class JobCreationFragment extends DialogFragment {
                     btnImagePicker.setImageBitmap(camImage);
                     break;
                 case 1:
-                    Bitmap image = null;
-                    try {
-                        image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    btnImagePicker.setImageBitmap(image);
+//                    Bitmap image = null;
+//                    try {
+//                        System.out.println(data.getData());
+//                        image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    btnImagePicker.setImageBitmap(image);
+                    btnImagePicker.setImageURI(data.getData());
+                    btnImagePicker.setScaleType(ImageView.ScaleType.FIT_XY);
                     break;
             }
 

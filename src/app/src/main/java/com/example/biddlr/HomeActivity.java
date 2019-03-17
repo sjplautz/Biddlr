@@ -163,7 +163,7 @@ public class HomeActivity extends AppCompatActivity {
             double startingPrice = Double.parseDouble(startingPriceText);
 
             //job constructor modified to include coordinates
-            Job job = new Job(title, desc, imgArr, location, coordinates, expDate, startingPrice);
+            Job job = new Job(title, desc, location, coordinates, expDate, startingPrice);
             DatabaseManager.shared.addJob(job, imgArr);
 
             closeDialog();

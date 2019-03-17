@@ -3,25 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp">
+    android:layout_height="150dp"
+    android:alpha=".8"
+    android:background="@color/common_google_signin_btn_text_dark_focused">
 
     <ImageButton
         android:id="@+id/btnCamera"
-        android:layout_width="100dp"
+        android:layout_width="0dp"
         android:layout_height="100dp"
-        android:layout_marginStart="50dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_timer_black_24dp" />
+        app:layout_constraintWidth_percent=".5"
+        app:srcCompat="@drawable/image_camera_white" />
 
     <ImageButton
         android:id="@+id/btnGallery"
-        android:layout_width="100dp"
+        android:layout_width="0dp"
         android:layout_height="100dp"
-        android:layout_marginEnd="50dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_build_24" />
+        app:layout_constraintWidth_percent=".5"
+        app:srcCompat="@drawable/image_folder_white" />
+
+    <ImageView
+        android:id="@+id/imgDivder"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/dividerVertical" />
+
 </android.support.constraint.ConstraintLayout>
