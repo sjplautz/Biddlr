@@ -1,5 +1,7 @@
 package com.example.biddlr;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -52,9 +54,9 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         Job job = jobsList.get(pos);
 
         //Set up job picture
-        int picId;
-        picId = job.getPhotoURL().equals("job1") ? R.drawable.job1 : R.drawable.job2;
-        holder.jobPicture.setImageResource(picId);
+//        byte[] imgArr = job.getPhoto();
+//        Bitmap jobImg = BitmapFactory.decodeByteArray(imgArr, 0, imgArr.length);
+//        holder.jobPicture.setImageBitmap(jobImg);
 
         //Set job title
         holder.jobTitle.setText(job.getTitle());

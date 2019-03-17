@@ -1,12 +1,19 @@
 package classes;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
@@ -17,6 +24,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,6 +40,8 @@ public class DatabaseManager {
     public FirebaseDatabase database;
     public DatabaseReference jobRef;
     public DatabaseReference userRef;
+    private FirebaseStorage storage;
+    private StorageReference imgRef;
 
     public void setUp() {
         shared.mAuth = FirebaseAuth.getInstance();
@@ -60,6 +71,9 @@ public class DatabaseManager {
         shared.jobRef = database.getReference("job");
         shared.jobs = new ArrayList<Job>();
 
+        shared.storage = FirebaseStorage.getInstance();
+        shared.imgRef = storage.getReference("images");
+
         ChildEventListener jobChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -88,8 +102,10 @@ public class DatabaseManager {
     }
 
     //adds job to front of shared jobs lists
-    public void addJob(Job job) {
+    public void addJob(Job job, byte[] image) {
         String id = shared.jobRef.push().getKey();
+        StorageReference tmpRef = shared.imgRef.child(id);
+        tmpRef.putBytes(image);
         job.setJobID(id);
         shared.jobRef.child(id).setValue(job);
     }

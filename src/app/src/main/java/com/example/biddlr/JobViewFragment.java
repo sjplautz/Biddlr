@@ -1,18 +1,14 @@
 package com.example.biddlr;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
 
@@ -70,8 +66,13 @@ public class JobViewFragment extends Fragment {
         ImageView imgProfile = (ImageView) v.findViewById(R.id.imgProfile);
         imgProfile.setImageResource(R.drawable.baseline_person_24);
 
-        ImageView imgJob = (ImageView) v.findViewById(R.id.imgJob);
-        imgJob.setImageResource(R.drawable.job1);
+        ImageView imgJob = v.findViewById(R.id.imgJob);
+//        DatabaseManager.shared.setImage(job.getJobID(), imgJob);
+//        Glide.with(this).load(DatabaseManager.shared.getRef(job.getJobID())).into(imgJob);
+//        ImageView imgJob = (ImageView) v.findViewById(R.id.imgJob);
+//        byte[] imgArr = job.getPhoto();
+//        Bitmap jobImg = BitmapFactory.decodeByteArray(imgArr, 0, imgArr.length);
+//        imgJob.setImageBitmap(jobImg);
 
         return v;
     }
