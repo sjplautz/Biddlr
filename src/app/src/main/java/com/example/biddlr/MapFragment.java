@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -22,15 +23,21 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.support.constraint.Constraints.TAG;
+import static com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    public static GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private CameraPosition mCameraPosition;
     private Location mCurrentLocation;
@@ -60,6 +67,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
+
+        //include method here for querying the database, will be passed in current coords
+
+        //this list needs to be filled with the result of querying against jobs database
+        //for coordinates within a certain distance of the detected user location
+        final List<LatLng> coordinateList = new ArrayList<LatLng>();
     }
 
     @Override
@@ -101,6 +114,45 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         //gets the devices location and sets the map view to be centered on the location returned
         getDeviceLocation();
+
+        //sets up listeners to handle pin loading for user map navigation gestures
+        mMap.setOnCameraMoveStartedListener(this);
+        mMap.setOnCameraMoveListener(this);
+        mMap.setOnCameraIdleListener(this);
+    }
+
+    @Override
+    public void onCameraMoveStarted(int reason){
+        if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE){
+            //the user gestured on the map
+            //do something
+            return;
+        }
+        else if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION){
+            //the user tapped something on the map
+            //do something
+            return;
+        }
+        else if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION){
+            //the app moved the camera
+            //do something
+            return;
+        }
+    }
+
+    @Override
+    public void onCameramove(){
+        //the camera is currently moving
+        //do something
+        return;
+    }
+
+    @Override
+    public void onCameraIdle(){
+        //the camera has stopped moving
+        //thus we want to now refresh the pins that are displayed accordingly
+        //do something
+        return;
     }
 
     //requests location permissions at runtime

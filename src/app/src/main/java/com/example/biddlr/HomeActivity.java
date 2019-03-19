@@ -16,6 +16,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -152,9 +155,11 @@ public class HomeActivity extends AppCompatActivity {
             if(startingPriceText.trim().isEmpty()) return;
             double startingPrice = Double.parseDouble(startingPriceText);
 
-            //job constructor modified to include coordinates
             Job job = new Job(title, desc,"job1", location, coordinates, expDate, startingPrice);
             DatabaseManager.shared.addJob(job);
+
+            //adds pin to homepage map
+            MapFragment.mMap.addMarker(new MarkerOptions().position(new LatLng(coordinates.lat, coordinates.lng )).title(title));
 
             closeDialog();
         }

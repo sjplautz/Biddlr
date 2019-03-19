@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,4 +93,14 @@ public class HomeFragment extends Fragment {
 
         return v;
     }
+
+    /*
+    //this will be used to update the map with the appropriate batch of pins when the map
+    //fragment is reopened, resulting in a dynamic map
+    @Override
+    public void onResume(){
+        super.onResume();
+        handler.post(batchAddMarkersRunnable);
+    }
+    */
 }
