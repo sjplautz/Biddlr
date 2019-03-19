@@ -21,7 +21,6 @@ public class Job implements Parcelable {
     private String description;
     private String posterID;
     private String selectedBidderID;
-    private String photoURL;
     private String location;
     private LatLngWrapped coordinates;
     private LocalDateTimeWrapped expirationDate;
@@ -34,7 +33,7 @@ public class Job implements Parcelable {
 
     // Required init
     public Job(String jobID, String title, String description, String posterID, String selectedBidderID,
-               String photoURL, String location, LatLngWrapped coordinates, LocalDateTimeWrapped expirationDate, JobStatus status, double startingPrice,
+               String location, LatLngWrapped coordinates, LocalDateTimeWrapped expirationDate, JobStatus status, double startingPrice,
                double currentBid, HashMap<Integer, Double> bids) {
         this.jobID = jobID;
         this.status = status;
@@ -42,7 +41,6 @@ public class Job implements Parcelable {
         this.description = description;
         this.posterID = posterID;
         this.selectedBidderID = selectedBidderID;
-        this.photoURL = photoURL;
         this.location = location;
         this.coordinates = coordinates;
         this.expirationDate = expirationDate;
@@ -52,7 +50,7 @@ public class Job implements Parcelable {
     }
 
     // General init
-    public Job(String title, String description, String photoURL, String location, LatLngWrapped coordinates,
+    public Job(String title, String description, String location, LatLngWrapped coordinates,
                LocalDateTime expirationDate, double startingPrice) {
         this.jobID = null;
         this.status = JobStatus.IN_BIDDING;
@@ -60,7 +58,6 @@ public class Job implements Parcelable {
         this.description = description;
         this.posterID = DatabaseManager.shared.mAuth.getCurrentUser().getUid();
         this.selectedBidderID = null;
-        this.photoURL = photoURL;
         this.location = location;
         this.coordinates = coordinates;
         this.expirationDate = new LocalDateTimeWrapped(expirationDate);
@@ -83,7 +80,6 @@ public class Job implements Parcelable {
         dest.writeString(this.description);
         dest.writeString(this.posterID);
         dest.writeString(this.selectedBidderID);
-        dest.writeString(this.photoURL);
         dest.writeString(this.location);
         dest.writeString(new LatLng(this.coordinates.lat, this.coordinates.lng).toString());
         dest.writeString(this.expirationDate.localDateTime);
@@ -108,7 +104,6 @@ public class Job implements Parcelable {
         this.description = src.readString();
         this.posterID = src.readString();
         this.selectedBidderID = src.readString();
-        this.photoURL = src.readString();
         this.location = src.readString();
         this.coordinates = new LatLngWrapped(src.readString());
         this.expirationDate = new LocalDateTimeWrapped(src.readString());
@@ -164,14 +159,6 @@ public class Job implements Parcelable {
 
     public void setSelectedBidderID(String selectedBidderID) {
         this.selectedBidderID = selectedBidderID;
-    }
-
-    public String getPhotoURL() {
-        return photoURL;
-    }
-
-    public void setPhotoURL(String photoURL) {
-        this.photoURL = photoURL;
     }
 
     public String getLocation() {

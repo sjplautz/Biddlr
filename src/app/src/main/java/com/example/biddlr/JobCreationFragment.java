@@ -1,6 +1,11 @@
 package com.example.biddlr;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.RectF;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -25,8 +32,12 @@ import java.util.concurrent.ExecutionException;
 import classes.HttpGetRequest;
 import classes.LatLngWrapped;
 
+import static android.app.Activity.RESULT_OK;
+
 //TODO Move submission code here
 public class JobCreationFragment extends DialogFragment {
+    private ImageButton btnImagePicker;
+    private BottomSheetDialog typePicker;
 
     public static JobCreationFragment newInstance() {
         JobCreationFragment fragment = new JobCreationFragment();
@@ -71,6 +82,36 @@ public class JobCreationFragment extends DialogFragment {
             }
         });
 
+        btnImagePicker = v.findViewById(R.id.btnImagePicker);
+        btnImagePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                typePicker = new BottomSheetDialog(getActivity());
+                View sheetView = getActivity().getLayoutInflater().inflate(R.layout.dialog_image_type, null);
+
+                ImageButton btnCamera = sheetView.findViewById(R.id.btnCamera);
+                btnCamera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent cameraPicker = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameraPicker, 0);
+                    }
+                });
+
+                ImageButton btnGallery = sheetView.findViewById(R.id.btnGallery);
+                btnGallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent galleryPicker = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(galleryPicker, 1);
+                    }
+                });
+
+                typePicker.setContentView(sheetView);
+                typePicker.show();
+            }
+        });
+
         Button btnCheckAddress = v.findViewById(R.id.btnCheckAddress);
         btnCheckAddress.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,8 +120,38 @@ public class JobCreationFragment extends DialogFragment {
             }
         });
 
-
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case 0:
+                    Bitmap camImage = (Bitmap)data.getExtras().get("data");
+                    btnImagePicker.setImageBitmap(camImage);
+                    break;
+                case 1:
+//                    Bitmap image = null;
+//                    try {
+//                        System.out.println(data.getData());
+//                        image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    btnImagePicker.setImageBitmap(image);
+                    btnImagePicker.setImageURI(data.getData());
+                    btnImagePicker.setScaleType(ImageView.ScaleType.FIT_XY);
+                    break;
+            }
+
+            typePicker.hide();
+        }
+        else{
+            System.out.println(resultCode);
+            System.out.println("ERROR");
+        }
     }
 
     public void verifyAddress(){

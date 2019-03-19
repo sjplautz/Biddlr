@@ -11,7 +11,7 @@
     <string name="prompt_lname">Last Name</string>
     <string name="prompt_password">Password</string>
     <string name="strCreateUser">Create Account</string>
-    <string name="strForgetPass">Forgot Password</string>
+    <string name="strForgetPass">Reset Password</string>
     <string name="enter_password">Enter Password</string>
     <string name="reenter_password">Re-Enter Password</string>
     <string name="strSubmit">SUBMIT</string>
