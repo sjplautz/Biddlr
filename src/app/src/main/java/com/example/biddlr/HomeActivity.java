@@ -165,6 +165,8 @@ public class HomeActivity extends AppCompatActivity {
             //job constructor modified to include coordinates
             Job job = new Job(title, desc, location, coordinates, expDate, startingPrice);
             DatabaseManager.shared.addJob(job, imgArr);
+//            Job job = new Job(title, desc,"job1", location, coordinates, expDate, startingPrice);
+//            DatabaseManager.shared.addJob(job);
 
             closeDialog();
         }
