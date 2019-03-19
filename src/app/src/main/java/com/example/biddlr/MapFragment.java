@@ -116,44 +116,44 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         getDeviceLocation();
 
         //sets up listeners to handle pin loading for user map navigation gestures
-        mMap.setOnCameraMoveStartedListener(this);
-        mMap.setOnCameraMoveListener(this);
-        mMap.setOnCameraIdleListener(this);
+//        mMap.setOnCameraMoveStartedListener(this);
+//        mMap.setOnCameraMoveListener(this);
+//        mMap.setOnCameraIdleListener(this);
     }
 
-    @Override
-    public void onCameraMoveStarted(int reason){
-        if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE){
-            //the user gestured on the map
-            //do something
-            return;
-        }
-        else if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION){
-            //the user tapped something on the map
-            //do something
-            return;
-        }
-        else if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION){
-            //the app moved the camera
-            //do something
-            return;
-        }
-    }
-
-    @Override
-    public void onCameramove(){
-        //the camera is currently moving
-        //do something
-        return;
-    }
-
-    @Override
-    public void onCameraIdle(){
-        //the camera has stopped moving
-        //thus we want to now refresh the pins that are displayed accordingly
-        //do something
-        return;
-    }
+//    @Override
+//    public void onCameraMoveStarted(int reason){
+//        if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE){
+//            //the user gestured on the map
+//            //do something
+//            return;
+//        }
+//        else if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION){
+//            //the user tapped something on the map
+//            //do something
+//            return;
+//        }
+//        else if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION){
+//            //the app moved the camera
+//            //do something
+//            return;
+//        }
+//    }
+//
+//    @Override
+//    public void onCameramove(){
+//        //the camera is currently moving
+//        //do something
+//        return;
+//    }
+//
+//    @Override
+//    public void onCameraIdle(){
+//        //the camera has stopped moving
+//        //thus we want to now refresh the pins that are displayed accordingly
+//        //do something
+//        return;
+//    }
 
     //requests location permissions at runtime
     private void getLocationPermission() {

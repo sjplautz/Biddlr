@@ -1,6 +1,8 @@
 package com.example.biddlr;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -16,9 +18,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
+import java.nio.ByteBuffer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -127,9 +127,16 @@ public class HomeActivity extends AppCompatActivity {
     };
 
     private void submitDialog(){
-
         //add in logic for flag value on submission
         if(flag > 0){
+            ImageButton btnImagePicker = findViewById(R.id.btnImagePicker);
+            Bitmap image = ((BitmapDrawable) btnImagePicker.getDrawable()).getBitmap();
+
+            int size = image.getRowBytes() * image.getHeight();
+            ByteBuffer buffer = ByteBuffer.allocate(size);
+            image.copyPixelsToBuffer(buffer);
+            byte[] imgArr = buffer.array();
+
             TextView txtTitle = findViewById(R.id.txtTitle);
             String title = txtTitle.getText().toString();
             if(title.trim().isEmpty()) return;
@@ -155,19 +162,9 @@ public class HomeActivity extends AppCompatActivity {
             if(startingPriceText.trim().isEmpty()) return;
             double startingPrice = Double.parseDouble(startingPriceText);
 
-
             //job constructor modified to include coordinates
             Job job = new Job(title, desc, location, coordinates, expDate, startingPrice);
-//            DatabaseManager.shared.addJob(job, imgArr);
-//            Job job = new Job(title, desc,"job1", location, coordinates, expDate, startingPrice);
-//            DatabaseManager.shared.addJob(job);
-
-//            Job job = new Job(title, desc,"job1", location, coordinates, expDate, startingPrice);
-//            DatabaseManager.shared.addJob(job);
-
-            //adds pin to homepage map
-            MapFragment.mMap.addMarker(new MarkerOptions().position(new LatLng(coordinates.lat, coordinates.lng )).title(title));
-
+            DatabaseManager.shared.addJob(job, imgArr);
 
             closeDialog();
         }
