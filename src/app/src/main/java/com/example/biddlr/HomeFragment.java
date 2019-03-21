@@ -41,8 +41,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        jobList = DatabaseManager.shared.getJobs();
-        adapter = new JobListAdapter(jobList);
+        adapter = DatabaseManager.shared.getExploreAdapter();
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 

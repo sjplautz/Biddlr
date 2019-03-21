@@ -56,10 +56,10 @@ public class ExploreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        jobList = DatabaseManager.shared.getJobs();
         View v = inflater.inflate(R.layout.fragment_explore, container, false);
 
-        adapter = new JobListAdapter(jobList);
+        adapter = DatabaseManager.shared.getExploreAdapter();
+
         recycler = v.findViewById(R.id.exploreRecycler);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext().getApplicationContext());
         recycler.setLayoutManager(manager);
