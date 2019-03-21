@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
         recycler.addOnItemTouchListener(new JobListTouchListener(getContext(), recycler, new JobListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
-                Job job = jobList.get(pos);
+                Job job = DatabaseManager.shared.getJobs().get(pos);
                 Fragment jobFrag = JobViewFragment.newInstance(job);
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
