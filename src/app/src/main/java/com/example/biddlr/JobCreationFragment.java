@@ -154,15 +154,25 @@ public class JobCreationFragment extends DialogFragment {
         }
     }
 
+    //given user entered address, ensures address is reasonable and the geocodes
     public void verifyAddress(){
         TextView locationView = getActivity().findViewById(R.id.txtLocation);
         String location = locationView.getText().toString();
 
         if(!location.isEmpty()){
-            HomeActivity.coordinates = geocode(location);
-            Toast.makeText(getActivity(), "address checked out",
-                    Toast.LENGTH_LONG).show();
-            HomeActivity.flag = 1;
+            //checking that the address fits one of the regex's specified
+            Boolean flag = checkFormat(location);
+            if(flag){
+                Toast.makeText(getActivity(), "valid address entered",
+                        Toast.LENGTH_LONG).show();
+                HomeActivity.coordinates = geocode(location);
+                HomeActivity.flag = 1;
+            }
+            else{
+                Toast.makeText(getActivity(), "please enter job address in standard mailing format",
+                        Toast.LENGTH_LONG).show();
+                HomeActivity.flag = 0;
+            }
         }
         else{
             Toast.makeText(getActivity(), "please enter a non-empty address",
@@ -171,6 +181,21 @@ public class JobCreationFragment extends DialogFragment {
         }
 
         return;
+    }
+
+    //checks if address fits specified format for inputting addresses for job creation
+    public Boolean checkFormat(String location){
+        //             opt                 opt
+        //example: 3720 N. 33rd Dr., Apt# 709, Rockford, IL
+
+        //pattern allows for optional cardinal directions, abbreviations, and apt/suite numbers
+        String pattern1 = "\\d{1,5}\\s(\\w*.?\\s)?\\w*\\s\\w*.?,\\s(\\w*.?\\W?\\s\\W?\\d{1,5}(\\s)?)?(,\\s)?\\w*,\\s\\w*";
+
+        //test against prescribed format
+        if(location.matches(pattern1))
+            return true;
+
+        return false;
     }
 
     //forward geocode for retrieving coordinates from address
