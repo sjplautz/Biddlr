@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -132,10 +133,13 @@ public class HomeActivity extends AppCompatActivity {
             ImageButton btnImagePicker = findViewById(R.id.btnImagePicker);
             Bitmap image = ((BitmapDrawable) btnImagePicker.getDrawable()).getBitmap();
 
-            int size = image.getRowBytes() * image.getHeight();
-            ByteBuffer buffer = ByteBuffer.allocate(size);
-            image.copyPixelsToBuffer(buffer);
-            byte[] imgArr = buffer.array();
+//            int size = image.getRowBytes() * image.getHeight();
+//            ByteBuffer buffer = ByteBuffer.allocate(size);
+//            image.copyPixelsToBuffer(buffer);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] imgArr = stream.toByteArray();
+            image.recycle();
 
             TextView txtTitle = findViewById(R.id.txtTitle);
             String title = txtTitle.getText().toString();

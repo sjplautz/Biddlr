@@ -10,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.storage.StorageReference;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.DatabaseManager;
 import classes.Job;
 
 
@@ -54,9 +57,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         Job job = jobsList.get(pos);
 
         //Set up job picture
-//        byte[] imgArr = job.getPhoto();
-//        Bitmap jobImg = BitmapFactory.decodeByteArray(imgArr, 0, imgArr.length);
-//        holder.jobPicture.setImageBitmap(jobImg);
+        DatabaseManager.shared.setImage(job.getJobID(), holder.jobPicture);
 
         //Set job title
         holder.jobTitle.setText(job.getTitle());

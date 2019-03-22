@@ -1,12 +1,17 @@
 package classes;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Adapter;
+import android.widget.ImageView;
 
 import com.example.biddlr.ExploreFragment;
 import com.example.biddlr.JobListAdapter;
+import com.example.biddlr.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -105,9 +110,26 @@ public class DatabaseManager {
     public void addJob(Job job, byte[] image) {
         String id = jobRef.push().getKey();
         StorageReference tmpRef = imgRef.child(id);
+        System.out.println(image.length);
         tmpRef.putBytes(image);
         job.setJobID(id);
         jobRef.child(id).setValue(job);
+    }
+
+    public StorageReference getImgRef(String jobId){
+        return imgRef.child(jobId);
+    }
+
+    public void setImage(String id, final ImageView iv){
+        iv.setImageResource(R.drawable.ic_biddlrlogo);
+        StorageReference ref = imgRef.child(id);
+        ref.getBytes(1024*1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                iv.setImageBitmap(bmp);
+            }
+        });
     }
     
     // Users

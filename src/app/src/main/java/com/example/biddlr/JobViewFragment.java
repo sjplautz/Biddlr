@@ -1,5 +1,7 @@
 package com.example.biddlr;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +11,14 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StreamDownloadTask;
+
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+
+import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
 
@@ -67,12 +77,7 @@ public class JobViewFragment extends Fragment {
         imgProfile.setImageResource(R.drawable.baseline_person_24);
 
         ImageView imgJob = v.findViewById(R.id.imgJob);
-//        DatabaseManager.shared.setImage(job.getJobID(), imgJob);
-//        Glide.with(this).load(DatabaseManager.shared.getRef(job.getJobID())).into(imgJob);
-//        ImageView imgJob = (ImageView) v.findViewById(R.id.imgJob);
-//        byte[] imgArr = job.getPhoto();
-//        Bitmap jobImg = BitmapFactory.decodeByteArray(imgArr, 0, imgArr.length);
-//        imgJob.setImageBitmap(jobImg);
+        DatabaseManager.shared.setImage(job.getJobID(), imgJob);
 
         return v;
     }
