@@ -2,10 +2,10 @@ package com.example.biddlr;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -36,7 +35,7 @@ import static android.app.Activity.RESULT_OK;
 
 //TODO Move submission code here
 public class JobCreationFragment extends DialogFragment {
-    private ImageButton btnImagePicker;
+    private ImageView imgJobPicture;
     private BottomSheetDialog typePicker;
 
     public static JobCreationFragment newInstance() {
@@ -82,7 +81,9 @@ public class JobCreationFragment extends DialogFragment {
             }
         });
 
-        btnImagePicker = v.findViewById(R.id.btnImagePicker);
+        imgJobPicture = v.findViewById(R.id.imgJobImage);
+
+        FloatingActionButton btnImagePicker = v.findViewById(R.id.btnImagePicker);
         btnImagePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,22 +131,13 @@ public class JobCreationFragment extends DialogFragment {
             switch (requestCode) {
                 case 0:
                     Bitmap camImage = (Bitmap)data.getExtras().get("data");
-                    btnImagePicker.setImageBitmap(camImage);
+                    imgJobPicture.setImageBitmap(camImage);
                     break;
                 case 1:
-//                    Bitmap image = null;
-//                    try {
-//                        System.out.println(data.getData());
-//                        image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    btnImagePicker.setImageBitmap(image);
-                    btnImagePicker.setImageURI(data.getData());
-                    btnImagePicker.setScaleType(ImageView.ScaleType.FIT_XY);
+                    imgJobPicture.setImageURI(data.getData());
                     break;
             }
-
+            imgJobPicture.setScaleType(ImageView.ScaleType.CENTER_CROP);
             typePicker.hide();
         }
         else{

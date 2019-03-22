@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.example.biddlr.ExploreFragment;
 import com.example.biddlr.JobListAdapter;
 import com.example.biddlr.R;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -128,6 +129,11 @@ public class DatabaseManager {
             public void onSuccess(byte[] bytes) {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 iv.setImageBitmap(bmp);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //Do nothing on failure
             }
         });
     }
