@@ -28,7 +28,7 @@
     <string name="btnPlaceBid">PLACE A BID</string>
     <string name="strJobTitle">Job Title</string>
     <string name="strJobDesc">Job Description</string>
-    <string name="strLocation">Job Location</string>
+    <string name="strLocation">Job Address</string>
     <string name="strDate">Date</string>
     <string name="strTime">Time</string>
     <string name="strStartingPrice">Starting Price</string>
