@@ -96,8 +96,8 @@ public class DatabaseManager {
     }
 
     // New way
-    public void getAllJobs(final DataListener listener) {
-        jobRef.addChildEventListener(new ChildEventListener() {
+    public void getAllJobs(int limit, final DataListener listener) {
+        jobRef.limitToFirst(limit).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
@@ -116,8 +116,8 @@ public class DatabaseManager {
     }
 
     // Get all jobs posted by a user
-    public void getJobsForPoster(String userID, final DataListener listener) {
-        jobRef.orderByChild("posterID").equalTo(userID).addChildEventListener(new ChildEventListener() {
+    public void getJobsForPoster(String userID, int limit, final DataListener listener) {
+        jobRef.orderByChild("posterID").equalTo(userID).limitToFirst(limit).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
@@ -137,13 +137,13 @@ public class DatabaseManager {
     }
 
     // Haven't tested this
-    public void getJobsByLocation(LatLngWrapped coordinate, Double radius, final DataListener listener) {
+    public void getJobsByLocation(LatLngWrapped coordinate, Double radius, int limit, final DataListener listener) {
         Double maxLat = coordinate.lat + radius;
         final Double maxLng = coordinate.lng + radius;
         Double minLat = coordinate.lat - radius;
         final Double minLng = coordinate.lng - radius;
 
-        jobRef.orderByChild("coordinates").orderByChild("lat").startAt(maxLat).endAt(minLat).addChildEventListener(new ChildEventListener() {
+        jobRef.orderByChild("coordinates").orderByChild("lat").startAt(maxLat).endAt(minLat).limitToFirst(limit).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);

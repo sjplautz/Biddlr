@@ -45,7 +45,7 @@ public class ExploreFragment extends Fragment implements DataListener {
 
         // New way
         // Call the query you want with 'this' as the listener
-        /*DatabaseManager.shared.getJobsForPoster(DatabaseManager.shared.getCurrentUser().getUid(), this);
+        /*DatabaseManager.shared.getJobsForPoster(DatabaseManager.shared.getCurrentUser().getUid(), 5, this);
         adapter = new JobListAdapter(jobs);*/
 
         recycler = v.findViewById(R.id.exploreRecycler);

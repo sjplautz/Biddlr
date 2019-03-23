@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment implements DataListener {
         adapter = DatabaseManager.shared.getExploreAdapter();
 
         // new way
-        /* DatabaseManager.shared.getAllJobs(this);
+        /*DatabaseManager.shared.getAllJobs(50, this);
         adapter = new JobListAdapter(jobs);*/
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
