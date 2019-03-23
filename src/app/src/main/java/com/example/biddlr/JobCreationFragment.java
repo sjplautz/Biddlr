@@ -181,7 +181,7 @@ public class JobCreationFragment extends DialogFragment {
         //example: 3720 N. 33rd Dr., Apt# 709, Rockford, IL
 
         //pattern allows for optional cardinal directions, abbreviations, and apt/suite numbers
-        String pattern1 = "\\d{1,5}\\s(\\w*.?\\s)?\\w*\\s\\w*.?,\\s(\\w*.?\\W?\\s\\W?\\d{1,5}(\\s)?)?(,\\s)?\\w*,\\s\\w*";
+        String pattern1 = "\\d{1,5}\\s(\\w*.?\\s)?\\w*\\s\\w*.?,?\\s(\\w*.?\\W?\\s\\W?\\d{1,5}(\\s)?)?(,?\\s)?\\w*,?\\s\\w*";
 
         //test against prescribed format
         if(location.matches(pattern1))
