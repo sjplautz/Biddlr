@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         DatabaseManager.shared.setUp();
-        FirebaseUser currentUser = DatabaseManager.shared.mAuth.getCurrentUser();
+        FirebaseUser currentUser = DatabaseManager.shared.getCurrentUser();
 
         // update UI to start app with current user
         if (currentUser != null) {
@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = DatabaseManager.shared.mAuth.getCurrentUser();
+                            FirebaseUser user = DatabaseManager.shared.getCurrentUser();
                             DatabaseManager.shared.setJobListener();
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             finish();

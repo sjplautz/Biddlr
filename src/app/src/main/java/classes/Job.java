@@ -31,24 +31,6 @@ public class Job implements Parcelable {
     // Initializers
     public Job() { }
 
-    // Required init
-    public Job(String jobID, String title, String description, String posterID, String selectedBidderID,
-               String location, LatLngWrapped coordinates, LocalDateTimeWrapped expirationDate, JobStatus status, double startingPrice,
-               double currentBid, HashMap<Integer, Double> bids) {
-        this.jobID = jobID;
-        this.status = status;
-        this.title = title;
-        this.description = description;
-        this.posterID = posterID;
-        this.selectedBidderID = selectedBidderID;
-        this.location = location;
-        this.coordinates = coordinates;
-        this.expirationDate = expirationDate;
-        this.startingPrice = startingPrice;
-        this.currentBid = currentBid;
-        this.bids = bids;
-    }
-
     // General init
     public Job(String title, String description, String location, LatLngWrapped coordinates,
                LocalDateTime expirationDate, double startingPrice) {
