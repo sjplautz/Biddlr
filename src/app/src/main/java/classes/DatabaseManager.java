@@ -2,6 +2,7 @@ package classes;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -110,30 +112,29 @@ public class DatabaseManager {
     //adds job to front of shared jobs lists
     public void addJob(Job job, byte[] image) {
         String id = jobRef.push().getKey();
-        StorageReference tmpRef = imgRef.child(id);
-        System.out.println(image.length);
-        tmpRef.putBytes(image);
+        if(image != null) {
+            StorageReference tmpRef = imgRef.child(id);
+            tmpRef.putBytes(image);
+        }
         job.setJobID(id);
         jobRef.child(id).setValue(job);
-    }
-
-    public StorageReference getImgRef(String jobId){
-        return imgRef.child(jobId);
     }
 
     public void setImage(String id, final ImageView iv){
         iv.setImageResource(R.drawable.ic_biddlrlogo);
         StorageReference ref = imgRef.child(id);
-        ref.getBytes(1024*1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        ref.getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 iv.setImageBitmap(bmp);
+                iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.lightGray, null));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //Do nothing on failure
+                iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.colorPrimary, null));
             }
         });
     }
