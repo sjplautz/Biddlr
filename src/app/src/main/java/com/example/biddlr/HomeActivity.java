@@ -3,6 +3,7 @@ package com.example.biddlr;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -131,11 +132,14 @@ public class HomeActivity extends AppCompatActivity {
         //add in logic for flag value on submission
         if(flag > 0){
             ImageView imgJobPic = findViewById(R.id.imgJobImage);
-            Bitmap image = ((BitmapDrawable) imgJobPic.getDrawable()).getBitmap();
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] imgArr = stream.toByteArray();
-            image.recycle();
+            byte[] imgArr = null;
+            if(imgJobPic.getDrawable() != null) {
+                Bitmap image = ((BitmapDrawable) imgJobPic.getDrawable()).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                imgArr = stream.toByteArray();
+                image.recycle();
+            }
 
             TextView txtTitle = findViewById(R.id.txtTitle);
             String title = txtTitle.getText().toString();

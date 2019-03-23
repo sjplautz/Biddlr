@@ -155,12 +155,20 @@
         app:layout_constraintTop_toBottomOf="@+id/txtTitleBox" />
 
     <ImageView
+        android:id="@+id/imgOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_camera_alt_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgJobImage"
+        app:layout_constraintLeft_toLeftOf="@+id/imgJobImage"
+        app:layout_constraintRight_toRightOf="@+id/imgJobImage"
+        app:layout_constraintTop_toTopOf="@+id/imgJobImage" />
+
+    <ImageView
         android:id="@+id/imgJobImage"
         android:layout_width="0dp"
         android:layout_height="164dp"
-        android:background="@drawable/border"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_camera_alt_black_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
