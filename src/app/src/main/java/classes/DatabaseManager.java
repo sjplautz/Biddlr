@@ -21,11 +21,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import interfaces.DataListener;
 
 public class DatabaseManager {
 
@@ -45,14 +50,13 @@ public class DatabaseManager {
     public void setUp() {
         mAuth = FirebaseAuth.getInstance();
 
+        mAuth.getCurrentUser();
+
         database = FirebaseDatabase.getInstance();
         jobRef = database.getReference("job");
 
         storage = FirebaseStorage.getInstance();
         imgRef = storage.getReference("images");
-
-//        jobs = new ArrayList<Job>();
-//        users = new ArrayList<User>();
 
         jobsAdapter = new JobListAdapter(jobs);
     }
@@ -61,6 +65,7 @@ public class DatabaseManager {
         return jobsAdapter;
     }
 
+    // Old way
     public void setJobListener() {
         ChildEventListener jobChildEventListener = new ChildEventListener() {
             @Override
@@ -90,14 +95,34 @@ public class DatabaseManager {
         return jobs;
     }
 
-    public ArrayList<Job> getJobsByLocation() {
-        ArrayList<Job> jobList = new ArrayList<>();
-        jobRef.orderByChild("location").limitToFirst(10).addChildEventListener(new ChildEventListener() {
+    // New way
+    public void getAllJobs(final DataListener listener) {
+        jobRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
-                Log.d("LOC QUERY", "location: " + job.getLocation());
-                jobs.add(0, job);
+                Log.d("ALL JOBS", "job: " + job);
+                listener.newDataReceived(job);
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+    }
+
+    // Get all jobs posted by a user
+    public void getJobsForPoster(String userID, final DataListener listener) {
+        jobRef.orderByChild("posterID").equalTo(userID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Job job = dataSnapshot.getValue(Job.class);
+                Log.d("USER JOB QUERY", "job: " + job);
+                listener.newDataReceived(job);
             }
 
             @Override
@@ -109,7 +134,35 @@ public class DatabaseManager {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
-        return jobList;
+    }
+
+    // Haven't tested this
+    public void getJobsByLocation(LatLngWrapped coordinate, Double radius, final DataListener listener) {
+        Double maxLat = coordinate.lat + radius;
+        final Double maxLng = coordinate.lng + radius;
+        Double minLat = coordinate.lat - radius;
+        final Double minLng = coordinate.lng - radius;
+
+        jobRef.orderByChild("coordinates").orderByChild("lat").startAt(maxLat).endAt(minLat).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Job job = dataSnapshot.getValue(Job.class);
+                Double lng = job.getCoordinates().lng;
+                if ( minLng <= lng && lng <= maxLng) {
+                    Log.d("JOB LOC QUERY", "job: " + job);
+                    listener.newDataReceived(job);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
     }
 
     //adds job to front of shared jobs lists

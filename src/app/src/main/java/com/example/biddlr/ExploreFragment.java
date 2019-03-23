@@ -1,11 +1,6 @@
 package com.example.biddlr;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,33 +9,21 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import classes.DatabaseManager;
 import classes.Job;
-import enums.JobStatus;
+import interfaces.DataListener;
 
-public class ExploreFragment extends Fragment {
+public class ExploreFragment extends Fragment implements DataListener {
     private RecyclerView recycler;
     private JobListAdapter adapter;
+
+    private ArrayList<Job> jobs = new ArrayList<Job>();
 
     public static ExploreFragment newInstance() {
         ExploreFragment fragment = new ExploreFragment();
@@ -57,7 +40,13 @@ public class ExploreFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_explore, container, false);
 
+        // Old way
         adapter = DatabaseManager.shared.getExploreAdapter();
+
+        // New way
+        // Call the query you want with 'this' as the listener
+        /*DatabaseManager.shared.getJobsForPoster(DatabaseManager.shared.getCurrentUser().getUid(), this);
+        adapter = new JobListAdapter(jobs);*/
 
         recycler = v.findViewById(R.id.exploreRecycler);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext().getApplicationContext());
@@ -88,11 +77,12 @@ public class ExploreFragment extends Fragment {
             }
         }));
 
-        //prepareSampleData();
         return v;
     }
 
-    private void prepareSampleData() {
+    @Override
+    public void newDataReceived(Job job) {
+        jobs.add(0, job);
         adapter.notifyDataSetChanged();
     }
 }

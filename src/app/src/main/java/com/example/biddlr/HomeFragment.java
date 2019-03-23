@@ -22,11 +22,14 @@ import java.util.List;
 
 import classes.DatabaseManager;
 import classes.Job;
+import interfaces.DataListener;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements DataListener {
     private List<Job> jobList;
     private RecyclerView recycler;
     private JobListAdapter adapter;
+
+    static ArrayList<Job> jobs = new ArrayList<Job>();
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -41,7 +44,12 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // old way
         adapter = DatabaseManager.shared.getExploreAdapter();
+
+        // new way
+        /* DatabaseManager.shared.getAllJobs(this);
+        adapter = new JobListAdapter(jobs);*/
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -102,4 +110,10 @@ public class HomeFragment extends Fragment {
         handler.post(batchAddMarkersRunnable);
     }
     */
+
+    @Override
+    public void newDataReceived(Job job) {
+        jobs.add(0, job);
+        adapter.notifyDataSetChanged();
+    }
 }

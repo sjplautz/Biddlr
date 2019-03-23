@@ -69,7 +69,7 @@ public class CreateUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = DatabaseManager.shared.mAuth.getCurrentUser();
+                            FirebaseUser user = DatabaseManager.shared.getCurrentUser();
                             startActivity(new Intent(CreateUserActivity.this, LoginActivity.class));
                             finish();
                         } else {
