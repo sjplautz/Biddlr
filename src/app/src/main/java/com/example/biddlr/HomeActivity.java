@@ -173,7 +173,7 @@ public class HomeActivity extends AppCompatActivity {
             closeDialog();
         }
         else{
-            Toast.makeText(this, "please enter and check a valid address before submission",
+            Toast.makeText(this, "please enter a valid address before submission",
                     Toast.LENGTH_LONG).show();
         }
 

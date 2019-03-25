@@ -101,16 +101,6 @@ public class HomeFragment extends Fragment implements DataListener {
         return v;
     }
 
-    /*
-    //this will be used to update the map with the appropriate batch of pins when the map
-    //fragment is reopened, resulting in a dynamic map
-    @Override
-    public void onResume(){
-        super.onResume();
-        handler.post(batchAddMarkersRunnable);
-    }
-    */
-
     @Override
     public void newDataReceived(Job job) {
         jobs.add(0, job);

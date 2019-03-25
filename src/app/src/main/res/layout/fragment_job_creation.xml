@@ -45,7 +45,7 @@
         android:layout_marginEnd="8dp"
         android:hint="@string/strLocation"
         app:hintTextAppearance="@style/TextTheme"
-        app:layout_constraintEnd_toStartOf="@id/btnCheckAddress"
+        app:layout_constraintEnd_toStartOf="@id/btnUseLocation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnDate">
 
@@ -174,14 +174,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnCheckAddress"
+        android:id="@+id/btnUseLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Check Address"
+        android:text="Use My Location"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/txtDescriptionBox"
         app:layout_constraintEnd_toEndOf="parent"
