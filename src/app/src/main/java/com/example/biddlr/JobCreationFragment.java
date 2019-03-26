@@ -102,7 +102,7 @@ public class JobCreationFragment extends DialogFragment {
             }
         });
 
-        imgJobPicture = v.findViewById(R.id.imgJobImage);
+        imgJobPicture = v.findViewById(R.id.imgMyProfileImage);
 
         FloatingActionButton btnImagePicker = v.findViewById(R.id.btnImagePicker);
         btnImagePicker.setOnClickListener(new View.OnClickListener() {

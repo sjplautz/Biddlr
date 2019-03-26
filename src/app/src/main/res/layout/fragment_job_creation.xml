@@ -23,7 +23,7 @@
         app:hintTextAppearance="@style/TextTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgJobImage">
+        app:layout_constraintTop_toBottomOf="@+id/imgMyProfileImage">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/txtTitle"
@@ -159,13 +159,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/ic_camera_alt_black_24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgJobImage"
-        app:layout_constraintLeft_toLeftOf="@+id/imgJobImage"
-        app:layout_constraintRight_toRightOf="@+id/imgJobImage"
-        app:layout_constraintTop_toTopOf="@+id/imgJobImage" />
+        app:layout_constraintBottom_toBottomOf="@+id/imgMyProfileImage"
+        app:layout_constraintLeft_toLeftOf="@+id/imgMyProfileImage"
+        app:layout_constraintRight_toRightOf="@+id/imgMyProfileImage"
+        app:layout_constraintTop_toTopOf="@+id/imgMyProfileImage" />
 
     <ImageView
-        android:id="@+id/imgJobImage"
+        android:id="@+id/imgMyProfileImage"
         android:layout_width="0dp"
         android:layout_height="164dp"
         android:scaleType="fitCenter"
@@ -197,7 +197,7 @@
         android:clickable="true"
         android:src="@drawable/ic_add_black_24dp"
         app:backgroundTint="@color/colorPrimaryDark"
-        app:layout_constraintBottom_toBottomOf="@+id/imgJobImage"
-        app:layout_constraintRight_toRightOf="@+id/imgJobImage" />
+        app:layout_constraintBottom_toBottomOf="@+id/imgMyProfileImage"
+        app:layout_constraintRight_toRightOf="@+id/imgMyProfileImage" />
 
 </android.support.constraint.ConstraintLayout>
