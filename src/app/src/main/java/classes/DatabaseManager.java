@@ -143,7 +143,7 @@ public class DatabaseManager {
         Double minLat = coordinate.lat - radius;
         final Double minLng = coordinate.lng - radius;
 
-        jobRef.orderByChild("coordinates").orderByChild("lat").startAt(maxLat).endAt(minLat).limitToFirst(limit).addChildEventListener(new ChildEventListener() {
+        jobRef.orderByChild("coordinates/lat").startAt(minLat).endAt(maxLat).limitToFirst(limit).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
