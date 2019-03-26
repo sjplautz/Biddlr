@@ -1,5 +1,7 @@
 package classes;
 
+import android.location.Location;
+
 public class LatLngWrapped {
     public Double lat;
     public Double lng;
@@ -17,6 +19,14 @@ public class LatLngWrapped {
         String[] latLng =  "-34.8799074,174.7565664".split(",");
         this.lat = Double.parseDouble(latLng[0]);
         this.lng = Double.parseDouble(latLng[1]);
+    }
+
+    //takes a google location object and wraps it as a parcelabale object
+    public static LatLngWrapped wrap(Location l){
+        LatLngWrapped location = new LatLngWrapped();
+        location.setLat(l.getLatitude());
+        location.setLng(l.getLongitude());
+        return location;
     }
 
     public Double getLat() {
