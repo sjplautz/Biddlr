@@ -38,18 +38,14 @@ public class HomeFragment extends Fragment implements DataListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DatabaseManager.shared.getAllJobs(50, this);
+        adapter = new JobListAdapter(jobs);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // old way
-        adapter = DatabaseManager.shared.getExploreAdapter();
-
-        // new way
-        /*DatabaseManager.shared.getAllJobs(50, this);
-        adapter = new JobListAdapter(jobs);*/
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 

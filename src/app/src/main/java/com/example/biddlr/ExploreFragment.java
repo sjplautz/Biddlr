@@ -32,6 +32,10 @@ public class ExploreFragment extends Fragment implements DataListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Call the query you want with 'this' as the listener
+        DatabaseManager.shared.getAllJobs(50, this);
+        adapter = new JobListAdapter(jobs);
     }
 
     @Override
@@ -39,14 +43,6 @@ public class ExploreFragment extends Fragment implements DataListener {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_explore, container, false);
-
-        // Old way
-        adapter = DatabaseManager.shared.getExploreAdapter();
-
-        // New way
-        // Call the query you want with 'this' as the listener
-        /*DatabaseManager.shared.getJobsForPoster(DatabaseManager.shared.getCurrentUser().getUid(), 5, this);
-        adapter = new JobListAdapter(jobs);*/
 
         recycler = v.findViewById(R.id.exploreRecycler);
         JobListAdapter adapter = DatabaseManager.shared.getExploreAdapter();
