@@ -1,8 +1,7 @@
 package com.example.biddlr;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,15 +18,25 @@ import classes.DatabaseManager;
 import classes.Job;
 import interfaces.DataListener;
 
+/**
+ * Fragment that controls the My Job page
+ */
 public class MyJobsFragment extends Fragment implements DataListener {
     private ArrayList<Job> jobs = new ArrayList<>();
     private JobListAdapter adapter;
 
+    /**
+     * Creates a new instance of the My Job page
+     * @return A new MyJobsFragment object
+     */
     public static MyJobsFragment newInstance() {
-        MyJobsFragment fragment = new MyJobsFragment();
-        return fragment;
+        return new MyJobsFragment();
     }
 
+    /**
+     * Method called when the MyJobsFragment is created
+     * @param savedInstanceState A saved version of a previous MyJobsFragment if it exists
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +45,15 @@ public class MyJobsFragment extends Fragment implements DataListener {
         DatabaseManager.shared.getJobsForPoster(DatabaseManager.shared.getCurrentUser().getUid(), 50, this);
     }
 
+    /**
+     * Method called when the MyJobsFragment is displayed
+     * @param inflater The object used to create a View for the fragment based on the xml file
+     * @param container
+     * @param savedInstanceState A saved version of a previous MyJobsFragment if it exists
+     * @return A View describing a MyJobsFragment
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_my_jobs, container, false);
 
@@ -77,6 +93,11 @@ public class MyJobsFragment extends Fragment implements DataListener {
         return v;
     }
 
+    /**
+     * Implements the newDataRecieved method of the DataListener interface
+     * Adds Job to the jobs list when a job is added to the database
+     * @param job The Job that has been added
+     */
     @Override
     public void newDataReceived(Job job){
         jobs.add(0, job);
