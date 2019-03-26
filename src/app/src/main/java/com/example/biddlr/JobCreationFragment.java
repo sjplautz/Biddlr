@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
@@ -36,22 +37,40 @@ import classes.LatLngWrapped;
 import static android.app.Activity.RESULT_OK;
 
 //TODO Move submission code here
+
+/**
+ * The Fragment that handles job creation
+ */
 public class JobCreationFragment extends DialogFragment {
     private ImageView imgJobPicture;
     private BottomSheetDialog typePicker;
 
+    /**
+     * Creates a JobCreationFragment
+     * @return An instance of a JobCreationFragment
+     */
     public static JobCreationFragment newInstance() {
-        JobCreationFragment fragment = new JobCreationFragment();
-        return fragment;
+        return new JobCreationFragment();
     }
 
+    /**
+     * Method called when the Fragment is created
+     * @param savedInstanceState The last saved instance state of the fragment
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Method called when the Fragment is displayed
+     * @param inflater Inflates fragment_job_creation.xml to a View
+     * @param container Parent view of the layout to be inflated
+     * @param savedInstanceState The last saved instance state of the fragment
+     * @return The View to display in the Fragment
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_job_creation, container, false);
 
@@ -151,6 +170,12 @@ public class JobCreationFragment extends DialogFragment {
         return v;
     }
 
+    /**
+     * Handles the results of the Intents used to retrieve the job image
+     * @param requestCode The requestCode of the Intent
+     * @param resultCode The success state of the Intent
+     * @param data The result of the Intent
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -198,6 +223,8 @@ public class JobCreationFragment extends DialogFragment {
                     Toast.LENGTH_LONG).show();
             HomeActivity.flag = 0;
         }
+
+
 
         return;
     }
