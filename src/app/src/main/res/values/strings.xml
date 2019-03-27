@@ -38,5 +38,6 @@
     <string name="strTimeFormat">HH:MM</string>
     <string name="action_logout">Log out</string>
     <string name="strJobs">Jobs</string>
+    <string name="completed_jobs_empty">No Completed Jobs</string>
 
 </resources>

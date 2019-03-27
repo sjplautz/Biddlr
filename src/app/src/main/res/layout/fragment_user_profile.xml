@@ -75,12 +75,12 @@
         android:text="Jobs Completed"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/completedJobsRecycler"
+        app:layout_constraintBottom_toTopOf="@id/myCompletedJobsRecycler"
         app:layout_constraintStart_toStartOf="@+id/ProfileBio"
         app:layout_constraintTop_toBottomOf="@id/ProfileBio" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/completedJobsRecycler"
+        android:id="@+id/myCompletedJobsRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="2dp"
