@@ -53,8 +53,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, DataLis
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final int DEFAULT_ZOOM = 13;
-    private static final double DEFAULT_LAT = 33.2098;
-    private static final double DEFAULT_LONG = -87.565155;
+    private static final double DEFAULT_LAT = 33.34;
+    private static final double DEFAULT_LONG = -87.67;
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
@@ -87,13 +87,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, DataLis
 
         mMapView = (MapView) mView.findViewById(R.id.map);
         if(mMapView != null){
+            // Construct a FusedLocationProviderClient to handle location actions
+            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+            //call the following init methods for the map
             mMapView.onCreate(null);
             mMapView.onResume();
             mMapView.getMapAsync(this);
         }
-
-        // Construct a FusedLocationProviderClient.
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
     }
 
     @Override
@@ -116,6 +116,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, DataLis
 
         //sets the map to gotten location
         setMapCamera(currentLocation);
+    }
+
+    //updates the ui to indicate that location permissions are either allowed or not
+    private void updateLocationUI() {
+        if (mMap == null) {
+            return;
+        }
+        try {
+            if (mLocationPermissionGranted) {
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            } else {
+                mMap.setMyLocationEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mLastKnownLocation = null;
+                getLocationPermission();
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
     }
 
     //requests location permissions at runtime
@@ -145,26 +165,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, DataLis
         updateLocationUI();
     }
 
-    //updates the ui to indicate that location permissions are either allowed or not
-    private void updateLocationUI() {
-        if (mMap == null) {
-            return;
-        }
-        try {
-            if (mLocationPermissionGranted) {
-                mMap.setMyLocationEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            } else {
-                mMap.setMyLocationEnabled(false);
-                mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                mLastKnownLocation = null;
-                getLocationPermission();
-            }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }
-
     //gets the best and most recent location of the device, using a default if location is null
     public Location getDeviceLocation() {
         try {
@@ -183,6 +183,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, DataLis
 
                 //get current location using the best provider
                 mLastKnownLocation = lm.getLastKnownLocation(Provider);
+                Log.d("EXPERIMENT", "get device location method called, and retrieved location with coords: "
+                        + mLastKnownLocation.getLatitude() + " " + mLastKnownLocation.getLongitude());
             }
         }
         catch(SecurityException e)  {
@@ -208,9 +210,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, DataLis
         }
     }
 
-
-    //saves the state of map upon pausing activity
     @Override
+    //saves the state of map upon pausing activity
     public void onSaveInstanceState(Bundle outState) {
         if (mMap != null) {
             outState.putParcelable(KEY_CAMERA_POSITION, mMap.getCameraPosition());
@@ -220,6 +221,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, DataLis
     }
 
     @Override
+    //adds pins to the map for any jobs that are within the radius specified
     public void newDataReceived(Job job) {
         LatLngWrapped latLng = job.getCoordinates();
         Log.d("MAP PINS", "adding pin with lat: " + latLng.getLat() + " and lng: " + latLng.getLng());
