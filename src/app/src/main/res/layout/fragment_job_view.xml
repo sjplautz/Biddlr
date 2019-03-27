@@ -18,13 +18,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnContact"
+        android:id="@+id/btnViewProfile"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/btnContact"
+        android:text="@string/btnViewProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgJob" />
 

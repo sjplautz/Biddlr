@@ -48,18 +48,17 @@ public class MyProfileFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
-        //create handle for rating bar and set start to 4/5 default rating
-        RatingBar rating = (RatingBar) v.findViewById(R.id.userRatingBar);
+        //create handle for rating bar and set star count (stars possible) to 5
+        RatingBar rating = (RatingBar) v.findViewById(R.id.myRatingBar);
         rating.setNumStars(5);
 
         //setting the profile image resource to default baseline image
-        ImageView imgProfile = (ImageView) v.findViewById(R.id.DefaultProfileImage);
+        ImageView imgProfile = (ImageView) v.findViewById(R.id.myProfileImage);
         imgProfile.setImageResource(R.drawable.baseline_person_24);
 
-        //setting the star count in the user rating bar
-        RatingBar userRating = (RatingBar) v.findViewById(R.id.userRatingBar);
+        //setting the star count in the my rating bar to default 4.5/5 for my profile
         double default_rating = 4.5;
-        userRating.setRating((float)default_rating);
+        rating.setRating((float)default_rating);
 
         //grabbing a handle to recycler view
         recycler = v.findViewById(R.id.myCompletedJobsRecycler);
