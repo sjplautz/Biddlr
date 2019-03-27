@@ -32,10 +32,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import classes.DatabaseManager;
+import classes.Job;
+import classes.LatLngWrapped;
+import interfaces.DataListener;
+
 import static android.support.constraint.Constraints.TAG;
 import static com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback, DataListener {
 
     public static GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -47,7 +52,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     View mView;
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final int DEFAULT_ZOOM = 14;
+    private static final int DEFAULT_ZOOM = 13;
     private static final double DEFAULT_LAT = 33.2098;
     private static final double DEFAULT_LONG = -87.565155;
     private static final String KEY_CAMERA_POSITION = "camera_position";
@@ -67,12 +72,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
-
-        //include method here for querying the database, will be passed in current coords
-
-        //this list needs to be filled with the result of querying against jobs database
-        //for coordinates within a certain distance of the detected user location
-        final List<LatLng> coordinateList = new ArrayList<LatLng>();
     }
 
     @Override
@@ -108,12 +107,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         //turns on the my location layer and related control on the map
         updateLocationUI();
 
-        //adding two sample map markers, will eventually be done automatically upon job creation
-        mMap.addMarker(new MarkerOptions().position(new LatLng(DEFAULT_LAT - .001, DEFAULT_LONG + .001 )).title("Window Washing"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(DEFAULT_LAT - .004, DEFAULT_LONG - .003 )).title("Lawn Mowing"));
-
         //gets the devices location
         Location currentLocation = getDeviceLocation();
+
+        //wrap the location, and then retrieve jobs within a radius of that location, creating pins for these jobs
+        LatLngWrapped wrappedCurrentLocation = LatLngWrapped.wrap(currentLocation);
+        DatabaseManager.shared.getJobsForMap(wrappedCurrentLocation,100.0,50, this);
 
         //sets the map to gotten location
         setMapCamera(currentLocation);
@@ -218,5 +217,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             outState.putParcelable(KEY_LOCATION, mLastKnownLocation);
             super.onSaveInstanceState(outState);
         }
+    }
+
+    @Override
+    public void newDataReceived(Job job) {
+        LatLngWrapped latLng = job.getCoordinates();
+        Log.d("MAP PINS", "adding pin with lat: " + latLng.getLat() + " and lng: " + latLng.getLng());
+        mMap.addMarker(new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle()));
     }
 }

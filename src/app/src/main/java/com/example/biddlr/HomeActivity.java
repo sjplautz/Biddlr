@@ -3,7 +3,6 @@ package com.example.biddlr;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -59,7 +58,7 @@ public class HomeActivity extends AppCompatActivity {
                         tag = "JOBS";
                         break;
                     case R.id.itemProfile:
-                        selectedFrag = ProfileFragment.newInstance();
+                        selectedFrag = MyProfileFragment.newInstance();
                         tag = "PROFILE";
                         break;
                     case R.id.itemMessages:
@@ -131,7 +130,7 @@ public class HomeActivity extends AppCompatActivity {
     private void submitDialog(){
         //add in logic for flag value on submission
         if(flag > 0){
-            ImageView imgJobPic = findViewById(R.id.imgJobImage);
+            ImageView imgJobPic = findViewById(R.id.imgMyProfileImage);
             byte[] imgArr = null;
             if(imgJobPic.getDrawable() != null) {
                 Bitmap image = ((BitmapDrawable) imgJobPic.getDrawable()).getBitmap();

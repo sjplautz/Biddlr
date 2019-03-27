@@ -137,7 +137,7 @@ public class DatabaseManager {
     }
 
     // Haven't tested this
-    public void getJobsByLocation(LatLngWrapped coordinate, Double radius, int limit, final DataListener listener) {
+    public void getJobsForMap(LatLngWrapped coordinate, Double radius, int limit, final DataListener listener) {
         Double maxLat = coordinate.lat + radius;
         final Double maxLng = coordinate.lng + radius;
         Double minLat = coordinate.lat - radius;
@@ -148,7 +148,7 @@ public class DatabaseManager {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
                 Double lng = job.getCoordinates().lng;
-                if ( minLng <= lng && lng <= maxLng) {
+                if ( minLng <= lng && lng <= maxLng && job.getStatus().toString().equals("in bidding")) {
                     Log.d("JOB LOC QUERY", "job: " + job);
                     listener.newDataReceived(job);
                 }
