@@ -19,6 +19,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 
 import classes.DatabaseManager;
+import classes.User;
 
 
 public class CreateUserActivity extends AppCompatActivity {
@@ -55,12 +56,16 @@ public class CreateUserActivity extends AppCompatActivity {
 //                    }
 //                });
 
-        // Need some verification here
+        EditText txtFname = findViewById(R.id.txtFname);
+        EditText txtLname = findViewById(R.id.txtLname);
         EditText txtEmail = findViewById(R.id.txtEnEmail);
         EditText txtPassword = findViewById(R.id.txtEnPass);
 
-        String email = txtEmail.getText().toString();
-        String password = txtPassword.getText().toString();
+        final String fname = txtFname.getText().toString();
+        final String lname = txtLname.getText().toString();
+        final String email = txtEmail.getText().toString();
+        final String password = txtPassword.getText().toString();
+
 
         DatabaseManager.shared.mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -69,7 +74,8 @@ public class CreateUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = DatabaseManager.shared.getCurrentUser();
+                            User user = new User(password, fname, lname, email);
+                            DatabaseManager.shared.addNewUser(user);
                             startActivity(new Intent(CreateUserActivity.this, LoginActivity.class));
                             finish();
                         } else {
@@ -78,7 +84,6 @@ public class CreateUserActivity extends AppCompatActivity {
                             Toast.makeText(CreateUserActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
                         // ...
                     }
                 });
