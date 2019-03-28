@@ -24,6 +24,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Dictionary;
+import java.util.HashMap;
 
 import classes.DatabaseManager;
 import classes.Job;
@@ -34,6 +36,10 @@ public class HomeActivity extends AppCompatActivity {
     ActionBar bar;
     public static LatLngWrapped coordinates;
     public static int flag = 0;
+
+    private Fragment currFrag = null;
+    private String currTag = null;
+    private HashMap<String, Bundle> fragStore = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,24 +54,37 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment selectedFrag = null;
                 String tag = null;
+
+                if(currFrag != null) {
+                    Bundle bundle = new Bundle();
+                    currFrag.onSaveInstanceState(bundle);
+                    getSupportFragmentManager().putFragment(bundle, currTag, currFrag);
+                    fragStore.put(currTag, bundle);
+                }
                 switch(item.getItemId()){
                     case R.id.itemHome:
-                        selectedFrag = HomeFragment.newInstance();
                         tag = "HOME";
+                        if(fragStore.containsKey(tag)){
+                            Bundle b = fragStore.get(tag);
+                            selectedFrag = getSupportFragmentManager().getFragment(b, tag);
+                        }
+                        if(selectedFrag == null) selectedFrag = HomeFragment.newInstance();
                         break;
                     case R.id.itemJobs:
-                        selectedFrag = JobsFragment.newInstance();
                         tag = "JOBS";
+                        selectedFrag = JobsFragment.newInstance();
                         break;
                     case R.id.itemProfile:
-                        selectedFrag = MyProfileFragment.newInstance();
                         tag = "PROFILE";
+                        selectedFrag = MyProfileFragment.newInstance();
                         break;
                     case R.id.itemMessages:
-                        selectedFrag = MessagesFragment.newInstance();
                         tag = "MESSAGES";
+                        selectedFrag = MessagesFragment.newInstance();
                         break;
                 }
+                currFrag = selectedFrag;
+                currTag = tag;
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.frameNull, selectedFrag);

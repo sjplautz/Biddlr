@@ -23,7 +23,7 @@ import interfaces.DataListener;
  */
 public class MyJobsFragment extends Fragment implements DataListener {
     private ArrayList<Job> jobs = new ArrayList<>();
-    private JobListAdapter adapter;
+    private ExpandableListAdapter adapter;
 
     /**
      * Creates a new instance of the My Job page
@@ -41,7 +41,6 @@ public class MyJobsFragment extends Fragment implements DataListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new JobListAdapter(jobs);
         DatabaseManager.shared.getJobsForPoster(DatabaseManager.shared.getCurrentUser().getUid(), 50, this);
     }
 
@@ -66,7 +65,7 @@ public class MyJobsFragment extends Fragment implements DataListener {
         children.put("Jobs in bidding", DatabaseManager.shared.getJobs());
 
         ExpandableListView listMyJobs = v.findViewById(R.id.listMyJobs);
-        ExpandableListAdapter adapter = new ExpandableListAdapter(getContext(), headers, children);
+        adapter = new ExpandableListAdapter(getContext(), headers, children);
         listMyJobs.setAdapter(adapter);
         listMyJobs.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -94,7 +93,7 @@ public class MyJobsFragment extends Fragment implements DataListener {
     }
 
     /**
-     * Implements the newDataRecieved method of the DataListener interface
+     * Implements the newDataReceived method of the DataListener interface
      * Adds Job to the jobs list when a job is added to the database
      * @param job The Job that has been added
      */

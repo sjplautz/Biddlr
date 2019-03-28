@@ -23,6 +23,7 @@ import classes.Job;
 
 public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> {
     private List<Job> jobsList;
+    private List<Bitmap> picsList;
 
     class JobViewHolder extends RecyclerView.ViewHolder{
         private ImageView jobPicture;
@@ -41,8 +42,9 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         }
     }
 
-    public JobListAdapter(List<Job> jobsList){
+    public JobListAdapter(List<Job> jobsList, List<Bitmap> picsList){
         this.jobsList = jobsList;
+        this.picsList = picsList;
     }
 
     @NonNull
@@ -57,7 +59,9 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         Job job = jobsList.get(pos);
 
         //Set up job picture
-        DatabaseManager.shared.setImage(job.getJobID(), holder.jobPicture);
+        //DatabaseManager.shared.setImage(job.getJobID(), holder.jobPicture);
+        if(picsList != null && picsList.get(pos) != null) holder.jobPicture.setImageBitmap(picsList.get(pos));
+        else holder.jobPicture.setImageResource(R.drawable.ic_biddlrlogo);
 
         //Set job title
         holder.jobTitle.setText(job.getTitle());

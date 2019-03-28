@@ -58,7 +58,7 @@ public class DatabaseManager {
         storage = FirebaseStorage.getInstance();
         imgRef = storage.getReference("images");
 
-        jobsAdapter = new JobListAdapter(jobs);
+        jobsAdapter = new JobListAdapter(jobs, null);
     }
 
     public JobListAdapter getExploreAdapter() {
@@ -176,28 +176,27 @@ public class DatabaseManager {
         jobRef.child(id).setValue(job);
     }
 
+    public StorageReference getImgRef(String jobId){
+        return imgRef.child(jobId);
+    }
+
     public void setImage(String id, final ImageView iv){
         iv.setImageResource(R.drawable.ic_biddlrlogo);
         StorageReference ref = imgRef.child(id);
-        try {
-            ref.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    iv.setImageBitmap(bmp);
-                    iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.lightGray, null));
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.colorPrimary, null));
-                }
-            });
-        }
-        catch (Exception e){
-            //Do nothing
-        }
+        ref.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            iv.setImageBitmap(bmp);
+            iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.lightGray, null));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.colorPrimary, null));
+            }
+        });
     }
     
     // Users

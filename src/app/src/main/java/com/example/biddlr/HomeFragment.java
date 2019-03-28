@@ -1,6 +1,9 @@
 package com.example.biddlr;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,22 +17,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import classes.DatabaseManager;
 import classes.Job;
 import interfaces.DataListener;
 
 public class HomeFragment extends Fragment implements DataListener {
-    private List<Job> jobList;
-    private RecyclerView recycler;
     private JobListAdapter adapter;
 
-    static ArrayList<Job> jobs = new ArrayList<Job>();
+    private ArrayList<Job> jobs = new ArrayList<>();
+    private ArrayList<Bitmap> pics = new ArrayList<>();
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -39,8 +39,14 @@ public class HomeFragment extends Fragment implements DataListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseManager.shared.getAllJobs(50, this);
-        adapter = new JobListAdapter(jobs);
+        if(savedInstanceState != null){
+            jobs = savedInstanceState.getParcelableArrayList("Jobs");
+            pics = savedInstanceState.getParcelableArrayList("Pics");
+        }
+        else {
+            DatabaseManager.shared.getAllJobs(50, this);
+        }
+        adapter = new JobListAdapter(jobs, pics);
     }
 
     @Override
@@ -58,7 +64,7 @@ public class HomeFragment extends Fragment implements DataListener {
         });
 
         //Sets the layout for the recycler view to inflate with
-        recycler = v.findViewById(R.id.homeRecycler);
+        RecyclerView recycler = v.findViewById(R.id.homeRecycler);
 
         //Set the layout parameters
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
@@ -98,8 +104,25 @@ public class HomeFragment extends Fragment implements DataListener {
     }
 
     @Override
-    public void newDataReceived(Job job) {
+    public void onSaveInstanceState(@NonNull Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("Jobs", jobs);
+        outState.putParcelableArrayList("Pics", pics);
+    }
+
+    @Override
+    public void newDataReceived(final Job job) {
         jobs.add(0, job);
+        pics.add(0, null);
+        DatabaseManager.shared.getImgRef(job.getJobID()).getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                int index = jobs.indexOf(job);
+                pics.set(index, bmp);
+                adapter.notifyDataSetChanged();
+            }
+        });
         adapter.notifyDataSetChanged();
     }
 }

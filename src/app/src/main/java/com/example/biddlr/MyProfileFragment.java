@@ -44,7 +44,7 @@ public class MyProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         jobList = new ArrayList<>();
-        adapter = new JobListAdapter(jobList);
+        adapter = new JobListAdapter(jobList, null);
 
         View v = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
