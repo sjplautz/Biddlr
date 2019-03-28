@@ -322,6 +322,9 @@ public class JobCreationFragment extends DialogFragment {
             //now build the address string accordingly
             String addressResult = street+", "+city+", "+state+" "+zip;
 
+            //set the location for job building in home activity
+            HomeActivity.coordinates = new LatLngWrapped(lat, lng);
+
             return addressResult;
         }
         catch (Exception e){

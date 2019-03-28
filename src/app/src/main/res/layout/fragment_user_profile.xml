@@ -7,7 +7,7 @@
     tools:context=".MyProfileFragment">
 
     <ImageView
-        android:id="@+id/DefaultProfileImage"
+        android:id="@+id/userProfileImage"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
@@ -23,8 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:progressTint="@android:color/holo_orange_light"
-        app:layout_constraintBottom_toBottomOf="@+id/DefaultProfileImage"
-        app:layout_constraintStart_toEndOf="@+id/DefaultProfileImage"
+        app:layout_constraintBottom_toBottomOf="@+id/userProfileImage"
+        app:layout_constraintStart_toEndOf="@+id/userProfileImage"
         app:layout_constraintTop_toBottomOf="@id/myProfileName" />
 
     <Button
@@ -36,11 +36,11 @@
         android:text="@string/btnContact"
         app:layout_constraintBottom_toBottomOf="@+id/userRatingBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/DefaultProfileImage"
+        app:layout_constraintTop_toTopOf="@+id/userProfileImage"
         app:layout_constraintWidth_percent=".35" />
 
     <TextView
-        android:id="@+id/myProfileName"
+        android:id="@+id/userProfileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -49,11 +49,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintBottom_toTopOf="@+id/userRatingBar"
         app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
-        app:layout_constraintStart_toEndOf="@+id/DefaultProfileImage"
-        app:layout_constraintTop_toTopOf="@id/DefaultProfileImage" />
+        app:layout_constraintStart_toEndOf="@+id/userProfileImage"
+        app:layout_constraintTop_toTopOf="@id/userProfileImage" />
 
     <TextView
-        android:id="@+id/ProfileBio"
+        android:id="@+id/userProfileBio"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -63,8 +63,8 @@
         app:layout_constraintBottom_toTopOf="@+id/JobsCompletedText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@id/DefaultProfileImage"
-        app:layout_constraintTop_toBottomOf="@+id/DefaultProfileImage" />
+        app:layout_constraintStart_toStartOf="@id/userProfileImage"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileImage" />
 
     <TextView
         android:id="@+id/JobsCompletedText"
@@ -72,26 +72,43 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Jobs Completed"
+        android:text="@string/strJobsCompleted"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/completedJobsRecycler"
-        app:layout_constraintStart_toStartOf="@+id/ProfileBio"
-        app:layout_constraintTop_toBottomOf="@id/ProfileBio" />
+        app:layout_constraintBottom_toTopOf="@id/userViewSwitcherCompletedJobs"
+        app:layout_constraintStart_toStartOf="@+id/userProfileBio"
+        app:layout_constraintTop_toBottomOf="@id/userProfileBio" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/completedJobsRecycler"
+    <ViewSwitcher
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:id="@+id/userViewSwitcherCompletedJobs"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
-        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent=".50"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/JobsCompletedText"
-        tools:listitem="@layout/recycler_view_item_1" />
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/userCompletedJobsRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/recycler_view_item_1" />
+
+        <TextView android:id="@+id/userTxtEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/completed_jobs_empty"
+            android:gravity="center"
+            android:visibility="gone"
+            />
+
+    </ViewSwitcher>
 
 
 </android.support.constraint.ConstraintLayout>

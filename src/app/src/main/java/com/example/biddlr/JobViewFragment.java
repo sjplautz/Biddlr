@@ -4,9 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -78,6 +81,21 @@ public class JobViewFragment extends Fragment {
 
         ImageView imgJob = v.findViewById(R.id.imgJob);
         DatabaseManager.shared.setImage(job.getJobID(), imgJob);
+
+        //getting a handle to the view profile button
+        Button btnView = v.findViewById(R.id.btnViewProfile);
+        //adding a click listener to the button to navigate to profile editing fragment
+        btnView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment userFrag = UserProfileFragment.newInstance();
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction();
+                trans.replace(R.id.frameNull, userFrag);
+                trans.addToBackStack(null);
+                trans.commit();
+            }
+        });
 
         return v;
     }

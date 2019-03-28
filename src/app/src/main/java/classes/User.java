@@ -24,29 +24,9 @@ public class User implements Parcelable {
     private String profilePic;
     private Double bidderRating;
     private Double posterRating;
-    private ArrayList<Integer> postedJobs;
-    private ArrayList<Integer> activeJobs;
-    private ArrayList<Integer> completedJobs;
 
     // Initializers
-    public User(String password, String firstName, String lastName, String email,
-                String bio, String profilePic, Double bidderRating, Double posterRating,
-                ArrayList<Integer> postedJobs, ArrayList<Integer> activeJobs, ArrayList<Integer> completedJobs) {
-        this.userID = null;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.bio = bio;
-        this.profilePic = profilePic;
-        this.bidderRating = bidderRating;
-        this.posterRating = posterRating;
-        this.postedJobs = postedJobs;
-        this.activeJobs = activeJobs;
-        this.completedJobs = completedJobs;
-    }
-
-    public User(String password, String firstName, String lastName) {
+    public User(String password, String firstName, String lastName, String email) {
         this.userID = null;
         this.password = password;
         this.firstName = firstName;
@@ -56,9 +36,6 @@ public class User implements Parcelable {
         this.profilePic = null;
         this.bidderRating = null;
         this.posterRating = null;
-        this.postedJobs = null;
-        this.activeJobs = null;
-        this.completedJobs = null;
     }
 
     // Parcable
@@ -78,9 +55,6 @@ public class User implements Parcelable {
         dest.writeString(this.profilePic);
         dest.writeDouble(this.bidderRating);
         dest.writeDouble(this.posterRating);
-        dest.writeList(this.postedJobs);
-        dest.writeList(this.activeJobs);
-        dest.writeList(this.completedJobs);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -102,72 +76,44 @@ public class User implements Parcelable {
         this.profilePic = src.readString();
         this.bidderRating = src.readDouble();
         this.posterRating = src.readDouble();
-        src.readList(this.postedJobs, Integer.class.getClassLoader());
-        src.readList(this.activeJobs, Integer.class.getClassLoader());
-        src.readList(this.completedJobs, Integer.class.getClassLoader());
     }
 
     // Accessors
-    public String getUserID() {
-        return this.userID;
-    }
+    public String getUserID() { return userID; }
 
-    public String getPassword() {
-        return this.password;
-    }
+    public void setUserID(String userID) { this.userID = userID; }
 
-    public String getFirstName() {
-        return this.firstName;
-    }
+    public String getPassword() { return password; }
 
-    public String getLastName() {
-        return this.lastName;
-    }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getEmail() {
-        return this.email;
-    }
+    public String getFirstName() { return firstName; }
 
-    public String getBio() {
-        return bio;
-    }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    public String getProfilePic() {
-        return profilePic;
-    }
+    public String getLastName() { return lastName; }
 
-    public Double getBidderRating() {
-        return bidderRating;
-    }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public Double getPosterRating() {
-        return posterRating;
-    }
+    public String getEmail() { return email; }
 
-    public ArrayList<Integer> getPostedJobs() {
-        return postedJobs;
-    }
+    public void setEmail(String email) { this.email = email; }
 
-    public ArrayList<Integer> getActiveJobs() {
-        return activeJobs;
-    }
+    public String getBio() { return bio; }
 
-    public ArrayList<Integer> getCompletedJobs() {
-        return completedJobs;
-    }
+    public void setBio(String bio) { this.bio = bio; }
 
-    // Modifiers
-    public void addPostedJob(Integer jobID) {
-        postedJobs.add(jobID);
-    }
+    public String getProfilePic() { return profilePic; }
 
-    public void addActiveJob(Integer jobID) {
-        activeJobs.add(jobID);
-    }
+    public void setProfilePic(String profilePic) { this.profilePic = profilePic; }
 
-    public void addCompletedJob(Integer jobID) {
-        completedJobs.add(jobID);
-    }
+    public Double getBidderRating() { return bidderRating; }
+
+    public void setBidderRating(Double bidderRating) { this.bidderRating = bidderRating; }
+
+    public Double getPosterRating() { return posterRating; }
+
+    public void setPosterRating(Double posterRating) { this.posterRating = posterRating; }
 
 
     // Class logic

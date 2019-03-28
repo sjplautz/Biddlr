@@ -50,10 +50,13 @@ public class DatabaseManager {
     public void setUp() {
         mAuth = FirebaseAuth.getInstance();
 
-        mAuth.getCurrentUser();
-
+        // create reference to job table
         database = FirebaseDatabase.getInstance();
         jobRef = database.getReference("job");
+
+        // create reference to user table
+        database = FirebaseDatabase.getInstance();
+        userRef = database.getReference("user");
 
         storage = FirebaseStorage.getInstance();
         imgRef = storage.getReference("images");
@@ -166,7 +169,7 @@ public class DatabaseManager {
     }
 
     //adds job to front of shared jobs lists
-    public void addJob(Job job, byte[] image) {
+    public void addNewJob(Job job, byte[] image) {
         String id = jobRef.push().getKey();
         if(image != null) {
             StorageReference tmpRef = imgRef.child(id);
@@ -204,12 +207,9 @@ public class DatabaseManager {
         return mAuth.getCurrentUser();
     }
 
-//    public ArrayList<User> getUsers() {
-//        return users;
-//    }
-
-    public void addUser(User user) {
-//        users.add(user);
-        userRef.child("user").child(user.getUserID()).setValue(user);
+    public void addNewUser(User user) {
+        String id = userRef.push().getKey();
+        user.setUserID(getCurrentUser().getUid());
+        userRef.child(id).setValue(user);
     }
 }

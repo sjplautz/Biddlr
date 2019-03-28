@@ -1,108 +1,111 @@
 package com.example.biddlr;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link UserProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link UserProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import classes.Job;
+
 public class UserProfileFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private List<Job> jobList;
+    private RecyclerView recycler;
+    private Button btnEdit;
+    private JobListAdapter adapter;
+    private TextView txtEmpty;
 
-    private OnFragmentInteractionListener mListener;
-
-    public UserProfileFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UserProfileFragment newInstance(String param1, String param2) {
-        UserProfileFragment fragment = new UserProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public static UserProfileFragment newInstance() { return new UserProfileFragment(); }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        //need to add method to database manager to get the user's profile
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
-    }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        jobList = new ArrayList<>();
+        adapter = new JobListAdapter(jobList);
+
+        View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        //create handle for rating bar and set star ount (stars possible) to 5
+        RatingBar rating = (RatingBar) v.findViewById(R.id.userRatingBar);
+        rating.setNumStars(5);
+
+        //setting the profile image resource to default baseline image
+        ImageView imgProfile = (ImageView) v.findViewById(R.id.userProfileImage);
+        imgProfile.setImageResource(R.drawable.baseline_person_24);
+
+        //setting the rating on the rating bar to the default of 4/5 stars for other users
+        double default_rating = 4.0;
+        rating.setRating((float)default_rating);
+
+        //grabbing a handle to recycler view
+        recycler = v.findViewById(R.id.userCompletedJobsRecycler);
+
+        //adding a divider between recyclerview list items
+        DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recycler_divider));
+        recycler.addItemDecoration(divider);
+
+        //Set the layout parameters
+        final RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
+        recycler.setLayoutManager(manager);
+        recycler.setItemAnimator(new DefaultItemAnimator());
+        recycler.setAdapter(adapter);
+
+        recycler.addOnItemTouchListener(new JobListTouchListener(getContext(), recycler, new JobListTouchListener.ClickListener() {
+            @Override
+            public void onClick(View v, int pos) {
+                Job job = jobList.get(pos);
+                Fragment jobFrag = JobViewFragment.newInstance(job);
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction();
+                trans.replace(R.id.frameNull, jobFrag);
+                trans.addToBackStack(null);
+                trans.commit();
+            }
+
+            @Override
+            public void onLongClick(View v, int pos) {
+
+            }
+        }));
+
+        //grabbing handle to empty text view to sub in if recycler is empty
+        txtEmpty = v.findViewById(R.id.userTxtEmpty);
+
+        //switches the visibility to either the recycler or empty message based on whether any jobs completed
+        if (jobList.isEmpty()) {
+            recycler.setVisibility(View.GONE);
+            txtEmpty.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+        else {
+            recycler.setVisibility(View.VISIBLE);
+            txtEmpty.setVisibility(View.GONE);
         }
+
+        return v;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }
