@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".JobBidDialogFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <Button
+        android:id="@+id/btnPlaceBid"
+        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/txtSubmitBid"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtNewBid"
+        app:layout_constraintTop_toBottomOf="@+id/txtNewBid" />
+
+    <!--<TextView-->
+    <!--android:id="@+id/txtAskingPricePrompt5"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="16dp"-->
+    <!--android:text="@string/txtJobAskingPrice"-->
+    <!--app:layout_constraintEnd_toStartOf="@+id/txtCurrentBidPrompt5"-->
+    <!--app:layout_constraintHorizontal_bias="0.5"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="parent" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/txtCurrentBidPrompt5"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="@string/txtJobCurrentBid"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintHorizontal_bias="0.5"-->
+    <!--app:layout_constraintStart_toEndOf="@+id/txtAskingPricePrompt5"-->
+    <!--app:layout_constraintTop_toTopOf="@+id/txtAskingPricePrompt5" />-->
+
+    <Button
+        android:id="@+id/btnCancel"
+        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/txtCancel"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        app:layout_constraintBottom_toBottomOf="@+id/btnPlaceBid"
+        app:layout_constraintEnd_toStartOf="@+id/btnPlaceBid"
+        app:layout_constraintTop_toTopOf="@+id/btnPlaceBid" />
+
+    <TextView
+        android:id="@+id/txtAskingPricePrompt5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/txtJobAskingPrice"
+        app:layout_constraintEnd_toStartOf="@+id/txtCurrentBidPrompt5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtCurrentBidPrompt5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txtJobCurrentBid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/txtAskingPricePrompt5"
+        app:layout_constraintTop_toTopOf="@+id/txtAskingPricePrompt5" />
+
+    <TextView
+        android:id="@+id/txtJobCurrentBid"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="$0"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/txtCurrentBidPrompt5"
+        app:layout_constraintTop_toBottomOf="@+id/txtCurrentBidPrompt5" />
+
+    <TextView
+        android:id="@+id/txtJobAskingPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="$0"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/txtAskingPricePrompt5"
+        app:layout_constraintTop_toBottomOf="@+id/txtAskingPricePrompt5" />
+
+    <EditText
+        android:id="@+id/txtNewBid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Enter a new bid"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtJobAskingPrice" />
+
+</android.support.constraint.ConstraintLayout>

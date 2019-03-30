@@ -26,7 +26,7 @@ public class Job implements Parcelable {
     private LocalDateTimeWrapped expirationDate;
     private Double startingPrice;
     private Double currentBid;
-    private HashMap<Integer, Double> bids;  // <bidderID, bidValue>
+    private HashMap<String, Double> bids;  // <bidderID, bidValue>
 
     // Initializers
     public Job() { }
@@ -91,7 +91,7 @@ public class Job implements Parcelable {
         this.expirationDate = new LocalDateTimeWrapped(src.readString());
         this.startingPrice = src.readDouble();
         this.currentBid = src.readDouble();
-        this.bids = (HashMap<Integer, Double>) src.readSerializable();
+        this.bids = (HashMap<String, Double>) src.readSerializable();
     }
 
     // Getters and Setters
@@ -183,19 +183,23 @@ public class Job implements Parcelable {
         this.currentBid = currentBid;
     }
 
-    public HashMap<Integer, Double> getBids() {
+    public HashMap<String, Double> getBids() {
         return bids;
     }
 
-    public void setBids(HashMap<Integer, Double> bids) {
+    public void setBids(HashMap<String, Double> bids) {
         this.bids = bids;
     }
 
 
     // Custom Methods
-    public void addBid(int bidderId, double bid) {
+    public void addBid(String bidderId, double bid) {
+        if (bids == null) {
+            bids = new HashMap<String, Double>();
+        }
         this.bids.put(bidderId, bid);
         this.currentBid = bid < this.currentBid ? bid : this.currentBid;
+        DatabaseManager.shared.addJobBid(this, bid);
     }
 
     public String formatExpirationDate() {

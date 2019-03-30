@@ -42,5 +42,7 @@
     <string name="strJobsCompleted">Jobs Completed</string>
     <string name="completed_jobs_empty">No Completed Jobs</string>
     <string name="strBtnEditProfile">Edit Profile</string>
+    <string name="txtSubmitBid">SUBMIT BID</string>
+    <string name="txtCancel">CANCEL</string>
 
 </resources>

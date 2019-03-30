@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,9 @@ import java.util.ArrayList;
 
 import classes.DatabaseManager;
 import classes.Job;
-import interfaces.DataListener;
+import interfaces.JobDataListener;
 
-public class ExploreFragment extends Fragment implements DataListener {
+public class ExploreFragment extends Fragment implements JobDataListener {
     private RecyclerView recycler;
     private JobListAdapter adapter;
     private ArrayList<Job> jobs = new ArrayList<>();
@@ -34,7 +35,7 @@ public class ExploreFragment extends Fragment implements DataListener {
         super.onCreate(savedInstanceState);
 
         // Call the query you want with 'this' as the listener
-        DatabaseManager.shared.getAllJobs(50, this);
+        DatabaseManager.shared.setActiveJobsListener(50, this);
         adapter = new JobListAdapter(jobs);
     }
 
@@ -45,7 +46,6 @@ public class ExploreFragment extends Fragment implements DataListener {
         View v = inflater.inflate(R.layout.fragment_explore, container, false);
 
         recycler = v.findViewById(R.id.exploreRecycler);
-        JobListAdapter adapter = DatabaseManager.shared.getExploreAdapter();
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext().getApplicationContext());
         recycler.setLayoutManager(manager);
@@ -58,7 +58,7 @@ public class ExploreFragment extends Fragment implements DataListener {
         recycler.addOnItemTouchListener(new JobListTouchListener(getContext().getApplicationContext(), recycler, new JobListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
-                Job job = DatabaseManager.shared.getJobs().get(pos);
+                Job job = jobs.get(pos);
                 Fragment jobFrag = JobViewFragment.newInstance(job);
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();

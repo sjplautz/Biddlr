@@ -2,6 +2,6 @@ package interfaces;
 
 import classes.Job;
 
-public interface DataListener {
+public interface JobDataListener {
     void newDataReceived(Job job);
 }

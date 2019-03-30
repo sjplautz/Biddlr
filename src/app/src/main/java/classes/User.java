@@ -26,6 +26,8 @@ public class User implements Parcelable {
     private Double posterRating;
 
     // Initializers
+    public User() { }
+
     public User(String password, String firstName, String lastName, String email) {
         this.userID = null;
         this.password = password;

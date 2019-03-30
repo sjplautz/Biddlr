@@ -1,7 +1,5 @@
 package com.example.biddlr;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,9 +15,9 @@ import java.util.List;
 
 import classes.DatabaseManager;
 import classes.Job;
-import interfaces.DataListener;
+import interfaces.JobDataListener;
 
-public class MyJobsFragment extends Fragment implements DataListener {
+public class MyJobsFragment extends Fragment implements JobDataListener {
     private ArrayList<Job> jobs = new ArrayList<>();
     private JobListAdapter adapter;
 
@@ -33,7 +31,7 @@ public class MyJobsFragment extends Fragment implements DataListener {
         super.onCreate(savedInstanceState);
 
         adapter = new JobListAdapter(jobs);
-        DatabaseManager.shared.getJobsForPoster(DatabaseManager.shared.getCurrentUser().getUid(), 50, this);
+        DatabaseManager.shared.setJobsForPosterListener(DatabaseManager.shared.getCurrentUser().getUid(), 50, this);
     }
 
     @Override
@@ -47,7 +45,7 @@ public class MyJobsFragment extends Fragment implements DataListener {
 
         HashMap<String, List<Job>> children = new HashMap<>();
         children.put("Posted jobs", jobs);
-        children.put("Jobs in bidding", DatabaseManager.shared.getJobs());
+//        children.put("Jobs in bidding", DatabaseManager.shared.getJobs());
 
         ExpandableListView listMyJobs = v.findViewById(R.id.listMyJobs);
         ExpandableListAdapter adapter = new ExpandableListAdapter(getContext(), headers, children);
@@ -61,7 +59,7 @@ public class MyJobsFragment extends Fragment implements DataListener {
                         job = jobs.get(childPos);
                         break;
                     case 1:
-                        job = DatabaseManager.shared.getJobs().get(childPos);
+//                        job = DatabaseManager.shared.getJobs().get(childPos);
                         break;
                 }
                 Fragment jobFrag = JobViewFragment.newInstance(job);

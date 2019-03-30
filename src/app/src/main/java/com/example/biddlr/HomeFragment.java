@@ -10,26 +10,22 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import classes.DatabaseManager;
 import classes.Job;
-import interfaces.DataListener;
+import interfaces.JobDataListener;
 
-public class HomeFragment extends Fragment implements DataListener {
-    private List<Job> jobList;
+public class HomeFragment extends Fragment implements JobDataListener {
     private RecyclerView recycler;
     private JobListAdapter adapter;
 
-    static ArrayList<Job> jobs = new ArrayList<Job>();
+    static ArrayList<Job> jobs = new ArrayList<>();
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -39,7 +35,7 @@ public class HomeFragment extends Fragment implements DataListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseManager.shared.getAllJobs(50, this);
+        DatabaseManager.shared.setActiveJobsListener(50, this);
         adapter = new JobListAdapter(jobs);
     }
 
@@ -74,7 +70,7 @@ public class HomeFragment extends Fragment implements DataListener {
         recycler.addOnItemTouchListener(new JobListTouchListener(getContext(), recycler, new JobListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
-                Job job = DatabaseManager.shared.getJobs().get(pos);
+                Job job = jobs.get(pos);
                 Fragment jobFrag = JobViewFragment.newInstance(job);
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
