@@ -21,6 +21,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import interfaces.JobDataListener;
@@ -78,6 +79,37 @@ public class DatabaseManager {
         updates.put(job.getJobID() + "/currentBid" , job.getCurrentBid());
 
         activeJobRef.updateChildren(updates);
+    }
+
+    public void setJobFromJobID(String id, final JobDataListener listener){
+        activeJobRef.orderByChild("jobID").equalTo(id).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Job job = dataSnapshot.getValue(Job.class);
+                Log.d("JOB ID QUERY", "job: " + job);
+                listener.newDataReceived(job);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
@@ -266,6 +298,39 @@ public class DatabaseManager {
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+    }
+
+    public void setUsersFromListListener(final List<String> ids, final UserDataListener listener){
+        userRef.orderByChild("userID").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                User user = dataSnapshot.getValue(User.class);
+                if(ids.contains(user.getUserID())){
+                    Log.d("USER ADDED", "user: " + user);
+                    listener.newDataReceived(user);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
     }
 
