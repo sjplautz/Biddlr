@@ -1,6 +1,9 @@
 package com.example.biddlr;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,19 +17,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.time.LocalDateTime;
+import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
-import java.util.List;
 
 import classes.DatabaseManager;
 import classes.Job;
+import interfaces.JobDataListener;
 
-public class HomeFragment extends Fragment {
-    private List<Job> jobList;
-    private RecyclerView recycler;
+public class HomeFragment extends Fragment implements JobDataListener {
     private JobListAdapter adapter;
+    private ArrayList<Job> jobs = new ArrayList<>();
+    private ArrayList<Bitmap> pics = new ArrayList<>();
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -35,13 +36,14 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DatabaseManager.shared.setActiveJobsListener(50, this);
+        adapter = new JobListAdapter(jobs, pics);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        adapter = DatabaseManager.shared.getExploreAdapter();
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -54,7 +56,7 @@ public class HomeFragment extends Fragment {
         });
 
         //Sets the layout for the recycler view to inflate with
-        recycler = v.findViewById(R.id.homeRecycler);
+        RecyclerView recycler = v.findViewById(R.id.homeRecycler);
 
         //Set the layout parameters
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
@@ -70,7 +72,7 @@ public class HomeFragment extends Fragment {
         recycler.addOnItemTouchListener(new JobListTouchListener(getContext(), recycler, new JobListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
-                Job job = DatabaseManager.shared.getJobs().get(pos);
+                Job job = jobs.get(pos);
                 Fragment jobFrag = JobViewFragment.newInstance(job);
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
@@ -93,13 +95,19 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
-    /*
-    //this will be used to update the map with the appropriate batch of pins when the map
-    //fragment is reopened, resulting in a dynamic map
     @Override
-    public void onResume(){
-        super.onResume();
-        handler.post(batchAddMarkersRunnable);
+    public void newDataReceived(final Job job) {
+        jobs.add(0, job);
+        pics.add(0, null);
+        DatabaseManager.shared.getImgRef(job.getJobID()).getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                int index = jobs.indexOf(job);
+                pics.set(index, bmp);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.notifyDataSetChanged();
     }
-    */
 }

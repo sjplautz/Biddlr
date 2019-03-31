@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -23,33 +22,32 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
-import java.util.List;
+import classes.DatabaseManager;
+import classes.Job;
+import classes.LatLngWrapped;
+import interfaces.JobDataListener;
 
 import static android.support.constraint.Constraints.TAG;
-import static com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback, JobDataListener {
 
     public static GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private CameraPosition mCameraPosition;
     private Location mCurrentLocation;
-    private Location mLastKnownLocation;
+    public static Location mLastKnownLocation;
 
     MapView mMapView;
     View mView;
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final int DEFAULT_ZOOM = 14;
-    private static final double DEFAULT_LAT = 33.2098;
-    private static final double DEFAULT_LONG = -87.565155;
+    private static final int DEFAULT_ZOOM = 13;
+    private static final double DEFAULT_LAT = 33.34;
+    private static final double DEFAULT_LONG = -87.67;
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
@@ -67,12 +65,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
-
-        //include method here for querying the database, will be passed in current coords
-
-        //this list needs to be filled with the result of querying against jobs database
-        //for coordinates within a certain distance of the detected user location
-        final List<LatLng> coordinateList = new ArrayList<LatLng>();
     }
 
     @Override
@@ -88,13 +80,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mMapView = (MapView) mView.findViewById(R.id.map);
         if(mMapView != null){
+            // Construct a FusedLocationProviderClient to handle location actions
+            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+            //call the following init methods for the map
             mMapView.onCreate(null);
             mMapView.onResume();
             mMapView.getMapAsync(this);
         }
-
-        // Construct a FusedLocationProviderClient.
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
     }
 
     @Override
@@ -108,52 +100,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         //turns on the my location layer and related control on the map
         updateLocationUI();
 
-        //adding two sample map markers, will eventually be done automatically upon job creation
-        mMap.addMarker(new MarkerOptions().position(new LatLng(DEFAULT_LAT - .001, DEFAULT_LONG + .001 )).title("Window Washing"));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(DEFAULT_LAT - .004, DEFAULT_LONG - .003 )).title("Lawn Mowing"));
+        //gets the devices location
+        Location currentLocation = getDeviceLocation();
 
-        //gets the devices location and sets the map view to be centered on the location returned
-        getDeviceLocation();
+        //wrap the location, and then retrieve jobs within a radius of that location, creating pins for these jobs
+        LatLngWrapped wrappedCurrentLocation = LatLngWrapped.wrap(currentLocation);
+        DatabaseManager.shared.setJobsForLocationListener(wrappedCurrentLocation,100.0,50, this);
 
-        //sets up listeners to handle pin loading for user map navigation gestures
-//        mMap.setOnCameraMoveStartedListener(this);
-//        mMap.setOnCameraMoveListener(this);
-//        mMap.setOnCameraIdleListener(this);
+        //sets the map to gotten location
+        setMapCamera(currentLocation);
     }
 
-//    @Override
-//    public void onCameraMoveStarted(int reason){
-//        if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE){
-//            //the user gestured on the map
-//            //do something
-//            return;
-//        }
-//        else if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION){
-//            //the user tapped something on the map
-//            //do something
-//            return;
-//        }
-//        else if(reason == GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION){
-//            //the app moved the camera
-//            //do something
-//            return;
-//        }
-//    }
-//
-//    @Override
-//    public void onCameramove(){
-//        //the camera is currently moving
-//        //do something
-//        return;
-//    }
-//
-//    @Override
-//    public void onCameraIdle(){
-//        //the camera has stopped moving
-//        //thus we want to now refresh the pins that are displayed accordingly
-//        //do something
-//        return;
-//    }
+    //updates the ui to indicate that location permissions are either allowed or not
+    private void updateLocationUI() {
+        if (mMap == null) {
+            return;
+        }
+        try {
+            if (mLocationPermissionGranted) {
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            } else {
+                mMap.setMyLocationEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mLastKnownLocation = null;
+                getLocationPermission();
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
 
     //requests location permissions at runtime
     private void getLocationPermission() {
@@ -182,28 +158,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         updateLocationUI();
     }
 
-    //updates the ui to indicate that location permissions are either allowed or not
-    private void updateLocationUI() {
-        if (mMap == null) {
-            return;
-        }
-        try {
-            if (mLocationPermissionGranted) {
-                mMap.setMyLocationEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            } else {
-                mMap.setMyLocationEnabled(false);
-                mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                mLastKnownLocation = null;
-                getLocationPermission();
-            }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }
-
     //gets the best and most recent location of the device, using a default if location is null
-    private void getDeviceLocation() {
+    public Location getDeviceLocation() {
         try {
             if (mLocationPermissionGranted) {
                 LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -220,30 +176,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 //get current location using the best provider
                 mLastKnownLocation = lm.getLastKnownLocation(Provider);
-
-                //if location extraction was successful, set the map to location's coords
-                if(mLastKnownLocation != null){
-                    Log.d(TAG, "Current location was not null!");
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                            new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                }
-                //else set map to default coords
-                else{
-                    Log.d(TAG, "Current location is null. Using defaults.");
-                    Log.e(TAG, "Exception");
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LONG), DEFAULT_ZOOM));
-                    mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                }
+                Log.d("EXPERIMENT", "get device location method called, and retrieved location with coords: "
+                        + mLastKnownLocation.getLatitude() + " " + mLastKnownLocation.getLongitude());
             }
         }
         catch(SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
+        return mLastKnownLocation;
     }
 
+    //centers the maps camera on the user's location, if location could not be found on default coords
+    private void setMapCamera(Location mLastKnownLocation){
+        //if location extraction was successful, set the map to location's coords
+        if(mLastKnownLocation != null){
+            Log.d(TAG, "Current location was not null!");
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+        }
+        //else set map to default coords
+        else{
+            Log.d(TAG, "Current location is null. Using defaults.");
+            Log.e(TAG, "Exception");
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(DEFAULT_LAT, DEFAULT_LONG), DEFAULT_ZOOM));
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        }
+    }
 
-    //saves the state of map upon pausing activity
     @Override
+    //saves the state of map upon pausing activity
     public void onSaveInstanceState(Bundle outState) {
         if (mMap != null) {
             outState.putParcelable(KEY_CAMERA_POSITION, mMap.getCameraPosition());
@@ -251,4 +212,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             super.onSaveInstanceState(outState);
         }
     }
+
+    @Override
+    //adds pins to the map for any jobs that are within the radius specified
+    public void newDataReceived(Job job) {
+        LatLngWrapped latLng = job.getCoordinates();
+        Log.d("MAP PINS", "adding pin with lat: " + latLng.getLat() + " and lng: " + latLng.getLng());
+        mMap.addMarker(new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle()));
+    }
+
 }

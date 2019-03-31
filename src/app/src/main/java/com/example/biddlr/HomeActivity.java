@@ -3,14 +3,15 @@ package com.example.biddlr;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Dictionary;
+import java.util.HashMap;
 
 import classes.DatabaseManager;
 import classes.Job;
@@ -49,25 +52,25 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment selectedFrag = null;
                 String tag = null;
+
                 switch(item.getItemId()){
                     case R.id.itemHome:
-                        selectedFrag = HomeFragment.newInstance();
                         tag = "HOME";
+                        selectedFrag = HomeFragment.newInstance();
                         break;
                     case R.id.itemJobs:
-                        selectedFrag = JobsFragment.newInstance();
                         tag = "JOBS";
+                        selectedFrag = JobsFragment.newInstance();
                         break;
                     case R.id.itemProfile:
-                        selectedFrag = ProfileFragment.newInstance();
                         tag = "PROFILE";
+                        selectedFrag = MyProfileFragment.newInstance();
                         break;
                     case R.id.itemMessages:
-                        selectedFrag = MessagesFragment.newInstance();
                         tag = "MESSAGES";
+                        selectedFrag = BidderSelectFragment.newInstance();
                         break;
                 }
-
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.frameNull, selectedFrag);
                 transaction.addToBackStack(tag);
@@ -131,7 +134,7 @@ public class HomeActivity extends AppCompatActivity {
     private void submitDialog(){
         //add in logic for flag value on submission
         if(flag > 0){
-            ImageView imgJobPic = findViewById(R.id.imgJobImage);
+            ImageView imgJobPic = findViewById(R.id.imgMyProfileImage);
             byte[] imgArr = null;
             if(imgJobPic.getDrawable() != null) {
                 Bitmap image = ((BitmapDrawable) imgJobPic.getDrawable()).getBitmap();
@@ -168,18 +171,18 @@ public class HomeActivity extends AppCompatActivity {
 
             //job constructor modified to include coordinates
             Job job = new Job(title, desc, location, coordinates, expDate, startingPrice);
-            DatabaseManager.shared.addJob(job, imgArr);
+            DatabaseManager.shared.addNewJob(job, imgArr);
 
             closeDialog();
         }
         else{
-            Toast.makeText(this, "please enter and check a valid address before submission",
+            Toast.makeText(this, "please enter a valid address before submission",
                     Toast.LENGTH_LONG).show();
         }
 
     }
 
-    // When user clicks 3 dots
+    // When user clicks menu (3 dots) in app bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -188,7 +191,7 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
-    // When user selects item
+    // Menu item selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

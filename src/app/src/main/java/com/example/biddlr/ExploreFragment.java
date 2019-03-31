@@ -1,79 +1,67 @@
 package com.example.biddlr;
 
-import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import classes.DatabaseManager;
 import classes.Job;
-import enums.JobStatus;
+import interfaces.JobDataListener;
 
-public class ExploreFragment extends Fragment {
-    private RecyclerView recycler;
+public class ExploreFragment extends Fragment implements JobDataListener {
     private JobListAdapter adapter;
+    private ArrayList<Bitmap> pics = new ArrayList<>();
+    private ArrayList<Job> jobs = new ArrayList<>();
 
     public static ExploreFragment newInstance() {
-        ExploreFragment fragment = new ExploreFragment();
-        return fragment;
+        return new ExploreFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Call the query you want with 'this' as the listener
+        DatabaseManager.shared.setActiveJobsListener(50, this);
+        adapter = new JobListAdapter(jobs, pics);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.fragment_explore, container, false);
 
-        adapter = DatabaseManager.shared.getExploreAdapter();
+        RecyclerView recycler = v.findViewById(R.id.exploreRecycler);
 
-        recycler = v.findViewById(R.id.exploreRecycler);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext().getApplicationContext());
         recycler.setLayoutManager(manager);
         recycler.setItemAnimator(new DefaultItemAnimator());
 
-        //adding a divider between recyclerview list items
-        DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recycler_divider));
-        recycler.addItemDecoration(divider);
+        DividerItemDecoration div = new DividerItemDecoration(recycler.getContext(), ((LinearLayoutManager) manager).getOrientation());
+        recycler.addItemDecoration(div);
 
         recycler.setAdapter(adapter);
         recycler.addOnItemTouchListener(new JobListTouchListener(getContext().getApplicationContext(), recycler, new JobListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
-                Job job = DatabaseManager.shared.getJobs().get(pos);
+                Job job = jobs.get(pos);
                 Fragment jobFrag = JobViewFragment.newInstance(job);
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
@@ -88,11 +76,22 @@ public class ExploreFragment extends Fragment {
             }
         }));
 
-        //prepareSampleData();
         return v;
     }
 
-    private void prepareSampleData() {
+    @Override
+    public void newDataReceived(final Job job) {
+        jobs.add(0, job);
+        pics.add(0, null);
+        DatabaseManager.shared.getImgRef(job.getJobID()).getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                int index = jobs.indexOf(job);
+                pics.set(index, bmp);
+                adapter.notifyDataSetChanged();
+            }
+        });
         adapter.notifyDataSetChanged();
     }
 }

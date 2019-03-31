@@ -1,11 +1,16 @@
 package com.example.biddlr;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,22 +39,40 @@ import classes.LatLngWrapped;
 import static android.app.Activity.RESULT_OK;
 
 //TODO Move submission code here
+
+/**
+ * The Fragment that handles job creation
+ */
 public class JobCreationFragment extends DialogFragment {
     private ImageView imgJobPicture;
     private BottomSheetDialog typePicker;
 
+    /**
+     * Creates a JobCreationFragment
+     * @return An instance of a JobCreationFragment
+     */
     public static JobCreationFragment newInstance() {
-        JobCreationFragment fragment = new JobCreationFragment();
-        return fragment;
+        return new JobCreationFragment();
     }
 
+    /**
+     * Method called when the Fragment is created
+     * @param savedInstanceState The last saved instance state of the fragment
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Method called when the Fragment is displayed
+     * @param inflater Inflates fragment_job_creation.xml to a View
+     * @param container Parent view of the layout to be inflated
+     * @param savedInstanceState The last saved instance state of the fragment
+     * @return The View to display in the Fragment
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_job_creation, container, false);
 
@@ -81,7 +104,7 @@ public class JobCreationFragment extends DialogFragment {
             }
         });
 
-        imgJobPicture = v.findViewById(R.id.imgJobImage);
+        imgJobPicture = v.findViewById(R.id.imgMyProfileImage);
 
         FloatingActionButton btnImagePicker = v.findViewById(R.id.btnImagePicker);
         btnImagePicker.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +117,9 @@ public class JobCreationFragment extends DialogFragment {
                 btnCamera.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                            getActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+                        }
                         Intent cameraPicker = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(cameraPicker, 0);
                     }
@@ -113,17 +139,48 @@ public class JobCreationFragment extends DialogFragment {
             }
         });
 
-        Button btnCheckAddress = v.findViewById(R.id.btnCheckAddress);
-        btnCheckAddress.setOnClickListener(new View.OnClickListener() {
+        //creates a handle to the editText section for addresses
+        final TextInputEditText textLocation = v.findViewById(R.id.txtLocation);
+
+        //adds a listener to the use location button, calling the getaddress method and placing results in the address box
+        Button btnUseLocation = v.findViewById(R.id.btnUseLocation);
+        btnUseLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verifyAddress();
+                String address = reverseGeocode();
+                Log.d("ADDRESS", "value of address string after reverse geocode: "+address+" end");
+
+                if(textLocation == null){
+                    Log.d("ADDRESS", "couldn't get a handle on text box properly");
+                }
+
+                //setting the value of address editText box to contain resulting string from reverse geocode
+                textLocation.setText(address);
+
+                //clearing the flag to allow for job submission
+                HomeActivity.flag = 1;
+            }
+        });
+
+        //sets a listener on the location editText box, when user clicks off the box, the listener calls address verification method
+        textLocation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    verifyAddress();
+                }
             }
         });
 
         return v;
     }
 
+    /**
+     * Handles the results of the Intents used to retrieve the job image
+     * @param requestCode The requestCode of the Intent
+     * @param resultCode The success state of the Intent
+     * @param data The result of the Intent
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -146,7 +203,7 @@ public class JobCreationFragment extends DialogFragment {
         }
     }
 
-    //given user entered address, ensures address is reasonable and the geocodes
+    //given user entered address, ensures address is reasonable and then geocodes
     public void verifyAddress(){
         TextView locationView = getActivity().findViewById(R.id.txtLocation);
         String location = locationView.getText().toString();
@@ -157,7 +214,7 @@ public class JobCreationFragment extends DialogFragment {
             if(flag){
                 Toast.makeText(getActivity(), "valid address entered",
                         Toast.LENGTH_LONG).show();
-                HomeActivity.coordinates = geocode(location);
+                HomeActivity.coordinates = forwardGeocode(location);
                 HomeActivity.flag = 1;
             }
             else{
@@ -172,16 +229,18 @@ public class JobCreationFragment extends DialogFragment {
             HomeActivity.flag = 0;
         }
 
+
+
         return;
     }
 
     //checks if address fits specified format for inputting addresses for job creation
     public Boolean checkFormat(String location){
-        //             opt                 opt
-        //example: 3720 N. 33rd Dr., Apt# 709, Rockford, IL
+        //             opt              opt                  opt
+        //example: 3720 N. 33rd Dr., Apt# 709, Rockford, IL 36301
 
         //pattern allows for optional cardinal directions, abbreviations, and apt/suite numbers
-        String pattern1 = "\\d{1,5}\\s(\\w*.?\\s)?\\w*\\s\\w*.?,\\s(\\w*.?\\W?\\s\\W?\\d{1,5}(\\s)?)?(,\\s)?\\w*,\\s\\w*";
+        String pattern1 = "\\d{1,5}\\s(\\w*.?\\s)?\\w*\\s\\w*.?,?\\s(\\w*.?\\W?\\s\\W?\\d{1,5}(\\s)?)?(,?\\s)?\\w*,?\\s\\w*(\\s\\w*(-\\w*)?)?";
 
         //test against prescribed format
         if(location.matches(pattern1))
@@ -191,15 +250,25 @@ public class JobCreationFragment extends DialogFragment {
     }
 
     //forward geocode for retrieving coordinates from address
-    public static LatLngWrapped geocode(String address){
+    public static LatLngWrapped forwardGeocode(String address){
         String apiKey = "NypbUMfluOKXSv4v02Gq1Er3kIA9AfVB";
+
+        //creating path string to be executed for forward geocode
         String requestPath = "http://www.mapquestapi.com/geocoding/v1/address?key="+apiKey+"&location=";
+        try{
+            requestPath += URLEncoder.encode(address,"UTF-8");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
         LatLng coordinates;
         double lat = 0;
         double lng = 0;
 
         //get a json response object using httpRequest to Mapquest API
-        JSONObject response = httpRequest(requestPath, address);
+        JSONObject response = httpRequest(requestPath);
 
         //Parse the response object to extract lat and lng
         try{
@@ -219,26 +288,61 @@ public class JobCreationFragment extends DialogFragment {
         }
         catch (Exception e){
             e.printStackTrace();
-            Log.d("VERIFICATION", "inside of exception e in geocode method");
+            Log.d("VERIFICATION", "inside of exception e in forward geocode method");
+            return null;
+        }
+    }
+
+    //reverse geocode for retrieving address from coordinates
+    public static String reverseGeocode(){
+        String apiKey = "NypbUMfluOKXSv4v02Gq1Er3kIA9AfVB";
+
+        //getting the location info retrieved in map fragment
+        Location currentLocation = MapFragment.mLastKnownLocation;
+        double lat = currentLocation.getLatitude();
+        double lng = currentLocation.getLongitude();
+
+        //creating path string to be executed for reverse geocode
+        String requestPath = "http://www.mapquestapi.com/geocoding/v1/reverse?key="+apiKey+"&location="
+                +Double.toString(lat)+","+Double.toString(lng)+","
+                +"&includeRoadMetadata=true&includeNearestIntersection=true";
+
+        //get a json response object using httpRequest to Mapquest API
+        JSONObject response = httpRequest(requestPath);
+
+        //Parse the response object to extract lat and lng
+        try{
+            //navigate through JSON object to get to desired attributes
+            JSONArray results = response.getJSONArray("results");
+            JSONObject resultsObject = results.getJSONObject(0);
+            JSONArray locations = resultsObject.getJSONArray("locations");
+            JSONObject locationsObject = locations.getJSONObject(0);
+
+            //getting strings needed to build a resulting address string
+            String street = locationsObject.getString("street");
+            String city = locationsObject.getString("adminArea5");
+            String state = locationsObject.getString("adminArea3");
+            String zip = locationsObject.getString("postalCode");
+
+            //now build the address string accordingly
+            String addressResult = street+", "+city+", "+state+" "+zip;
+
+            //set the location for job building in home activity
+            HomeActivity.coordinates = new LatLngWrapped(lat, lng);
+
+            return addressResult;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Log.d("VERIFICATION", "inside of exception e in reverse geocode method");
             return null;
         }
     }
 
     //makes an http request to a selected url and returns a response JSON object
-    public static JSONObject httpRequest(String path, String address){
-
+    public static JSONObject httpRequest(String request){
         String returned;
         JSONObject result;
-
-        //Combining path and address for full http request
-        String request = path;
-        try{
-            request += URLEncoder.encode(address,"UTF-8");
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return null;
-        }
 
         //Instantiate new instance of Async Task get request class
         HttpGetRequest getRequest = new HttpGetRequest();
