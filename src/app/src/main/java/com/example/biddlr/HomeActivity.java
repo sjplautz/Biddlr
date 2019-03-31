@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,10 +39,6 @@ public class HomeActivity extends AppCompatActivity {
     public static LatLngWrapped coordinates;
     public static int flag = 0;
 
-    private Fragment currFrag = null;
-    private String currTag = null;
-    private HashMap<String, Bundle> fragStore = new HashMap<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,20 +53,10 @@ public class HomeActivity extends AppCompatActivity {
                 Fragment selectedFrag = null;
                 String tag = null;
 
-                if(currFrag != null) {
-                    Bundle bundle = new Bundle();
-                    currFrag.onSaveInstanceState(bundle);
-                    getSupportFragmentManager().putFragment(bundle, currTag, currFrag);
-                    fragStore.put(currTag, bundle);
-                }
                 switch(item.getItemId()){
                     case R.id.itemHome:
                         tag = "HOME";
-                        if(fragStore.containsKey(tag)){
-                            Bundle b = fragStore.get(tag);
-                            selectedFrag = getSupportFragmentManager().getFragment(b, tag);
-                        }
-                        if(selectedFrag == null) selectedFrag = HomeFragment.newInstance();
+                        selectedFrag = HomeFragment.newInstance();
                         break;
                     case R.id.itemJobs:
                         tag = "JOBS";
@@ -81,12 +68,9 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     case R.id.itemMessages:
                         tag = "MESSAGES";
-                        selectedFrag = MessagesFragment.newInstance();
+                        selectedFrag = BidderSelectFragment.newInstance();
                         break;
                 }
-                currFrag = selectedFrag;
-                currTag = tag;
-
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.frameNull, selectedFrag);
                 transaction.addToBackStack(tag);

@@ -1,6 +1,8 @@
 package com.example.biddlr;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
@@ -115,6 +117,9 @@ public class JobCreationFragment extends DialogFragment {
                 btnCamera.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                            getActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+                        }
                         Intent cameraPicker = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(cameraPicker, 0);
                     }

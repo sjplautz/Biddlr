@@ -26,7 +26,7 @@ import interfaces.JobDataListener;
 
 public class HomeFragment extends Fragment implements JobDataListener {
     private JobListAdapter adapter;
-    static ArrayList<Job> jobs = new ArrayList<>();
+    private ArrayList<Job> jobs = new ArrayList<>();
     private ArrayList<Bitmap> pics = new ArrayList<>();
 
     public static HomeFragment newInstance() {
@@ -93,13 +93,6 @@ public class HomeFragment extends Fragment implements JobDataListener {
         trans.add(R.id.mapView, mapFragment).commit();
 
         return v;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState){
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("Jobs", jobs);
-        outState.putParcelableArrayList("Pics", pics);
     }
 
     @Override
