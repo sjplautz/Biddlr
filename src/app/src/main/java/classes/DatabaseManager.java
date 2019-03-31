@@ -59,6 +59,10 @@ public class DatabaseManager {
         storage = FirebaseStorage.getInstance();
         imgRef = storage.getReference("images");
 
+
+    }
+
+    public void setCurrentUser() {
         userRef.child(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -268,6 +272,8 @@ public class DatabaseManager {
         String id = getCurrentUser().getUid();
         user.setUserID(id);
         userRef.child(id).setValue(user);
+
+        DatabaseManager.shared.setCurrentUser();
     }
 
     public void addBidForUser(User user) {

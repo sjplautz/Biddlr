@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // update UI to start app with current user
         if (currentUser != null) {
+            DatabaseManager.shared.setCurrentUser();
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }
@@ -93,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (user.isEmailVerified()) {
                                 Toast.makeText(LoginActivity.this, "Verified Email", Toast.LENGTH_SHORT).show();
 
-                                DatabaseManager.shared.getCurrentUser();
+                                DatabaseManager.shared.setCurrentUser();
                                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                 finish();
 
