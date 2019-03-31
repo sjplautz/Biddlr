@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.example.biddlr.JobListAdapter;
 import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,19 +33,22 @@ public class DatabaseManager {
     public FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private FirebaseStorage storage;
-    private DatabaseReference jobRef;
+    private DatabaseReference activeJobRef;
+    private DatabaseReference expiredJobRef;
     private DatabaseReference userRef;
     private StorageReference imgRef;
 
     public void setUp() {
         mAuth = FirebaseAuth.getInstance();
-
-        // create reference to job table
         database = FirebaseDatabase.getInstance();
-        jobRef = database.getReference("job");
+
+        // create reference to active job table
+        activeJobRef = database.getReference("active_job");
+
+        // create reference to expired job table
+        expiredJobRef = database.getReference("expired_job");
 
         // create reference to user table
-        database = FirebaseDatabase.getInstance();
         userRef = database.getReference("user");
 
         storage = FirebaseStorage.getInstance();
@@ -62,13 +63,13 @@ public class DatabaseManager {
      * @param image
      */
     public void addNewJob(Job job, byte[] image) {
-        String id = jobRef.push().getKey();
+        String id = activeJobRef.push().getKey();
         if(image != null) {
             StorageReference tmpRef = imgRef.child(id);
             tmpRef.putBytes(image);
         }
         job.setJobID(id);
-        jobRef.child(id).setValue(job);
+        activeJobRef.child(id).setValue(job);
     }
 
     public void addJobBid(Job job, Double bid) {
@@ -76,7 +77,7 @@ public class DatabaseManager {
         updates.put(job.getJobID() + "/bids" , job.getBids());
         updates.put(job.getJobID() + "/currentBid" , job.getCurrentBid());
 
-        jobRef.updateChildren(updates);
+        activeJobRef.updateChildren(updates);
     }
 
     /**
@@ -85,7 +86,7 @@ public class DatabaseManager {
      * @param listener fragment to receive jobs
      */
     public void setActiveJobsListener(int limit, final JobDataListener listener) {
-        jobRef.orderByChild("status").equalTo("IN_BIDDING").limitToFirst(limit).addChildEventListener(new ChildEventListener() {
+        activeJobRef.orderByChild("status").equalTo("IN_BIDDING").limitToFirst(limit).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
@@ -113,7 +114,7 @@ public class DatabaseManager {
      * @param listener fragment to receive job
      */
     public void setJobFromIDListener(String jobID, final JobDataListener listener) {
-        jobRef.orderByChild("jobID").equalTo(jobID).addChildEventListener(new ChildEventListener() {
+        activeJobRef.orderByChild("jobID").equalTo(jobID).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
@@ -143,7 +144,7 @@ public class DatabaseManager {
      * @param listener fragment to receive jobs
      */
     public void setJobsForPosterListener(String userID, int limit, final JobDataListener listener) {
-        jobRef.orderByChild("posterID").equalTo(userID).limitToFirst(limit).addChildEventListener(new ChildEventListener() {
+        activeJobRef.orderByChild("posterID").equalTo(userID).limitToFirst(limit).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
@@ -179,7 +180,7 @@ public class DatabaseManager {
         Double minLat = coordinate.lat - radius;
         final Double minLng = coordinate.lng - radius;
 
-        jobRef.orderByChild("coordinates/lat").startAt(minLat).endAt(maxLat).limitToFirst(limit).addChildEventListener(new ChildEventListener() {
+        activeJobRef.orderByChild("coordinates/lat").startAt(minLat).endAt(maxLat).limitToFirst(limit).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);

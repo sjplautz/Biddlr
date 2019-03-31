@@ -37,7 +37,7 @@ public class User implements Parcelable {
         this.bio = null;
         this.profilePic = null;
         this.bidderRating = null;
-        this.posterRating = null;
+        this.posterRating = 0.0;
     }
 
     // Parcable
@@ -113,7 +113,7 @@ public class User implements Parcelable {
 
     public void setBidderRating(Double bidderRating) { this.bidderRating = bidderRating; }
 
-    public Double getPosterRating() { return posterRating; }
+    public Double getPosterRating() { return posterRating == null ? 5.0 : posterRating; }
 
     public void setPosterRating(Double posterRating) { this.posterRating = posterRating; }
 

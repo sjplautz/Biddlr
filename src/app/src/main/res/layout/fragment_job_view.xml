@@ -101,6 +101,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="sans-serif-medium"
         android:text="$0"
+        android:textColor="@color/colorPrimary"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/txtAskingPricePrompt"
         app:layout_constraintTop_toBottomOf="@+id/txtAskingPricePrompt" />
@@ -112,7 +113,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="sans-serif-medium"
         android:text="$0"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/txtCurrentBidPrompt"
         app:layout_constraintTop_toBottomOf="@+id/txtCurrentBidPrompt" />

@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -178,7 +179,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    // When user clicks 3 dots
+    // When user clicks menu (3 dots) in app bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -187,7 +188,7 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
-    // When user selects item
+    // Menu item selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

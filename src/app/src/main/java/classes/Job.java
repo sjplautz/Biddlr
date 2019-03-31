@@ -202,22 +202,27 @@ public class Job implements Parcelable {
         DatabaseManager.shared.addJobBid(this, bid);
     }
 
-    public String formatExpirationDate() {
+    public String formattedExpirationDate() {
         // We can mak our own formatter
         return LocalDateTime.parse(getExpirationDate().getLocalDateTime()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
     }
 
-    public String formatDateFromNow() {
+    public boolean isNowPastExpirationDate() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime temp = LocalDateTime.from( now );
+        LocalDateTime timeFromNow = LocalDateTime.from( now );
+        long hours = timeFromNow.until( LocalDateTime.parse(getExpirationDate().getLocalDateTime()), ChronoUnit.HOURS);
+        return hours < 0;
+    }
 
-        long days = temp.until( getExpirationDate().toLocalDateTime(), ChronoUnit.DAYS);
-//        temp = temp.plusDays( days );
+    public String formattedTimeFromNow() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime timeFromNow = LocalDateTime.from( now );
 
-        long hours = temp.until( LocalDateTime.parse(getExpirationDate().getLocalDateTime()), ChronoUnit.HOURS);
-//        temp = temp.plusHours( hours );
+        long days = timeFromNow.until( getExpirationDate().toLocalDateTime(), ChronoUnit.DAYS);
 
-        if (hours < 0) { return "Expired"; };
+        long hours = timeFromNow.until( LocalDateTime.parse(getExpirationDate().getLocalDateTime()), ChronoUnit.HOURS);
+
+        if (hours < 0) { return "Expired"; }
         if (days > 0) {
             return days + " days";
         }

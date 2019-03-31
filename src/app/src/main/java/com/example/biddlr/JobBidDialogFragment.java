@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import classes.DatabaseManager;
 import classes.Job;
@@ -47,11 +48,11 @@ public class JobBidDialogFragment extends DialogFragment {
         job = getArguments().getParcelable(JOB_BID_DIALOG_KEY);
 
         TextView txtJobAskingPrice = (TextView) v.findViewById(R.id.txtJobAskingPrice);
-        String start = "$" + job.getStartingPrice();
+        String start = "$" + String.format("%.2f", job.getStartingPrice());
         txtJobAskingPrice.setText(start);
 
         TextView txtJobCurrentBid = (TextView) v.findViewById(R.id.txtJobCurrentBid);
-        String current = "$" + job.getCurrentBid();
+        String current = "$" + String.format("%.2f", job.getCurrentBid());
         txtJobCurrentBid.setText(current);
 
         txtBid = (EditText) v.findViewById(R.id.txtNewBid);
@@ -59,10 +60,17 @@ public class JobBidDialogFragment extends DialogFragment {
         btnPlaceBid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String bid = txtBid.getText().toString();
-                if (bid.trim().isEmpty()) { return; }
-                job.addBid(DatabaseManager.shared.getCurrentUser().getUid(), new Double(bid));
-                dismiss();
+                String bidInput = txtBid.getText().toString();
+                if (bidInput.trim().isEmpty()) { return; }
+
+                Double bid = new Double(bidInput);
+                if (bid > job.getStartingPrice() ) {
+                    Toast.makeText(getActivity(), "Bid must not exceed the asking price.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    job.addBid(DatabaseManager.shared.getCurrentUser().getUid(), new Double(bid));
+                    dismiss();
+                }
             }
         });
 
