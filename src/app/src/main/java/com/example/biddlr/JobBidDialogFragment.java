@@ -16,12 +16,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseError;
+
 import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
 import interfaces.UserDataListener;
 
-public class JobBidDialogFragment extends DialogFragment implements UserDataListener {
+public class JobBidDialogFragment extends DialogFragment {
     private static final String JOB_BID_DIALOG_KEY = "job_bid_dialog_key";
     private Job job;
     private User user;
@@ -37,7 +39,6 @@ public class JobBidDialogFragment extends DialogFragment implements UserDataList
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        DatabaseManager.shared.setUserFromIDListener(DatabaseManager.shared.getCurrentUser().getUid(), this);
         super.onCreate(savedInstanceState);
     }
 
@@ -72,7 +73,7 @@ public class JobBidDialogFragment extends DialogFragment implements UserDataList
                             Toast.LENGTH_LONG).show();
                 } else {
                     job.addBid(DatabaseManager.shared.getCurrentUser().getUid(), new Double(bid));
-                    user.addBid(job.getJobID());
+                    DatabaseManager.shared.currentUser.addBid(job.getJobID(), new Double(bid));
                     dismiss();
                 }
             }
@@ -88,10 +89,5 @@ public class JobBidDialogFragment extends DialogFragment implements UserDataList
         builder.setView(v);
         return builder.create();
 
-    }
-
-    @Override
-    public void newDataReceived(User user) {
-        this.user = user;
     }
 }
