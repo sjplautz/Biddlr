@@ -8,14 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import classes.DatabaseManager;
@@ -64,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         DatabaseManager.shared.setUp();
-        FirebaseUser currentUser = DatabaseManager.shared.getCurrentUser();
+        FirebaseUser currentUser = DatabaseManager.shared.getFirebaseUser();
 
         // update UI to start app with current user
         if (currentUser != null) {
@@ -89,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = DatabaseManager.shared.getCurrentUser();
+                            FirebaseUser user = DatabaseManager.shared.getFirebaseUser();
 
                             if (user.isEmailVerified()) {
                                 Toast.makeText(LoginActivity.this, "Verified Email", Toast.LENGTH_SHORT).show();

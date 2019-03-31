@@ -3,25 +3,19 @@ package com.example.biddlr;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseError;
-
 import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
-import interfaces.UserDataListener;
 
 public class JobBidDialogFragment extends DialogFragment {
     private static final String JOB_BID_DIALOG_KEY = "job_bid_dialog_key";
@@ -72,7 +66,7 @@ public class JobBidDialogFragment extends DialogFragment {
                     Toast.makeText(getActivity(), "Bid must not exceed the asking price.",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    job.addBid(DatabaseManager.shared.getCurrentUser().getUid(), new Double(bid));
+                    job.addBid(DatabaseManager.shared.getFirebaseUser().getUid(), new Double(bid));
                     DatabaseManager.shared.currentUser.addBid(job.getJobID(), new Double(bid));
                     dismiss();
                 }

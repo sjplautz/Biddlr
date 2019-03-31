@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +89,7 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         btnPlaceBid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (job.getPosterID().equals(DatabaseManager.shared.getCurrentUser().getUid())) {
+                if (job.getPosterID().equals(DatabaseManager.shared.getFirebaseUser().getUid())) {
                     Toast.makeText(getActivity(), "You cannot bid on a job you posted!",
                             Toast.LENGTH_LONG).show();
                 } else {
