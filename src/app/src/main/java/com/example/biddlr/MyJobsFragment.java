@@ -16,12 +16,12 @@ import java.util.List;
 
 import classes.DatabaseManager;
 import classes.Job;
-import interfaces.DataListener;
+import interfaces.JobDataListener;
 
 /**
  * Fragment that controls the My Job page
  */
-public class MyJobsFragment extends Fragment implements DataListener {
+public class MyJobsFragment extends Fragment implements JobDataListener {
     private ArrayList<Job> jobs = new ArrayList<>();
     private ExpandableListAdapter adapter;
 
@@ -41,7 +41,7 @@ public class MyJobsFragment extends Fragment implements DataListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseManager.shared.getJobsForPoster(DatabaseManager.shared.getCurrentUser().getUid(), 50, this);
+        DatabaseManager.shared.setJobsForPosterListener(DatabaseManager.shared.getCurrentUser().getUid(), 50, this);
     }
 
     /**
@@ -62,7 +62,7 @@ public class MyJobsFragment extends Fragment implements DataListener {
 
         HashMap<String, List<Job>> children = new HashMap<>();
         children.put("Posted jobs", jobs);
-        children.put("Jobs in bidding", DatabaseManager.shared.getJobs());
+//        children.put("Jobs in bidding", DatabaseManager.shared.getJobs());
 
         ExpandableListView listMyJobs = v.findViewById(R.id.listMyJobs);
         adapter = new ExpandableListAdapter(getContext(), headers, children);
@@ -76,7 +76,7 @@ public class MyJobsFragment extends Fragment implements DataListener {
                         job = jobs.get(childPos);
                         break;
                     case 1:
-                        job = DatabaseManager.shared.getJobs().get(childPos);
+//                        job = DatabaseManager.shared.getJobs().get(childPos);
                         break;
                 }
                 Fragment jobFrag = JobViewFragment.newInstance(job);

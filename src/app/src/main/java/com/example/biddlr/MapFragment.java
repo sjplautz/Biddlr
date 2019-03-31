@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -23,24 +22,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import classes.DatabaseManager;
 import classes.Job;
 import classes.LatLngWrapped;
-import interfaces.DataListener;
+import interfaces.JobDataListener;
 
 import static android.support.constraint.Constraints.TAG;
-import static com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, DataListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, JobDataListener {
 
     public static GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -112,7 +105,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, DataLis
 
         //wrap the location, and then retrieve jobs within a radius of that location, creating pins for these jobs
         LatLngWrapped wrappedCurrentLocation = LatLngWrapped.wrap(currentLocation);
-        DatabaseManager.shared.getJobsForMap(wrappedCurrentLocation,100.0,50, this);
+        DatabaseManager.shared.setJobsForLocationListener(wrappedCurrentLocation,100.0,50, this);
 
         //sets the map to gotten location
         setMapCamera(currentLocation);
@@ -227,4 +220,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, DataLis
         Log.d("MAP PINS", "adding pin with lat: " + latLng.getLat() + " and lng: " + latLng.getLng());
         mMap.addMarker(new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle()));
     }
+
 }

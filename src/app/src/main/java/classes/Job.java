@@ -26,7 +26,7 @@ public class Job implements Parcelable {
     private LocalDateTimeWrapped expirationDate;
     private Double startingPrice;
     private Double currentBid;
-    private HashMap<Integer, Double> bids;  // <bidderID, bidValue>
+    private HashMap<String, Double> bids;  // <bidderID, bidValue>
 
     // Initializers
     public Job() { }
@@ -91,7 +91,7 @@ public class Job implements Parcelable {
         this.expirationDate = new LocalDateTimeWrapped(src.readString());
         this.startingPrice = src.readDouble();
         this.currentBid = src.readDouble();
-        this.bids = (HashMap<Integer, Double>) src.readSerializable();
+        this.bids = (HashMap<String, Double>) src.readSerializable();
     }
 
     // Getters and Setters
@@ -183,37 +183,46 @@ public class Job implements Parcelable {
         this.currentBid = currentBid;
     }
 
-    public HashMap<Integer, Double> getBids() {
+    public HashMap<String, Double> getBids() {
         return bids;
     }
 
-    public void setBids(HashMap<Integer, Double> bids) {
+    public void setBids(HashMap<String, Double> bids) {
         this.bids = bids;
     }
 
 
     // Custom Methods
-    public void addBid(int bidderId, double bid) {
+    public void addBid(String bidderId, double bid) {
+        if (bids == null) {
+            bids = new HashMap<String, Double>();
+        }
         this.bids.put(bidderId, bid);
         this.currentBid = bid < this.currentBid ? bid : this.currentBid;
+        DatabaseManager.shared.addJobBid(this, bid);
     }
 
-    public String formatExpirationDate() {
+    public String formattedExpirationDate() {
         // We can mak our own formatter
         return LocalDateTime.parse(getExpirationDate().getLocalDateTime()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
     }
 
-    public String formatDateFromNow() {
+    public boolean isNowPastExpirationDate() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime temp = LocalDateTime.from( now );
+        LocalDateTime timeFromNow = LocalDateTime.from( now );
+        long hours = timeFromNow.until( LocalDateTime.parse(getExpirationDate().getLocalDateTime()), ChronoUnit.HOURS);
+        return hours < 0;
+    }
 
-        long days = temp.until( getExpirationDate().toLocalDateTime(), ChronoUnit.DAYS);
-//        temp = temp.plusDays( days );
+    public String formattedTimeFromNow() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime timeFromNow = LocalDateTime.from( now );
 
-        long hours = temp.until( LocalDateTime.parse(getExpirationDate().getLocalDateTime()), ChronoUnit.HOURS);
-//        temp = temp.plusHours( hours );
+        long days = timeFromNow.until( getExpirationDate().toLocalDateTime(), ChronoUnit.DAYS);
 
-        if (hours < 0) { return "Expired"; };
+        long hours = timeFromNow.until( LocalDateTime.parse(getExpirationDate().getLocalDateTime()), ChronoUnit.HOURS);
+
+        if (hours < 0) { return "Expired"; }
         if (days > 0) {
             return days + " days";
         }

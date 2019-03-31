@@ -1,7 +1,5 @@
 package com.example.biddlr;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,22 +11,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StreamDownloadTask;
-
-import java.io.InputStream;
-import java.nio.ByteBuffer;
+import android.widget.Toast;
 
 import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
+import interfaces.JobDataListener;
+import interfaces.UserDataListener;
 
 
-public class JobViewFragment extends Fragment {
+public class JobViewFragment extends Fragment implements UserDataListener, JobDataListener {
     private static final String JOB_FRAGMENT_KEY = "job_fragment_key";
     private Job job;
+
+    private TextView txtPosterName;
+    private TextView txtJobCurrentBid;
+    private RatingBar rtgPosterRating;
 
     public static JobViewFragment newInstance(Job job) {
         Bundle bundle = new Bundle();
@@ -40,6 +38,7 @@ public class JobViewFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         super.onCreate(savedInstanceState);
     }
 
@@ -48,6 +47,9 @@ public class JobViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         job = getArguments().getParcelable(JOB_FRAGMENT_KEY);
         View v = inflater.inflate(R.layout.fragment_job_view, container, false);
+
+        DatabaseManager.shared.setUserFromIDListener(job.getPosterID(), this);
+        DatabaseManager.shared.setJobFromIDListener(job.getJobID(), this);
 
         TextView txtJobTitle = (TextView) v.findViewById(R.id.txtJobTitle);
         txtJobTitle.setText(job.getTitle());
@@ -59,28 +61,44 @@ public class JobViewFragment extends Fragment {
         txtJobLocation.setText(job.getLocation());
 
         TextView txtTimeToExpiration = (TextView) v.findViewById(R.id.txtTimeToExpiration);
-        txtTimeToExpiration.setText(job.formatDateFromNow());
+        txtTimeToExpiration.setText(job.formattedTimeFromNow());
 
         TextView txtJobAskingPrice = (TextView) v.findViewById(R.id.txtJobAskingPrice);
-        String start = "$" + job.getStartingPrice();
+        String start = "$" + String.format("%.2f", job.getStartingPrice());
         txtJobAskingPrice.setText(start);
 
-        TextView txtJobCurrentBid = (TextView) v.findViewById(R.id.txtJobCurrentBid);
-        String current = "$" + job.getCurrentBid();
+        txtJobCurrentBid = (TextView) v.findViewById(R.id.txtJobCurrentBid);
+        String current = "$" + String.format("%.2f", job.getCurrentBid());
         txtJobCurrentBid.setText(current);
 
-        TextView txtPosterName = (TextView) v.findViewById(R.id.txtPosterName);
-//        User poster = DatabaseManager.shared.getUsers().get(0);
-        txtPosterName.setText("Poster");//poster.getFirstName() + " " + poster.getLastName());
+        txtPosterName = (TextView) v.findViewById(R.id.txtPosterName);
 
-        RatingBar rtgPosterRating = (RatingBar) v.findViewById(R.id.rtgPosterRating);
+        rtgPosterRating = (RatingBar) v.findViewById(R.id.rtgPosterRating);
         rtgPosterRating.setRating(5);//poster.getPosterRating().floatValue());
 
         ImageView imgProfile = (ImageView) v.findViewById(R.id.imgProfile);
+//        DatabaseManager.shared.setImage(job.getPosterID(), imgProfile);
         imgProfile.setImageResource(R.drawable.baseline_person_24);
 
         ImageView imgJob = v.findViewById(R.id.imgJob);
         DatabaseManager.shared.setImage(job.getJobID(), imgJob);
+
+        Button btnPlaceBid = v.findViewById(R.id.btnPlaceBid);
+        if (job.isNowPastExpirationDate()) {
+            btnPlaceBid.setVisibility(View.INVISIBLE);
+        }
+        btnPlaceBid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (job.getPosterID() == DatabaseManager.shared.getCurrentUser().getUid()) {
+                    Toast.makeText(getActivity(), "You cannot bid on a job you posted!",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    JobBidDialogFragment bidDialog = JobBidDialogFragment.newInstance(job);
+                    bidDialog.show(getChildFragmentManager(), null);
+                }
+            }
+        });
 
         //getting a handle to the view profile button
         Button btnView = v.findViewById(R.id.btnViewProfile);
@@ -99,4 +117,19 @@ public class JobViewFragment extends Fragment {
 
         return v;
     }
+
+    @Override
+    public void newDataReceived(User user) {
+        // Set profile info
+        txtPosterName.setText(user.getFirstName() + " " + user.getLastName());
+        rtgPosterRating.setRating(user.getPosterRating().floatValue());
+    }
+
+    @Override
+    public void newDataReceived(Job job) {
+        // Update current bid
+        String current = "$" + String.format("%.2f", job.getCurrentBid());
+        txtJobCurrentBid.setText(current);
+    }
+
 }

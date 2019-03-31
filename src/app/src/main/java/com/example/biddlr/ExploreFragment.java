@@ -22,11 +22,10 @@ import java.util.ArrayList;
 
 import classes.DatabaseManager;
 import classes.Job;
-import interfaces.DataListener;
+import interfaces.JobDataListener;
 
-public class ExploreFragment extends Fragment implements DataListener {
+public class ExploreFragment extends Fragment implements JobDataListener {
     private JobListAdapter adapter;
-
     private ArrayList<Bitmap> pics = new ArrayList<>();
     private ArrayList<Job> jobs = new ArrayList<>();
 
@@ -38,7 +37,8 @@ public class ExploreFragment extends Fragment implements DataListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseManager.shared.getAllJobs(50, this);
+        // Call the query you want with 'this' as the listener
+        DatabaseManager.shared.setActiveJobsListener(50, this);
         adapter = new JobListAdapter(jobs, pics);
     }
 
@@ -61,7 +61,7 @@ public class ExploreFragment extends Fragment implements DataListener {
         recycler.addOnItemTouchListener(new JobListTouchListener(getContext().getApplicationContext(), recycler, new JobListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
-                Job job = DatabaseManager.shared.getJobs().get(pos);
+                Job job = jobs.get(pos);
                 Fragment jobFrag = JobViewFragment.newInstance(job);
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();

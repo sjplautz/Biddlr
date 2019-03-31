@@ -18,17 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import java.util.ArrayList;
 
 import classes.DatabaseManager;
 import classes.Job;
-import interfaces.DataListener;
+import interfaces.JobDataListener;
 
-public class HomeFragment extends Fragment implements DataListener {
+public class HomeFragment extends Fragment implements JobDataListener {
     private JobListAdapter adapter;
-
-    private ArrayList<Job> jobs = new ArrayList<>();
+    static ArrayList<Job> jobs = new ArrayList<>();
     private ArrayList<Bitmap> pics = new ArrayList<>();
 
     public static HomeFragment newInstance() {
@@ -39,18 +37,12 @@ public class HomeFragment extends Fragment implements DataListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(savedInstanceState != null){
-            jobs = savedInstanceState.getParcelableArrayList("Jobs");
-            pics = savedInstanceState.getParcelableArrayList("Pics");
-        }
-        else {
-            DatabaseManager.shared.getAllJobs(50, this);
-        }
+        DatabaseManager.shared.setActiveJobsListener(50, this);
         adapter = new JobListAdapter(jobs, pics);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
@@ -80,7 +72,7 @@ public class HomeFragment extends Fragment implements DataListener {
         recycler.addOnItemTouchListener(new JobListTouchListener(getContext(), recycler, new JobListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
-                Job job = DatabaseManager.shared.getJobs().get(pos);
+                Job job = jobs.get(pos);
                 Fragment jobFrag = JobViewFragment.newInstance(job);
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();

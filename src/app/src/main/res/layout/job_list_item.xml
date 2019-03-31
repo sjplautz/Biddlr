@@ -24,39 +24,42 @@
                 android:id="@+id/txtJobLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="4dp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/common_google_signin_btn_text_light_default"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/txtTimeRemaining"
-                app:layout_constraintLeft_toRightOf="@+id/imgLocation" />
+                app:layout_constraintBottom_toBottomOf="@+id/imgLocation"
+                app:layout_constraintLeft_toRightOf="@+id/imgLocation"
+                app:layout_constraintTop_toTopOf="@+id/imgLocation" />
 
             <TextView
                 android:id="@+id/txtTimeRemaining"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="4dp"
+                android:textColor="@color/common_google_signin_btn_text_light_default"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/imgTime" />
+                app:layout_constraintBottom_toBottomOf="@+id/imgTime"
+                app:layout_constraintLeft_toRightOf="@+id/imgTime"
+                app:layout_constraintTop_toTopOf="@+id/imgTime" />
 
             <ImageView
                 android:id="@+id/imgTime"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginBottom="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/imgJobPic"
                 app:layout_constraintLeft_toRightOf="@+id/imgJobPic"
-                app:layout_constraintTop_toBottomOf="@+id/imgLocation"
                 app:srcCompat="@drawable/baseline_schedule_24" />
 
             <TextView
                 android:id="@+id/txtStartingPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -65,16 +68,21 @@
                 android:id="@+id/txtJobTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@android:color/background_dark"
                 android:textSize="16dp"
-                android:textStyle="bold"
                 app:layout_constraintLeft_toRightOf="@+id/imgJobPic"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/imgJobPic" />
 
             <ImageView
                 android:id="@+id/imgJobPic"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -83,10 +91,9 @@
                 android:id="@+id/imgLocation"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintLeft_toRightOf="@+id/imgJobPic"
-                app:layout_constraintTop_toBottomOf="@+id/txtJobTitle"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintBottom_toTopOf="@+id/imgTime"
+                app:layout_constraintStart_toStartOf="@+id/imgTime"
                 app:srcCompat="@drawable/baseline_place_24" />
         </android.support.constraint.ConstraintLayout>
 

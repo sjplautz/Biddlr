@@ -11,7 +11,7 @@ public enum JobStatus {
                 return "in progress";
             case COMPLETED :
                 return "completed";
-            case EXPIRED:
+            case EXPIRED :
                 return "expired";
         }
         return null;
