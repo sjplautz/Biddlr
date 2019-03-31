@@ -18,10 +18,13 @@ import android.widget.Toast;
 
 import classes.DatabaseManager;
 import classes.Job;
+import classes.User;
+import interfaces.UserDataListener;
 
-public class JobBidDialogFragment extends DialogFragment {
+public class JobBidDialogFragment extends DialogFragment implements UserDataListener {
     private static final String JOB_BID_DIALOG_KEY = "job_bid_dialog_key";
     private Job job;
+    private User user;
     private EditText txtBid;
 
     public static JobBidDialogFragment newInstance(Job job) {
@@ -34,7 +37,7 @@ public class JobBidDialogFragment extends DialogFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-//        DatabaseManager.shared.getUserFromID(job.getPosterID(), this);
+        DatabaseManager.shared.setUserFromIDListener(DatabaseManager.shared.getCurrentUser().getUid(), this);
         super.onCreate(savedInstanceState);
     }
 
@@ -69,6 +72,7 @@ public class JobBidDialogFragment extends DialogFragment {
                             Toast.LENGTH_LONG).show();
                 } else {
                     job.addBid(DatabaseManager.shared.getCurrentUser().getUid(), new Double(bid));
+                    user.addBid(job.getJobID());
                     dismiss();
                 }
             }
@@ -84,5 +88,10 @@ public class JobBidDialogFragment extends DialogFragment {
         builder.setView(v);
         return builder.create();
 
+    }
+
+    @Override
+    public void newDataReceived(User user) {
+        this.user = user;
     }
 }

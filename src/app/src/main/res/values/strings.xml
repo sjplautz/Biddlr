@@ -47,5 +47,6 @@
     <string name="strLowestBid">Current Lowest Bid</string>
     <string name="strViewProfile">View Profile</string>
     <string name="strSelect">Select</string>
+    <string name="txtLowestBid">Lowest Bid:</string>
 
 </resources>

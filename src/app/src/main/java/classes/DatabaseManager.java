@@ -226,7 +226,7 @@ public class DatabaseManager {
         Map<String, Object> updates = new HashMap<>();
         updates.put(user.getUserID() + "/biddedJobs" , user.getBiddedJobs());
 
-        activeJobRef.updateChildren(updates);
+        userRef.updateChildren(updates);
     }
 
     /**
