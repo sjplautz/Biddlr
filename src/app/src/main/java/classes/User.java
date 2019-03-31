@@ -126,5 +126,6 @@ public class User implements Parcelable {
             biddedJobs = new ArrayList<String>();
         }
         biddedJobs.add(jobID);
+        DatabaseManager.shared.addBidForUser(this);
     }
 }
