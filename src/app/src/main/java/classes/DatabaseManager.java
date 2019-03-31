@@ -217,9 +217,16 @@ public class DatabaseManager {
      * @param user
      */
     public void addNewUser(User user) {
-        String id = userRef.push().getKey();
-        user.setUserID(getCurrentUser().getUid());
+        String id = getCurrentUser().getUid();
+        user.setUserID(id);
         userRef.child(id).setValue(user);
+    }
+
+    public void addBidForUser(User user) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(user.getUserID() + "/biddedJobs" , user.getBiddedJobs());
+
+        activeJobRef.updateChildren(updates);
     }
 
     /**
