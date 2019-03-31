@@ -74,7 +74,7 @@ public class CreateUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            User user = new User(password, fname, lname, email);
+                            User user = new User(fname, lname, email);
                             DatabaseManager.shared.addNewUser(user);
                             startActivity(new Intent(CreateUserActivity.this, LoginActivity.class));
                             finish();

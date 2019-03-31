@@ -39,7 +39,6 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         super.onCreate(savedInstanceState);
     }
 

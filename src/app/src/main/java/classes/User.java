@@ -16,7 +16,6 @@ public class User implements Parcelable {
 
     // Properties
     private String userID;
-    private String password;
     private String firstName;
     private String lastName;
     private String email;
@@ -24,13 +23,13 @@ public class User implements Parcelable {
     private String profilePic;
     private Double bidderRating;
     private Double posterRating;
+    private ArrayList<String> biddedJobs; //string jobID
 
     // Initializers
     public User() { }
 
-    public User(String password, String firstName, String lastName, String email) {
+    public User(String firstName, String lastName, String email) {
         this.userID = null;
-        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = null;
@@ -38,6 +37,7 @@ public class User implements Parcelable {
         this.profilePic = null;
         this.bidderRating = null;
         this.posterRating = 0.0;
+        this.biddedJobs = null;
     }
 
     // Parcable
@@ -49,7 +49,6 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.userID);
-        dest.writeString(this.password);
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
         dest.writeString(this.email);
@@ -57,6 +56,7 @@ public class User implements Parcelable {
         dest.writeString(this.profilePic);
         dest.writeDouble(this.bidderRating);
         dest.writeDouble(this.posterRating);
+        dest.writeStringList(this.biddedJobs);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -70,7 +70,6 @@ public class User implements Parcelable {
 
     public User(Parcel src){
         this.userID = src.readString();
-        this.password = src.readString();
         this.firstName = src.readString();
         this.lastName = src.readString();
         this.email = src.readString();
@@ -78,16 +77,13 @@ public class User implements Parcelable {
         this.profilePic = src.readString();
         this.bidderRating = src.readDouble();
         this.posterRating = src.readDouble();
+        this.biddedJobs = (ArrayList<String>) src.readSerializable();
     }
 
     // Accessors
     public String getUserID() { return userID; }
 
     public void setUserID(String userID) { this.userID = userID; }
-
-    public String getPassword() { return password; }
-
-    public void setPassword(String password) { this.password = password; }
 
     public String getFirstName() { return firstName; }
 
@@ -117,9 +113,18 @@ public class User implements Parcelable {
 
     public void setPosterRating(Double posterRating) { this.posterRating = posterRating; }
 
+    public ArrayList<String> getBiddedJobs() {
+        return biddedJobs;
+    }
 
-    // Class logic
-    public Boolean validatePassword(String password) {
-        return this.password  == password ? true : false;
+    public void setBiddedJobs(ArrayList<String> biddedJobs) {
+        this.biddedJobs = biddedJobs;
+    }
+
+    public void addBid(String jobID) {
+        if (biddedJobs == null) {
+            biddedJobs = new ArrayList<String>();
+        }
+        biddedJobs.add(jobID);
     }
 }
