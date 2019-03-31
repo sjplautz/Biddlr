@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -17,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -29,6 +31,8 @@ import interfaces.UserDataListener;
 public class DatabaseManager {
 
     public static DatabaseManager shared = new DatabaseManager();
+
+    public User currentUser;
 
     public FirebaseAuth mAuth;
     private FirebaseDatabase database;
@@ -53,6 +57,18 @@ public class DatabaseManager {
 
         storage = FirebaseStorage.getInstance();
         imgRef = storage.getReference("images");
+
+        userRef.child(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                Log.d("CURRENT USER", "user: " + user);
+                currentUser = user;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) { }
+        });
     }
 
     /* JOB DATABASE */
