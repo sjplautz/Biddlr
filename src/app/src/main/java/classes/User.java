@@ -23,7 +23,7 @@ public class User implements Parcelable {
     private String profilePic;
     private Double bidderRating;
     private Double posterRating;
-    private ArrayList<String> biddedJobs; //string jobID
+    private HashMap<String, Double> biddedJobs; //string jobID
 
     // Initializers
     public User() { }
@@ -56,7 +56,7 @@ public class User implements Parcelable {
         dest.writeString(this.profilePic);
         dest.writeDouble(this.bidderRating);
         dest.writeDouble(this.posterRating);
-        dest.writeStringList(this.biddedJobs);
+        dest.writeSerializable(this.biddedJobs);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -77,7 +77,7 @@ public class User implements Parcelable {
         this.profilePic = src.readString();
         this.bidderRating = src.readDouble();
         this.posterRating = src.readDouble();
-        this.biddedJobs = (ArrayList<String>) src.readSerializable();
+        this.biddedJobs = (HashMap<String, Double>) src.readSerializable();
     }
 
     // Accessors
@@ -113,18 +113,19 @@ public class User implements Parcelable {
 
     public void setPosterRating(Double posterRating) { this.posterRating = posterRating; }
 
-    public ArrayList<String> getBiddedJobs() {
+    public HashMap<String, Double> getBiddedJobs() {
         return biddedJobs;
     }
 
-    public void setBiddedJobs(ArrayList<String> biddedJobs) {
+    public void setBiddedJobs(HashMap<String, Double> biddedJobs) {
         this.biddedJobs = biddedJobs;
     }
 
-    public void addBid(String jobID) {
+    public void addBid(String jobID, Double bid) {
         if (biddedJobs == null) {
-            biddedJobs = new ArrayList<String>();
+            biddedJobs = new HashMap<String, Double>();
         }
-        biddedJobs.add(jobID);
+        biddedJobs.put(jobID, bid);
+        DatabaseManager.shared.addBidForUser(this);
     }
 }

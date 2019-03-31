@@ -16,12 +16,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseError;
+
 import classes.DatabaseManager;
 import classes.Job;
+import classes.User;
+import interfaces.UserDataListener;
 
 public class JobBidDialogFragment extends DialogFragment {
     private static final String JOB_BID_DIALOG_KEY = "job_bid_dialog_key";
     private Job job;
+    private User user;
     private EditText txtBid;
 
     public static JobBidDialogFragment newInstance(Job job) {
@@ -34,7 +39,6 @@ public class JobBidDialogFragment extends DialogFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-//        DatabaseManager.shared.getUserFromID(job.getPosterID(), this);
         super.onCreate(savedInstanceState);
     }
 
@@ -69,6 +73,7 @@ public class JobBidDialogFragment extends DialogFragment {
                             Toast.LENGTH_LONG).show();
                 } else {
                     job.addBid(DatabaseManager.shared.getCurrentUser().getUid(), new Double(bid));
+                    DatabaseManager.shared.currentUser.addBid(job.getJobID(), new Double(bid));
                     dismiss();
                 }
             }

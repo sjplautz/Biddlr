@@ -76,8 +76,9 @@ public class CreateUserActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             User user = new User(fname, lname, email);
                             DatabaseManager.shared.addNewUser(user);
+                            sendRegistrationLink();
                             startActivity(new Intent(CreateUserActivity.this, LoginActivity.class));
-                            finish();
+                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -88,7 +89,38 @@ public class CreateUserActivity extends AppCompatActivity {
                     }
                 });
 
+
 //        AlertDialog confirmationDialog = b.create();
 //        confirmationDialog.show();
     }
+    private void sendRegistrationLink() {
+        //DatabaseManager.shared.setUp();
+        final FirebaseUser user = DatabaseManager.shared.mAuth.getCurrentUser();
+        assert user != null;
+        final Task sendEmailVerification;
+        sendEmailVerification = user.sendEmailVerification()
+                .addOnCompleteListener(CreateUserActivity.this, new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(CreateUserActivity.this,
+                                    "Verification email sent to " + user.getEmail(),
+
+                                    Toast.LENGTH_SHORT).show();
+
+
+                            //startActivity(new Intent(CreateUserActivity.this, LoginActivity.class));
+                            //finish();
+                            //validateUsername();
+                        } else {
+                            Log.e(TAG, "sendEmailVerification", task.getException());
+                            Toast.makeText(CreateUserActivity.this,
+                                    "Failed to send verification email.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+    }
+
 }

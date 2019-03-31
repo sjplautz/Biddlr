@@ -79,16 +79,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/txtJobAskingPrice"
-        app:layout_constraintEnd_toStartOf="@+id/txtCurrentBidPrompt"
+        app:layout_constraintEnd_toStartOf="@+id/txtLowestBidPrompt"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <TextView
-        android:id="@+id/txtCurrentBidPrompt"
+        android:id="@+id/txtLowestBidPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txtJobCurrentBid"
+        android:text="@string/txtLowestBid"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/txtAskingPricePrompt"
@@ -115,8 +115,8 @@
         android:text="$0"
         android:textColor="@color/common_google_signin_btn_text_light_default"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/txtCurrentBidPrompt"
-        app:layout_constraintTop_toBottomOf="@+id/txtCurrentBidPrompt" />
+        app:layout_constraintEnd_toEndOf="@+id/txtLowestBidPrompt"
+        app:layout_constraintTop_toBottomOf="@+id/txtLowestBidPrompt" />
 
     <ImageView
         android:id="@+id/imgProfile"
