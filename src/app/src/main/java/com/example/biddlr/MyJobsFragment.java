@@ -41,7 +41,7 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseManager.shared.setJobsForPosterListener(DatabaseManager.shared.getCurrentUser().getUid(), 50, this);
+        DatabaseManager.shared.setJobsForPosterListener(DatabaseManager.shared.getFirebaseUser().getUid(), 50, this);
     }
 
     /**

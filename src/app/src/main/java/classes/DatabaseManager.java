@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -59,7 +58,11 @@ public class DatabaseManager {
         storage = FirebaseStorage.getInstance();
         imgRef = storage.getReference("images");
 
-        userRef.child(getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+
+    }
+
+    public void setCurrentUser() {
+        userRef.child(getFirebaseUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -225,7 +228,7 @@ public class DatabaseManager {
 
     /* USER DATABASE */
 
-    public FirebaseUser getCurrentUser() {
+    public FirebaseUser getFirebaseUser() {
         return mAuth.getCurrentUser();
     }
 
@@ -234,9 +237,11 @@ public class DatabaseManager {
      * @param user
      */
     public void addNewUser(User user) {
-        String id = getCurrentUser().getUid();
+        String id = getFirebaseUser().getUid();
         user.setUserID(id);
         userRef.child(id).setValue(user);
+
+        DatabaseManager.shared.setCurrentUser();
     }
 
     public void addBidForUser(User user) {
