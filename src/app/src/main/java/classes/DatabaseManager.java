@@ -97,37 +97,6 @@ public class DatabaseManager {
         activeJobRef.updateChildren(updates);
     }
 
-    public void setJobFromJobID(String id, final JobDataListener listener){
-        activeJobRef.orderByChild("jobID").equalTo(id).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Job job = dataSnapshot.getValue(Job.class);
-                Log.d("JOB ID QUERY", "job: " + job);
-                listener.newDataReceived(job);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     /**
      * Active jobs in the database
      * @param limit max number of jobs
