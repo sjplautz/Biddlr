@@ -372,7 +372,7 @@ public class DatabaseManager {
             @Override
             public void onFailure(@NonNull Exception e) {
             iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.colorPrimary, null));
+            iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.lightGray, null));
             }
         });
     }
