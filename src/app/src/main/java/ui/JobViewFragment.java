@@ -2,6 +2,8 @@ package ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import interfaces.UserDataListener;
 public class JobViewFragment extends Fragment implements UserDataListener, JobDataListener {
     private static final String JOB_FRAGMENT_KEY = "job_fragment_key";
     private Job job;
+    private User poster;
 
     private TextView txtPosterName;
     private TextView txtJobCurrentBid;
@@ -105,12 +108,12 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Fragment userFrag = UserProfileFragment.newInstance();
-//                FragmentManager manager = getFragmentManager();
-//                FragmentTransaction trans = manager.beginTransaction();
-//                trans.replace(R.id.frameNull, userFrag);
-//                trans.addToBackStack(null);
-//                trans.commit();
+                Fragment userFrag = UserProfileFragment.newInstance(poster);
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction();
+                trans.replace(R.id.frameNull, userFrag);
+                trans.addToBackStack(null);
+                trans.commit();
             }
         });
 
@@ -120,6 +123,7 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
     @Override
     public void newDataReceived(User user) {
         // Set profile info
+        poster = user;
         txtPosterName.setText(user.getFirstName() + " " + user.getLastName());
         rtgPosterRating.setRating(user.getPosterRating().floatValue());
     }

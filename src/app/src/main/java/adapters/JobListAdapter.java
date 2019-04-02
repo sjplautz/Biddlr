@@ -73,14 +73,14 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
 
         //Set up job picture
         if(picsList != null && pos < picsList.size() && picsList.get(pos) != null) holder.jobPicture.setImageBitmap(picsList.get(pos));
-        else holder.jobPicture.setImageResource(R.drawable.ic_biddlrlogo);
+        else holder.jobPicture.setImageResource(R.drawable.ic_camera_default_gray);
 
         //Set job title
         holder.jobTitle.setText(job.getTitle());
 
         //Set job price
         //TODO Set a formatter on the price input
-        String price = "$" + String.format("%.2f", job.getStartingPrice());
+        String price = "$" + String.format("%.2f", job.getCurrentBid());
         holder.jobPrice.setText(price);
 
         //Set job location
