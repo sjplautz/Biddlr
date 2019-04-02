@@ -3,12 +3,9 @@ package ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
 import com.example.biddlr.R;
@@ -26,7 +23,8 @@ import interfaces.JobDataListener;
  * Fragment that controls the My Job page
  */
 public class MyJobsFragment extends Fragment implements JobDataListener {
-    private ArrayList<Job> jobs = new ArrayList<>();
+    private ArrayList<Job> postedJobs = new ArrayList<>();
+    private ArrayList<Job> biddedJobs = new ArrayList<>();
     private ExpandableListAdapter adapter;
 
     /**
@@ -65,7 +63,8 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
         headers.add("My Bidded Jobs");
 
         HashMap<String, List<Job>> children = new HashMap<>();
-        children.put("My Posted Jobs", jobs);
+        children.put("My Posted Jobs", postedJobs);
+        children.put("My Bidded Jobs", biddedJobs);
 
         ExpandableListView listMyJobs = v.findViewById(R.id.listMyJobs);
         adapter = new ExpandableListAdapter(getContext(), headers, children);
@@ -76,12 +75,17 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
 
     /**
      * Implements the newDataReceived method of the DataListener interface
-     * Adds Job to the jobs list when a job is added to the database
+     * Adds Job to the postedJobs list when a job is added to the database
      * @param job The Job that has been added
      */
     @Override
     public void newDataReceived(Job job){
-        jobs.add(0, job);
+        if(job.getPosterID().equals(DatabaseManager.shared.currentUser.getUserID())){
+            postedJobs.add(0, job);
+        }
+        else{
+            biddedJobs.add(0, job);
+        }
         adapter.notifyDataSetChanged();
     }
 }
