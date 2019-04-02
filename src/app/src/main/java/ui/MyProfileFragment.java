@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapters.JobListAdapter;
-import adapters.JobListTouchListener;
+import adapters.ListTouchListener;
 import classes.Job;
 
 public class MyProfileFragment extends Fragment {
@@ -78,7 +78,7 @@ public class MyProfileFragment extends Fragment {
         recycler.setItemAnimator(new DefaultItemAnimator());
         recycler.setAdapter(adapter);
 
-        recycler.addOnItemTouchListener(new JobListTouchListener(getContext(), recycler, new JobListTouchListener.ClickListener() {
+        recycler.addOnItemTouchListener(new ListTouchListener(getContext(), recycler, new ListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
                 Job job = jobList.get(pos);

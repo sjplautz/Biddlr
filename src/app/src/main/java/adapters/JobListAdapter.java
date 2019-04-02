@@ -17,11 +17,16 @@ import java.util.List;
 
 import classes.Job;
 
-
+/**
+ * An adapter for a list of jobs
+ */
 public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> {
     private List<Job> jobsList;
     private List<Bitmap> picsList;
 
+    /**
+     * Describes the ui of each list item
+     */
     class JobViewHolder extends RecyclerView.ViewHolder{
         private ImageView jobPicture;
         private TextView jobTitle;
@@ -44,6 +49,12 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         this.picsList = picsList;
     }
 
+    /**
+     * Creates the JobViewHolder for each list item
+     * @param v
+     * @param viewType
+     * @return The JobViewHolder a list item
+     */
     @NonNull
     @Override
     public JobViewHolder onCreateViewHolder(@NonNull ViewGroup v, int viewType){
@@ -51,12 +62,16 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         return new JobViewHolder(itemView);
     }
 
+    /**
+     * Sets values for each list item
+     * @param holder Holds the ui elements for each list item
+     * @param pos The index in the list for each list item
+     */
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int pos){
         Job job = jobsList.get(pos);
 
         //Set up job picture
-        //DatabaseManager.shared.setImage(job.getJobID(), holder.jobPicture);
         if(picsList != null && pos < picsList.size() && picsList.get(pos) != null) holder.jobPicture.setImageBitmap(picsList.get(pos));
         else holder.jobPicture.setImageResource(R.drawable.ic_biddlrlogo);
 
@@ -76,11 +91,20 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
         holder.jobTime.setText(time);
     }
 
+    /**
+     * Gets count of list items
+     * @return Count of list items
+     */
     @Override
     public int getItemCount(){
         return jobsList.size();
     }
 
+    /**
+     * Determines how much time is left before a job expires
+     * @param expDate The expiration date of the job
+     * @return A string representation of the time remaining
+     */
     private String timeLeft(LocalDateTime expDate){
         if(expDate.isBefore(LocalDateTime.now())){
             return "Expired";

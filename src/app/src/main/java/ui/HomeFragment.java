@@ -23,7 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 
 import adapters.JobListAdapter;
-import adapters.JobListTouchListener;
+import adapters.ListTouchListener;
 import classes.DatabaseManager;
 import classes.Job;
 import interfaces.JobDataListener;
@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment implements JobDataListener {
         btnCreateNewJob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity)getActivity()).openDialog();
+                ((HomeActivity)getActivity()).openJobCreationDialog();
             }
         });
 
@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment implements JobDataListener {
         divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recycler_divider));
         recycler.addItemDecoration(divider);
 
-        recycler.addOnItemTouchListener(new JobListTouchListener(getContext(), recycler, new JobListTouchListener.ClickListener() {
+        recycler.addOnItemTouchListener(new ListTouchListener(getContext(), recycler, new ListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
                 Job job = jobs.get(pos);

@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,20 +18,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import adapters.BidderListAdapter;
-import adapters.BidderListTouchAdapter;
+import adapters.ListTouchListener;
 import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
 import interfaces.JobDataListener;
 import interfaces.UserDataListener;
 
-
+/**
+ * This controls the ui that allows the job poster to select a bidder
+ * to do this job
+ */
 public class BidderSelectFragment extends Fragment implements JobDataListener, UserDataListener {
     private static final String JOB_ID = "job_id";
     private BidderListAdapter adapter;
     private ArrayList<User> users = new ArrayList<>();
     private int selectedIndex = -1;
 
+    /**
+     * Method for creating an instance of this controller
+     * @param jobId The ID of the job that is being observed
+     * @return An instance of this Fragment
+     */
     public static BidderSelectFragment newInstance(String jobId) {
         Bundle bundle = new Bundle();
         bundle.putString(JOB_ID, jobId);
@@ -41,6 +48,10 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
         return bsf;
     }
 
+    /**
+     * Gets the job to search for bidders from
+     * @param savedInstanceState Describes a saved version of this instance if one exists
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,13 +59,19 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
         DatabaseManager.shared.setJobFromIDListener(getArguments().getString(JOB_ID), this);
     }
 
+    /**
+     * Creates the view for the ui that this controller manages
+     * @param inflater Used to inflate the xml file
+     * @param container
+     * @param savedInstanceState Describes a saved version of this instance if one exists
+     * @return A view describing this ui element
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         View v = inflater.inflate(R.layout.fragment_bidder_select, container, false);
 
+        //Displays a bidder's profile for the job poster
         final Button btnViewProfile = v.findViewById(R.id.btnView);
         btnViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +85,7 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
             }
         });
 
+        //Picks a bidder for the job
         final Button btnSelect = v.findViewById(R.id.btnSelect);
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,18 +100,10 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
         recycler.setLayoutManager(manager);
         recycler.setItemAnimator(new DefaultItemAnimator());
 
-        ArrayList<Pair<String, Double>> bids = new ArrayList<>();
-        bids.add(new Pair<>("Test 1", 20.0));
-        bids.add(new Pair<>("Test 2", 21.0));
-        bids.add(new Pair<>("Test 3", 22.0));
-        bids.add(new Pair<>("Test 4", 23.0));
-        bids.add(new Pair<>("Test 5", 24.0));
-        bids.add(new Pair<>("Test 6", 25.0));
-
         adapter = new BidderListAdapter(getArguments().getString(JOB_ID), users, null);
         recycler.setAdapter(adapter);
 
-        recycler.addOnItemTouchListener(new BidderListTouchAdapter(getContext().getApplicationContext(), recycler, new BidderListTouchAdapter.ClickListener(){
+        recycler.addOnItemTouchListener(new ListTouchListener(getContext().getApplicationContext(), recycler, new ListTouchListener.ClickListener(){
             @Override
             public void onClick(View v, int pos){
                 selectedIndex = pos;
@@ -113,6 +123,10 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
         return v;
     }
 
+    /**
+     * Gets the job that is being managed
+     * @param job The job that is being managed
+     */
     @Override
     public void newDataReceived(Job job){
         HashMap<String, Double> bids = job.getBids();
@@ -120,6 +134,10 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
         DatabaseManager.shared.setUsersFromListListener(uids, this);
     }
 
+    /**
+     * Gets all of the bidders that have bidded on this job
+     * @param user A user that has bidded on this job
+     */
     @Override
     public void newDataReceived(User user){
         users.add(user);

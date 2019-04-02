@@ -60,12 +60,11 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
         View v = inflater.inflate(R.layout.fragment_my_jobs, container, false);
 
         List<String> headers = new ArrayList<>();
-        headers.add("Posted jobs");
-        headers.add("Jobs in bidding");
+        headers.add("My Posted Jobs");
+        headers.add("My Bidded Jobs");
 
         HashMap<String, List<Job>> children = new HashMap<>();
-        children.put("Posted jobs", jobs);
-//        children.put("Jobs in bidding", DatabaseManager.shared.getJobs());
+        children.put("My Posted Jobs", jobs);
 
         ExpandableListView listMyJobs = v.findViewById(R.id.listMyJobs);
         adapter = new ExpandableListAdapter(getContext(), headers, children);
@@ -79,7 +78,6 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
                         job = jobs.get(childPos);
                         break;
                     case 1:
-//                        job = DatabaseManager.shared.getJobs().get(childPos);
                         break;
                 }
                 Fragment jobFrag = JobViewFragment.newInstance(job);

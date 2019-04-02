@@ -11,17 +11,32 @@ import android.view.ViewGroup;
 
 import com.example.biddlr.R;
 
+import adapters.JobsPagerAdapter;
+
+/**
+ * Controller that handles the Fragment related to jobs
+ */
 public class JobsFragment extends Fragment {
     public static JobsFragment newInstance() {
-        JobsFragment fragment = new JobsFragment();
-        return fragment;
+        return new JobsFragment();
     }
 
+    /**
+     * Called when Fragment is created
+     * @param savedInstanceState Describes a saved version of this instance if one exists
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates a view based on the xml file for this Fragment
+     * @param inflater Inflates the xml file
+     * @param container
+     * @param savedInstanceState Describes a saved version of this instance if one exists
+     * @return A View describing this ui
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,7 +55,7 @@ public class JobsFragment extends Fragment {
         btnCreateNewJobs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity)getActivity()).openDialog();
+                ((HomeActivity)getActivity()).openJobCreationDialog();
             }
         });
         return v;

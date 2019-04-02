@@ -39,8 +39,6 @@ import classes.LatLngWrapped;
 
 import static android.app.Activity.RESULT_OK;
 
-//TODO Move submission code here
-
 /**
  * The Fragment that handles job creation
  */
@@ -229,10 +227,6 @@ public class JobCreationFragment extends DialogFragment {
                     Toast.LENGTH_LONG).show();
             HomeActivity.flag = 0;
         }
-
-
-
-        return;
     }
 
     //checks if address fits specified format for inputting addresses for job creation

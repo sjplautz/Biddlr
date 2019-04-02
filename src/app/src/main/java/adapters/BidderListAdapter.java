@@ -17,12 +17,18 @@ import java.util.List;
 
 import classes.User;
 
+/**
+ * An adapter for a list of bidders for a job
+ */
 public class BidderListAdapter extends RecyclerView.Adapter<BidderListAdapter.BidderViewHolder> {
     private String jobId;
     private List<User> bids;
     private List<Bitmap> pics;
     private int selectedItem;
 
+    /**
+     * Describes the ui of each list item
+     */
     class BidderViewHolder extends RecyclerView.ViewHolder{
         private CardView background;
         private ImageView imgUserPic;
@@ -45,6 +51,12 @@ public class BidderListAdapter extends RecyclerView.Adapter<BidderListAdapter.Bi
         selectedItem = -1;
     }
 
+    /**
+     * Creates the BidderViewHolder for each list item
+     * @param v
+     * @param viewType
+     * @return The BidderViewHolder a list item
+     */
     @NonNull
     @Override
     public BidderViewHolder onCreateViewHolder(@NonNull ViewGroup v, int viewType){
@@ -52,6 +64,11 @@ public class BidderListAdapter extends RecyclerView.Adapter<BidderListAdapter.Bi
         return new BidderListAdapter.BidderViewHolder(itemView);
     }
 
+    /**
+     * Sets values for each list item
+     * @param holder Holds the ui elements for each list item
+     * @param pos The index in the list for each list item
+     */
     @Override
     public void onBindViewHolder(@NonNull BidderViewHolder holder, int pos){
         if(pos == selectedItem){
@@ -72,9 +89,17 @@ public class BidderListAdapter extends RecyclerView.Adapter<BidderListAdapter.Bi
         holder.txtUserBid.setText(value);
     }
 
+    /**
+     * Gets count of list items
+     * @return Count of list items
+     */
     @Override
     public int getItemCount(){ return bids.size(); }
 
+    /**
+     * Sets the currently selected list item
+     * @param pos Index of the currently selected list item
+     */
     public void setSelectedItem(int pos) {
         selectedItem = pos;
     }

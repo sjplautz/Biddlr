@@ -22,20 +22,31 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 
 import adapters.JobListAdapter;
-import adapters.JobListTouchListener;
+import adapters.ListTouchListener;
 import classes.DatabaseManager;
 import classes.Job;
 import interfaces.JobDataListener;
 
+/**
+ * Controller for the job exploration ui
+ */
 public class ExploreFragment extends Fragment implements JobDataListener {
     private JobListAdapter adapter;
     private ArrayList<Bitmap> pics = new ArrayList<>();
     private ArrayList<Job> jobs = new ArrayList<>();
 
+    /**
+     * Creates a new instance of the ExploreFragment
+     * @return A new instance of the ExploreFragment
+     */
     public static ExploreFragment newInstance() {
         return new ExploreFragment();
     }
 
+    /**
+     * Sets the listener to add jobs to the view as they are created
+     * @param savedInstanceState Describes a saved version of this instance if one exists
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +56,13 @@ public class ExploreFragment extends Fragment implements JobDataListener {
         adapter = new JobListAdapter(jobs, pics);
     }
 
+    /**
+     * Generates the ui from the xml file
+     * @param inflater inflates the xml file
+     * @param container
+     * @param savedInstanceState Describes a saved version of this instance if one exists
+     * @return A View decribing the ui for this Fragment
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,7 +79,7 @@ public class ExploreFragment extends Fragment implements JobDataListener {
         recycler.addItemDecoration(div);
 
         recycler.setAdapter(adapter);
-        recycler.addOnItemTouchListener(new JobListTouchListener(getContext().getApplicationContext(), recycler, new JobListTouchListener.ClickListener() {
+        recycler.addOnItemTouchListener(new ListTouchListener(getContext().getApplicationContext(), recycler, new ListTouchListener.ClickListener() {
             @Override
             public void onClick(View v, int pos) {
                 Job job = jobs.get(pos);
@@ -82,6 +100,10 @@ public class ExploreFragment extends Fragment implements JobDataListener {
         return v;
     }
 
+    /**
+     * Adds jobs to the job list
+     * @param job New job to be added
+     */
     @Override
     public void newDataReceived(final Job job) {
         jobs.add(0, job);

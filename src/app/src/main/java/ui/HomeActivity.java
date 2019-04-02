@@ -31,12 +31,20 @@ import classes.DatabaseManager;
 import classes.Job;
 import classes.LatLngWrapped;
 
+/**
+ * The main activity for the app. Displays all of the Fragments
+ * and nav bar
+ */
 public class HomeActivity extends AppCompatActivity {
     BottomNavigationView nav;
     ActionBar bar;
     public static LatLngWrapped coordinates;
     public static int flag = 0;
 
+    /**
+     * Sets the initial state of the app
+     * @param savedInstanceState Describes a saved version of this instance if one exists
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +52,7 @@ public class HomeActivity extends AppCompatActivity {
 
         bar = getSupportActionBar();
 
+        //Describes the nav bar controls
         nav = findViewById(R.id.menuNav);
         nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -77,19 +86,15 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        //TODO Make a image picker
-
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.frameNull, HomeFragment.newInstance());
         trans.commit();
     }
 
-    @Override
-    public void onBackPressed(){
-        super.onBackPressed();
-    }
-
-    public void openDialog(){
+    /**
+     * Opens a fullscreen dialog for job creation
+     */
+    public void openJobCreationDialog(){
         Fragment frag = JobCreationFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(android.R.id.content, frag, "DIALOG");
@@ -113,13 +118,16 @@ public class HomeActivity extends AppCompatActivity {
             //TODO Make an error dialog appear when required fields are unfilled
             @Override
             public void onClick(View v) {
-                submitDialog();
+                submitNewJob();
             }
         });
 
         bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
     }
 
+    /**
+     * Closes any open dialog Fragment
+     */
     private void closeDialog(){
         getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentByTag("DIALOG")).commit();
         bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
@@ -129,7 +137,10 @@ public class HomeActivity extends AppCompatActivity {
         return 0;
     };
 
-    private void submitDialog(){
+    /**
+     * Submits a job from the JobCreationFragment
+     */
+    private void submitNewJob(){
         //add in logic for flag value on submission
         if(flag > 0){
             ImageView imgJobPic = findViewById(R.id.imgMyProfileImage);
