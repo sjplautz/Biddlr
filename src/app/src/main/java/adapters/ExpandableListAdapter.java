@@ -1,4 +1,4 @@
-package com.example.biddlr;
+package adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.biddlr.R;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

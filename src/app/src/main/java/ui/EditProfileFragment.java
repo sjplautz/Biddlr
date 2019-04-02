@@ -1,4 +1,4 @@
-package com.example.biddlr;
+package ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import com.example.biddlr.R;
 
 import static android.app.Activity.RESULT_OK;
 

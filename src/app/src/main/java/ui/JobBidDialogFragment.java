@@ -1,4 +1,4 @@
-package com.example.biddlr;
+package ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.biddlr.R;
 
 import classes.DatabaseManager;
 import classes.Job;

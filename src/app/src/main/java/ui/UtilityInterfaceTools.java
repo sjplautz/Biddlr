@@ -1,4 +1,4 @@
-package com.example.biddlr;
+package ui;
 
 import android.app.Activity;
 import android.view.inputmethod.InputMethodManager;

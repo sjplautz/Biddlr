@@ -1,4 +1,4 @@
-package com.example.biddlr;
+package ui;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.widget.TextView;
+
+import com.example.biddlr.R;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;

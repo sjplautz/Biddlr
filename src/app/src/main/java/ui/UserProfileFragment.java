@@ -1,4 +1,4 @@
-package com.example.biddlr;
+package ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,9 +17,13 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.biddlr.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import adapters.JobListAdapter;
+import adapters.JobListTouchListener;
 import classes.Job;
 import classes.User;
 

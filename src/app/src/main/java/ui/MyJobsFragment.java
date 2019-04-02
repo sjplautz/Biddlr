@@ -1,4 +1,4 @@
-package com.example.biddlr;
+package ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,10 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.example.biddlr.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import adapters.ExpandableListAdapter;
 import classes.DatabaseManager;
 import classes.Job;
 import interfaces.JobDataListener;

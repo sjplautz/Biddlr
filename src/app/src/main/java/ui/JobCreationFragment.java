@@ -1,4 +1,4 @@
-package com.example.biddlr;
+package ui;
 
 import android.Manifest;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.biddlr.R;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;

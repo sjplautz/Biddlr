@@ -1,8 +1,6 @@
-package com.example.biddlr;
+package ui;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,13 +12,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import android.app.ProgressDialog;
+
+import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import android.support.annotation.VisibleForTesting;
-import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
 
 
 import java.util.Objects;

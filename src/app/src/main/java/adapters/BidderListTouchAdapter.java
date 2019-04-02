@@ -1,4 +1,4 @@
-package com.example.biddlr;
+package adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,12 +7,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class JobListTouchListener implements RecyclerView.OnItemTouchListener {
-
+public class BidderListTouchAdapter implements RecyclerView.OnItemTouchListener {
     private GestureDetector gestureDetector;
     private ClickListener clickListener;
 
-    public JobListTouchListener(Context context, final RecyclerView rv, final ClickListener listener){
+    public BidderListTouchAdapter(Context context, final RecyclerView rv, final BidderListTouchAdapter.ClickListener listener){
         clickListener = listener;
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
             @Override
@@ -41,12 +40,10 @@ public class JobListTouchListener implements RecyclerView.OnItemTouchListener {
 
     @Override
     public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
-
     }
 
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean b) {
-
     }
 
     public interface ClickListener{
