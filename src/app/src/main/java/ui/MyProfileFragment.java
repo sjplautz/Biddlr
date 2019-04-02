@@ -24,7 +24,9 @@ import java.util.List;
 
 import adapters.JobListAdapter;
 import adapters.ListTouchListener;
+import classes.DatabaseManager;
 import classes.Job;
+import classes.User;
 
 public class MyProfileFragment extends Fragment {
 
@@ -33,6 +35,8 @@ public class MyProfileFragment extends Fragment {
     private Button btnEdit;
     private JobListAdapter adapter;
     private TextView txtEmpty;
+
+    private User currUser;
 
     public static MyProfileFragment newInstance() { return new MyProfileFragment(); }
 
@@ -46,11 +50,14 @@ public class MyProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        currUser = DatabaseManager.shared.currentUser;
         jobList = new ArrayList<>();
         adapter = new JobListAdapter(jobList, null);
 
         View v = inflater.inflate(R.layout.fragment_my_profile, container, false);
+
+        TextView txtUserName = v.findViewById(R.id.myProfileName);
+        txtUserName.setText(currUser.getFirstName() + " " + currUser.getLastName());
 
         //create handle for rating bar and set star count (stars possible) to 5
         RatingBar rating = (RatingBar) v.findViewById(R.id.myRatingBar);
