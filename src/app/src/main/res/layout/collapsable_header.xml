@@ -13,5 +13,6 @@
         android:paddingLeft="32dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="30sp" />
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -73,14 +74,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     /**
      * Describes the ui for displaying a group
      * @param pos The index of the group
      * @param isExpanded True if group is expanded
-     * @param convertView
+     * @param convertView The view describing the group
      * @param parent
      * @return A View describing the ui for the group
      */
@@ -103,7 +104,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
      * @param groupPos The index of the group
      * @param childPos The index of the child within the group
      * @param isLastChild True if last child in a group
-     * @param convertView
+     * @param convertView The view describing the list item
      * @param parent
      * @return A View describing the ui for a list item within a group
      */
@@ -112,7 +113,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         Job job = listDataChild.get(listDataHeader.get(groupPos)).get(childPos);
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.job_list_item, null);
+            convertView = inflater.inflate(R.layout.test_job_list_item, null);
         }
 
         ImageView imgJobPic = convertView.findViewById(R.id.imgJobPic);
@@ -122,15 +123,31 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         txtJobTitle.setText(job.getTitle());
 
         TextView txtJobLocation = convertView.findViewById(R.id.txtJobLocation);
-        txtJobLocation.setText(job.getLocation());
+        String location = job.getLocation();
+        if(location.length() > 25){
+            location = location.substring(0, 22) + "...";
+        }
+        txtJobLocation.setText(location);
 
         TextView txtTimeRemaining = convertView.findViewById(R.id.txtTimeRemaining);
         String time = timeLeft(job.getExpirationDate().toLocalDateTime());
         txtTimeRemaining.setText(time);
 
-        TextView txtStartingPrice = convertView.findViewById(R.id.txtStartingPrice);
-        String price = "$" + String.format("%.2f", job.getStartingPrice());
-        txtStartingPrice.setText(price);
+        Button btnSubmit = convertView.findViewById(R.id.btnSelect);
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Trigger a listener to open the bidder select
+            }
+        });
+
+        Button btnDelete = convertView.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Delete a job
+            }
+        });
 
         return convertView;
     }

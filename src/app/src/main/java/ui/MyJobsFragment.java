@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
 import com.example.biddlr.R;
@@ -69,26 +70,6 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
         ExpandableListView listMyJobs = v.findViewById(R.id.listMyJobs);
         adapter = new ExpandableListAdapter(getContext(), headers, children);
         listMyJobs.setAdapter(adapter);
-        listMyJobs.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPos, int childPos, long id) {
-                Job job = null;
-                switch(groupPos){
-                    case 0:
-                        job = jobs.get(childPos);
-                        break;
-                    case 1:
-                        break;
-                }
-                Fragment jobFrag = JobViewFragment.newInstance(job);
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction trans = manager.beginTransaction();
-                trans.replace(R.id.frameNull, jobFrag);
-                trans.addToBackStack(null);
-                trans.commit();
-                return false;
-            }
-        });
 
         return v;
     }
