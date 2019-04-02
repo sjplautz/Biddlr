@@ -21,16 +21,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classes.Job;
+import classes.User;
 
 public class UserProfileFragment extends Fragment {
-
+    private final static String USER = "user";
     private List<Job> jobList;
     private RecyclerView recycler;
     private Button btnEdit;
     private JobListAdapter adapter;
     private TextView txtEmpty;
 
-    public static UserProfileFragment newInstance() { return new UserProfileFragment(); }
+    public static UserProfileFragment newInstance(User user) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(USER, user);
+        UserProfileFragment upf = new UserProfileFragment();
+        upf.setArguments(bundle);
+        return upf;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,11 +49,14 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        User user = getArguments().getParcelable(USER);
         jobList = new ArrayList<>();
         adapter = new JobListAdapter(jobList, null);
 
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        TextView txtName = v.findViewById(R.id.userProfileName);
+        txtName.setText(user.getFirstName() + " " + user.getLastName());
 
         //create handle for rating bar and set star ount (stars possible) to 5
         RatingBar rating = (RatingBar) v.findViewById(R.id.userRatingBar);

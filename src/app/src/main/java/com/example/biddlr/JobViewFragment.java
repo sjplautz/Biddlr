@@ -105,12 +105,12 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment userFrag = UserProfileFragment.newInstance();
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction trans = manager.beginTransaction();
-                trans.replace(R.id.frameNull, userFrag);
-                trans.addToBackStack(null);
-                trans.commit();
+//                Fragment userFrag = UserProfileFragment.newInstance();
+//                FragmentManager manager = getFragmentManager();
+//                FragmentTransaction trans = manager.beginTransaction();
+//                trans.replace(R.id.frameNull, userFrag);
+//                trans.addToBackStack(null);
+//                trans.commit();
             }
         });
 
