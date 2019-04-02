@@ -1,9 +1,12 @@
 package classes;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 public class LocalDateTimeWrapped {
     public String localDateTime;
+    public long milliseconds;
 
     public LocalDateTimeWrapped() {
 
@@ -15,6 +18,7 @@ public class LocalDateTimeWrapped {
 
     public LocalDateTimeWrapped(LocalDateTime localDateTime) {
         this.localDateTime = localDateTime.toString();
+        this.milliseconds = localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     public String getLocalDateTime() {
@@ -26,6 +30,6 @@ public class LocalDateTimeWrapped {
     }
 
     public LocalDateTime toLocalDateTime() {
-        return LocalDateTime.parse(this.localDateTime);
+        return  LocalDateTime.parse(this.localDateTime);
     }
 }
