@@ -241,4 +241,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
         //call marker.remove()
         markerToRemove.remove();
     }
+
+    @Override
+    public void dataChanged(Job job) { }
 }

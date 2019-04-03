@@ -123,4 +123,11 @@ public class HomeFragment extends Fragment implements JobDataListener {
         pics.remove(index);
         adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void dataChanged(Job job) {
+        int index = jobs.indexOf(job);
+        jobs.set(index, job);
+        adapter.notifyDataSetChanged();
+    }
 }

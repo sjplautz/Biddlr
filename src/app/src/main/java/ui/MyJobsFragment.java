@@ -105,4 +105,7 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
 
     @Override
     public void dataRemoved(Job job) { }
+
+    @Override
+    public void dataChanged(Job job) { }
 }

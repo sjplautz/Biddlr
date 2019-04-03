@@ -125,7 +125,7 @@ public class DatabaseManager {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
                 Log.d("JOB CHANGED", "job: " + job);
-                listener.newDataReceived(job);
+                listener.dataChanged(job);
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
@@ -158,7 +158,7 @@ public class DatabaseManager {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
                 Log.d("JOB CHANGED", "job: " + job);
-                listener.newDataReceived(job);
+                listener.dataChanged(job);
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
@@ -192,7 +192,7 @@ public class DatabaseManager {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
                 Log.d("JOB CHANGED", "job: " + job);
-                listener.newDataReceived(job);
+                listener.dataChanged(job);
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
@@ -265,7 +265,7 @@ public class DatabaseManager {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
                 Log.d("JOB CHANGED", "job: " + job);
-                listener.newDataReceived(job);
+                listener.dataChanged(job);
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
@@ -396,7 +396,7 @@ public class DatabaseManager {
             @Override
             public void onFailure(@NonNull Exception e) {
             iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.lightGray, null));
+            iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.gray, null));
             }
         });
     }

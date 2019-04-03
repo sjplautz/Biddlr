@@ -138,4 +138,6 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
     @Override
     public void dataRemoved(Job job) { }
 
+    @Override
+    public void dataChanged(Job job) { }
 }
