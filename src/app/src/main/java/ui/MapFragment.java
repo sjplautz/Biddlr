@@ -230,16 +230,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     public void newDataReceived(Job job) {
         LatLngWrapped latLng = job.getCoordinates();
         Log.d("MAP PINS", "adding pin with lat: " + latLng.getLat() + " and lng: " + latLng.getLng());
-        Marker jobsMarkerHandle = mMap.addMarker(new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle()));
-        job.setMarkerHandle(jobsMarkerHandle);
+        MarkerOptions jobsMarkerOptions = new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle());
+        mMap.addMarker(jobsMarkerOptions);
+
+        job.setMarkerOptionsHandle(jobsMarkerOptions);
     }
 
     @Override
     public void dataRemoved(Job job) {
         //get handle to correct marker from job
-        Marker markerToRemove = job.getMarkerHandle();
+        MarkerOptions markerToRemove = job.getMarkerOptionsHandle();
         //call marker.remove()
-        markerToRemove.remove();
+        markerToRemove.visible(false);
     }
 
     @Override
