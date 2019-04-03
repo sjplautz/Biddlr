@@ -1,6 +1,7 @@
 package adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +27,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> listDataHeader;
     private HashMap<String, List<Job>> listDataChild;
+    private HashMap<String, List<Bitmap>> listChildPics;
 
-    public ExpandableListAdapter(Context con, List<String> headers, HashMap<String, List<Job>> data){
+    public ExpandableListAdapter(Context con, List<String> headers, HashMap<String, List<Job>> data, HashMap<String, List<Bitmap>> pics){
         context = con;
         listDataHeader = headers;
         listDataChild = data;
+        listChildPics = pics;
     }
 
     /**
@@ -111,13 +114,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPos, int childPos, boolean isLastChild, View convertView, ViewGroup parent) {
         Job job = listDataChild.get(listDataHeader.get(groupPos)).get(childPos);
+        List<Bitmap> pics = listChildPics.get(listDataHeader.get(groupPos));
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.expandable_child_item, null);
         }
 
+        //Set up job picture
         ImageView imgJobPic = convertView.findViewById(R.id.imgJobPic);
-        DatabaseManager.shared.setImage(job.getJobID(), imgJobPic);
+        if(listChildPics != null && childPos < pics.size() && pics.get(childPos) != null) imgJobPic.setImageBitmap(pics.get(childPos));
+        else imgJobPic.setImageResource(R.drawable.ic_camera_default_gray);
 
         TextView txtJobTitle = convertView.findViewById(R.id.txtJobTitle);
         txtJobTitle.setText(job.getTitle());

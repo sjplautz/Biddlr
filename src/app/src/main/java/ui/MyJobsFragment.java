@@ -1,5 +1,7 @@
 package ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.example.biddlr.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +28,9 @@ import interfaces.JobDataListener;
  */
 public class MyJobsFragment extends Fragment implements JobDataListener {
     private ArrayList<Job> postedJobs = new ArrayList<>();
+    private ArrayList<Bitmap> postedPics = new ArrayList<>();
     private ArrayList<Job> biddedJobs = new ArrayList<>();
+    private ArrayList<Bitmap> biddedPics = new ArrayList<>();
     private ExpandableListAdapter adapter;
 
     /**
@@ -67,8 +72,12 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
         children.put("My Posted Jobs", postedJobs);
         children.put("My Bidded Jobs", biddedJobs);
 
+        HashMap<String, List<Bitmap>> pics = new HashMap<>();
+        pics.put("My Posted Jobs", postedPics);
+        pics.put("My Bidded Jobs", biddedPics);
+
         ExpandableListView listMyJobs = v.findViewById(R.id.listMyJobs);
-        adapter = new ExpandableListAdapter(getContext(), headers, children);
+        adapter = new ExpandableListAdapter(getContext(), headers, children, pics);
         listMyJobs.setAdapter(adapter);
         listMyJobs.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -93,12 +102,32 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
      * @param job The Job that has been added
      */
     @Override
-    public void newDataReceived(Job job){
+    public void newDataReceived(final Job job){
         if(job.getPosterID().equals(DatabaseManager.shared.currentUser.getUserID())){
             postedJobs.add(0, job);
+            postedPics.add(0, null);
+            DatabaseManager.shared.getImgRef(job.getJobID()).getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    int index = postedJobs.indexOf(job);
+                    postedPics.set(index, bmp);
+                    adapter.notifyDataSetChanged();
+                }
+            });
         }
         else{
             biddedJobs.add(0, job);
+            biddedPics.add(0, null);
+            DatabaseManager.shared.getImgRef(job.getJobID()).getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    int index = biddedJobs.indexOf(job);
+                    biddedPics.set(index, bmp);
+                    adapter.notifyDataSetChanged();
+                }
+            });
         }
         adapter.notifyDataSetChanged();
     }
