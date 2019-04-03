@@ -41,19 +41,6 @@ public class CreateUserActivity extends AppCompatActivity {
     private void actionCreateUser() {
         UtilityInterfaceTools.hideSoftKeyboard(CreateUserActivity.this);
 
-//        AlertDialog.Builder b = new AlertDialog.Builder(CreateUserActivity.this);
-//        b.setCancelable(true);
-//        b.setTitle("Your Account Has Been Created");
-//        b.setMessage("Use your email and password to login.");
-//        b.setPositiveButton("OK",
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        startActivity(new Intent(CreateUserActivity.this, LoginActivity.class));
-//                        finish();
-//                    }
-//                });
-
         EditText txtFname = findViewById(R.id.txtFname);
         EditText txtLname = findViewById(R.id.txtLname);
         EditText txtEmail = findViewById(R.id.txtEnEmail);
@@ -75,8 +62,9 @@ public class CreateUserActivity extends AppCompatActivity {
                             User user = new User(fname, lname, email);
                             DatabaseManager.shared.addNewUser(user);
                             sendRegistrationLink();
+                            DatabaseManager.shared.mAuth.signOut();
                             startActivity(new Intent(CreateUserActivity.this, LoginActivity.class));
-                             finish();
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
