@@ -104,6 +104,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
         //gets the devices location
         Location currentLocation = getDeviceLocation();
 
+        //in the event the current location was null, sets to defaults
+        if(currentLocation == null){
+            currentLocation = new Location("");
+            currentLocation.setLatitude(DEFAULT_LAT);
+            currentLocation.setLongitude(DEFAULT_LONG);
+        }
+
         //wrap the location, and then retrieve jobs within a radius of that location, creating pins for these jobs
         LatLngWrapped wrappedCurrentLocation = LatLngWrapped.wrap(currentLocation);
         DatabaseManager.shared.setJobsForLocationListener(wrappedCurrentLocation,100.0,50, this);
