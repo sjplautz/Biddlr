@@ -177,8 +177,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
 
                 //get current location using the best provider
                 mLastKnownLocation = lm.getLastKnownLocation(Provider);
-                Log.d("EXPERIMENT", "get device location method called, and retrieved location with coords: "
-                        + mLastKnownLocation.getLatitude() + " " + mLastKnownLocation.getLongitude());
+                //Log.d("EXPERIMENT", "get device location method called, and retrieved location with coords: "
+                        //+ mLastKnownLocation.getLatitude() + " " + mLastKnownLocation.getLongitude());
             }
         }
         catch(SecurityException e)  {
