@@ -233,15 +233,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
         MarkerOptions jobsMarkerOptions = new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle());
         mMap.addMarker(jobsMarkerOptions);
 
-        job.setMarkerOptionsHandle(jobsMarkerOptions);
+//        job.setMarkerOptionsHandle(jobsMarkerOptions);
     }
 
     @Override
     public void dataRemoved(Job job) {
         //get handle to correct marker from job
-        MarkerOptions markerToRemove = job.getMarkerOptionsHandle();
+//        MarkerOptions markerToRemove = job.getMarkerOptionsHandle();
         //call marker.remove()
-        markerToRemove.visible(false);
+//        markerToRemove.visible(false);
     }
 
     @Override

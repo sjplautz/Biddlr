@@ -108,6 +108,12 @@ public class DatabaseManager {
         activeJobRef.updateChildren(updates);
     }
 
+//    public void setJobMarkerOptions(Job job) {
+//        Map<String, Object> updates = new HashMap<>();
+//        updates.put(job.getJobID() + "/markerOptionsHandle" , job.getMarkerOptionsHandle());
+//        activeJobRef.updateChildren(updates);
+//    }
+
     /**
      * Active jobs in the database
      * @param limit max number of jobs

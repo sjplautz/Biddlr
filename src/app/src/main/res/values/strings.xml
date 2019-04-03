@@ -41,7 +41,7 @@
     <string name="strBtnEditProfile">Edit Profile</string>
     <string name="txtSubmitBid">SUBMIT BID</string>
     <string name="txtCancel">CANCEL</string>
-    <string name="strLowestBid">Current Lowest Bid</string>
+    <string name="strLowestBid">Current Lowest Bid:</string>
     <string name="strViewProfile">View Profile</string>
     <string name="strChoose">Choose</string>
     <string name="txtLowestBid">Lowest Bid:</string>

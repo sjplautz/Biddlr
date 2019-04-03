@@ -29,7 +29,6 @@ public class Job implements Parcelable {
     private Double startingPrice;
     private Double currentBid;
     private HashMap<String, Double> bids;  // <bidderID, bidValue>
-    private MarkerOptions markerOptionsHandle;
 
     // Initializers
     public Job() { }
@@ -49,7 +48,6 @@ public class Job implements Parcelable {
         this.startingPrice = startingPrice;
         this.currentBid = startingPrice;
         this.bids = null;
-        this.markerOptionsHandle = null;
     }
 
     // Parcable
@@ -72,7 +70,6 @@ public class Job implements Parcelable {
         dest.writeDouble(this.startingPrice);
         dest.writeDouble(this.currentBid);
         dest.writeSerializable(this.bids);
-        dest.writeParcelable(this.markerOptionsHandle, 0);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -97,7 +94,6 @@ public class Job implements Parcelable {
         this.startingPrice = src.readDouble();
         this.currentBid = src.readDouble();
         this.bids = (HashMap<String, Double>) src.readSerializable();
-        this.markerOptionsHandle = src.readParcelable(MarkerOptions.class.getClassLoader());
     }
 
     // Getters and Setters
@@ -196,11 +192,6 @@ public class Job implements Parcelable {
     public void setBids(HashMap<String, Double> bids) {
         this.bids = bids;
     }
-
-    public MarkerOptions getMarkerOptionsHandle(){ return markerOptionsHandle; }
-
-    public void setMarkerOptionsHandle(MarkerOptions m){ this.markerOptionsHandle = m; }
-
 
     // Custom Methods
     public void addBid(String bidderId, double bid) {
