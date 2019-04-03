@@ -3,6 +3,7 @@ package ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,19 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
         ExpandableListView listMyJobs = v.findViewById(R.id.listMyJobs);
         adapter = new ExpandableListAdapter(getContext(), headers, children);
         listMyJobs.setAdapter(adapter);
+        listMyJobs.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                if(groupPosition == 0){
+                    Fragment bidsFrag = BidderSelectFragment.newInstance(postedJobs.get(childPosition).getJobID());
+                    FragmentTransaction trans = getFragmentManager().beginTransaction();
+                    trans.add(android.R.id.content, bidsFrag);
+                    trans.addToBackStack("JOBS");
+                    trans.commit();
+                }
+                return false;
+            }
+        });
 
         return v;
     }

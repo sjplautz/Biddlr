@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.biddlr.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import adapters.BidderListAdapter;
 import adapters.ListTouchListener;
@@ -34,6 +36,9 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
     private BidderListAdapter adapter;
     private ArrayList<User> users = new ArrayList<>();
     private int selectedIndex = -1;
+
+    private Job job = null;
+    private TextView txtLowBid;
 
     /**
      * Method for creating an instance of this controller
@@ -71,6 +76,11 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bidder_select, container, false);
 
+        txtLowBid = v.findViewById(R.id.txtUserBid);
+        if(job != null){
+            txtLowBid.setText(String.format(Locale.ENGLISH, "$%.02f", job.getCurrentBid()));
+        }
+
         //Displays a bidder's profile for the job poster
         final Button btnViewProfile = v.findViewById(R.id.btnView);
         btnViewProfile.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +90,7 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
                     Fragment userFrag = UserProfileFragment.newInstance(users.get(selectedIndex));
                     FragmentTransaction trans = getActivity().getSupportFragmentManager().beginTransaction();
                     trans.add(android.R.id.content, userFrag);
+                    trans.addToBackStack("PROFILE");
                     trans.commit();
                 }
             }
@@ -129,9 +140,17 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
      */
     @Override
     public void newDataReceived(Job job){
+        if(txtLowBid != null){
+            txtLowBid.setText(String.format(Locale.ENGLISH, "$%.02f", job.getCurrentBid()));
+        }
+
+        this.job = job;
+
         HashMap<String, Double> bids = job.getBids();
-        ArrayList<String> uids = new ArrayList<>(bids.keySet());
-        DatabaseManager.shared.setUsersFromListListener(uids, this);
+        if(bids != null) {
+            ArrayList<String> uids = new ArrayList<>(bids.keySet());
+            DatabaseManager.shared.setUsersFromListListener(uids, this);
+        }
     }
 
     /**
