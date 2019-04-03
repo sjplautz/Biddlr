@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.biddlr.R;
 
 import java.util.List;
+import java.util.Locale;
 
 import classes.User;
 
@@ -80,12 +81,12 @@ public class BidderListAdapter extends RecyclerView.Adapter<BidderListAdapter.Bi
 
         User user = bids.get(pos);
 
-        holder.imgUserPic.setImageResource(R.drawable.ic_biddlrlogo);
+        holder.imgUserPic.setImageResource(R.drawable.baseline_person_24);
 
         String fullName = user.getFirstName() + " " + user.getLastName();
         holder.txtUserName.setText(fullName);
 
-        String value = "$" + user.getBiddedJobs().get(jobId);
+        String value = String.format(Locale.ENGLISH, "$%.02f", user.getBiddedJobs().get(jobId));
         holder.txtUserBid.setText(value);
     }
 
