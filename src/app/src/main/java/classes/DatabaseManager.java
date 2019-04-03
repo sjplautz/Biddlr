@@ -216,8 +216,10 @@ public class DatabaseManager {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 User user = dataSnapshot.getValue(User.class);
                 Log.d("BIDDED JOB QUERY", "user: " + user);
-                for(String jobId: user.getBiddedJobs().keySet()){
-                    setJobFromIDListener(jobId, listener);
+                if(user.getBiddedJobs() != null) {
+                    for (String jobId : user.getBiddedJobs().keySet()) {
+                        setJobFromIDListener(jobId, listener);
+                    }
                 }
             }
 

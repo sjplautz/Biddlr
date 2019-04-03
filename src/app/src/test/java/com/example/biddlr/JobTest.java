@@ -25,6 +25,26 @@ public class JobTest {
     }
 
     @Test
-    public void
+    public void formattedExpirationDate_isCorrect(){
+        Job job = new Job();
+
+        //Sets expiration date to Jan 1 2019
+        job.setExpirationDate(new LocalDateTimeWrapped(LocalDateTime.from));
+    }
+
+    @Test
+    public void formattedTimeFromNow_isCorrect(){
+        Job job = new Job();
+
+        //Sets expiration date to one hour ago
+        job.setExpirationDate(new LocalDateTimeWrapped(LocalDateTime.now().minusHours(1)));
+        assertEquals("Expired", job.formattedTimeFromNow());
+
+        job.setExpirationDate(new LocalDateTimeWrapped(LocalDateTime.now().plusHours(1)));
+        assertEquals("1 hours", job.formattedTimeFromNow());
+
+        job.setExpirationDate(new LocalDateTimeWrapped(LocalDateTime.now().plusDays(2)));
+        assertEquals("2 days", job.formattedTimeFromNow());
+    }
 
 }

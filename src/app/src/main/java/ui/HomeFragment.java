@@ -70,9 +70,8 @@ public class HomeFragment extends Fragment implements JobDataListener {
         recycler.setAdapter(adapter);
 
         //adding a divider between recyclerview list items
-        DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.recycler_divider));
-        recycler.addItemDecoration(divider);
+        DividerItemDecoration div = new DividerItemDecoration(recycler.getContext(), ((LinearLayoutManager) manager).getOrientation());
+        recycler.addItemDecoration(div);
 
         recycler.addOnItemTouchListener(new ListTouchListener(getContext(), recycler, new ListTouchListener.ClickListener() {
             @Override
