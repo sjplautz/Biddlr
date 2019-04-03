@@ -135,4 +135,7 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         txtJobCurrentBid.setText(current);
     }
 
+    @Override
+    public void dataRemoved(Job job) { }
+
 }

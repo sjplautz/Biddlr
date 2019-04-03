@@ -102,4 +102,7 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
         }
         adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void dataRemoved(Job job) { }
 }

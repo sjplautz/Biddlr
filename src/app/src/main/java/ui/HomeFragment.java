@@ -21,6 +21,7 @@ import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 import adapters.JobListAdapter;
 import adapters.ListTouchListener;
@@ -112,6 +113,14 @@ public class HomeFragment extends Fragment implements JobDataListener {
                 adapter.notifyDataSetChanged();
             }
         });
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void dataRemoved(Job job) {
+        int index = jobs.indexOf(job);
+        jobs.remove(index);
+        pics.remove(index);
         adapter.notifyDataSetChanged();
     }
 }

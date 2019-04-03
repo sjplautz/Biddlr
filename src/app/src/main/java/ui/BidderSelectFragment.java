@@ -153,6 +153,9 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
         }
     }
 
+    @Override
+    public void dataRemoved(Job job) { }
+
     /**
      * Gets all of the bidders that have bidded on this job
      * @param user A user that has bidded on this job

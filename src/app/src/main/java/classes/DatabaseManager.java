@@ -61,6 +61,9 @@ public class DatabaseManager {
 
     }
 
+    /**
+     * Set the current logged in user object
+     */
     public void setCurrentUser() {
         userRef.child(getFirebaseUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -92,6 +95,11 @@ public class DatabaseManager {
         activeJobRef.child(id).setValue(job);
     }
 
+    /**
+     * Updates the bids and currentBid field of a job
+     * @param job
+     * @param bid
+     */
     public void addJobBid(Job job, Double bid) {
         Map<String, Object> updates = new HashMap<>();
         updates.put(job.getJobID() + "/bids" , job.getBids());
@@ -120,7 +128,11 @@ public class DatabaseManager {
                 listener.newDataReceived(job);
             }
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Job job = dataSnapshot.getValue(Job.class);
+                Log.d("JOB REMOVED", "job: " + job);
+                listener.dataRemoved(job);
+            }
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
@@ -149,7 +161,11 @@ public class DatabaseManager {
                 listener.newDataReceived(job);
             }
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Job job = dataSnapshot.getValue(Job.class);
+                Log.d("JOB REMOVED", "job: " + job);
+                listener.dataRemoved(job);
+            }
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
@@ -179,7 +195,11 @@ public class DatabaseManager {
                 listener.newDataReceived(job);
             }
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Job job = dataSnapshot.getValue(Job.class);
+                Log.d("JOB REMOVED", "job: " + job);
+                listener.dataRemoved(job);
+            }
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
@@ -248,7 +268,11 @@ public class DatabaseManager {
                 listener.newDataReceived(job);
             }
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Job job = dataSnapshot.getValue(Job.class);
+                Log.d("JOB REMOVED", "job: " + job);
+                listener.dataRemoved(job);
+            }
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override

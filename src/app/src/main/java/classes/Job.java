@@ -228,4 +228,17 @@ public class Job implements Parcelable {
         }
         return hours + " hours";
     }
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Job other = (Job) obj;
+        if (!jobID.equals(other.jobID))
+            return false;
+        return true;
+    }
 }

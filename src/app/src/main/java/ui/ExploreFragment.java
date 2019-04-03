@@ -119,4 +119,12 @@ public class ExploreFragment extends Fragment implements JobDataListener {
         });
         adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void dataRemoved(Job job) {
+        int index = jobs.indexOf(job);
+        jobs.remove(index);
+        pics.remove(index);
+        adapter.notifyDataSetChanged();
+    }
 }

@@ -222,4 +222,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
         mMap.addMarker(new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle()));
     }
 
+    @Override
+    public void dataRemoved(Job job) {
+    }
 }
