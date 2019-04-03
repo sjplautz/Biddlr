@@ -25,7 +25,10 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 import classes.DatabaseManager;
 import classes.Job;
@@ -41,6 +44,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     private CameraPosition mCameraPosition;
     private Location mCurrentLocation;
     public static Location mLastKnownLocation;
+    public static List<Marker> MarkerList;
 
     MapView mMapView;
     View mView;
@@ -226,10 +230,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     public void newDataReceived(Job job) {
         LatLngWrapped latLng = job.getCoordinates();
         Log.d("MAP PINS", "adding pin with lat: " + latLng.getLat() + " and lng: " + latLng.getLng());
-        mMap.addMarker(new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle()));
+        Marker jobsMarkerHandle = mMap.addMarker(new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle()));
+        job.setMarkerHandle(jobsMarkerHandle);
     }
 
     @Override
     public void dataRemoved(Job job) {
+        //get handle to correct marker from job
+        Marker markerToRemove = job.getMarkerHandle();
+        //call marker.remove()
+        markerToRemove.remove();
     }
 }

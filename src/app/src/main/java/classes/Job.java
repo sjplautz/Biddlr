@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +28,7 @@ public class Job implements Parcelable {
     private Double startingPrice;
     private Double currentBid;
     private HashMap<String, Double> bids;  // <bidderID, bidValue>
+    private Marker MarkerHandle;
 
     // Initializers
     public Job() { }
@@ -46,6 +48,7 @@ public class Job implements Parcelable {
         this.startingPrice = startingPrice;
         this.currentBid = startingPrice;
         this.bids = null;
+        this.MarkerHandle = null;
     }
 
     // Parcable
@@ -68,6 +71,7 @@ public class Job implements Parcelable {
         dest.writeDouble(this.startingPrice);
         dest.writeDouble(this.currentBid);
         dest.writeSerializable(this.bids);
+        //dest.writeString(new Marker())
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -92,6 +96,7 @@ public class Job implements Parcelable {
         this.startingPrice = src.readDouble();
         this.currentBid = src.readDouble();
         this.bids = (HashMap<String, Double>) src.readSerializable();
+        //this.MarkerHandle = new Marker(src.readString());
     }
 
     // Getters and Setters
@@ -190,6 +195,10 @@ public class Job implements Parcelable {
     public void setBids(HashMap<String, Double> bids) {
         this.bids = bids;
     }
+
+    public Marker getMarkerHandle(){ return MarkerHandle; }
+
+    public void setMarkerHandle(Marker m){ this.MarkerHandle = m; }
 
 
     // Custom Methods
