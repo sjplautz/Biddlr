@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import classes.DatabaseManager;
@@ -44,7 +45,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     private CameraPosition mCameraPosition;
     private Location mCurrentLocation;
     public static Location mLastKnownLocation;
-    public static List<Marker> MarkerList;
+    public static List<Marker> markerList = new ArrayList<Marker>();
 
     MapView mMapView;
     View mView;
@@ -230,20 +231,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     public void newDataReceived(Job job) {
         LatLngWrapped latLng = job.getCoordinates();
         Log.d("MAP PINS", "adding pin with lat: " + latLng.getLat() + " and lng: " + latLng.getLng());
-        MarkerOptions jobsMarkerOptions = new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle());
-        mMap.addMarker(jobsMarkerOptions);
-
-//        job.setMarkerOptionsHandle(jobsMarkerOptions);
+        MarkerOptions jobMarkerOptions = new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle());
+        Marker markerHandle = mMap.addMarker(jobMarkerOptions);
+        markerList.add(markerHandle);
     }
 
     @Override
     public void dataRemoved(Job job) {
-        //get handle to correct marker from job
-//        MarkerOptions markerToRemove = job.getMarkerOptionsHandle();
-        //call marker.remove()
-//        markerToRemove.visible(false);
+        //get handle to correct marker from markerlist
+        Marker markerToRemove = getMarkerHandle(markerList, job);
+        //now remove the marker from the map
+        //if(markerToRemove != null)
+            markerToRemove.remove();
     }
 
     @Override
     public void dataChanged(Job job) { }
+
+    private Marker getMarkerHandle(List<Marker> markerList, Job job){
+        String jobTitle = job.getTitle();
+        LatLngWrapped latLngWrapped = job.getCoordinates();
+        LatLng jobLatLng = new LatLng(latLngWrapped.getLat(), latLngWrapped.getLng());
+        for(int i = 0; i < markerList.size(); i++){
+            Marker currentMarker = markerList.get(i);
+            String currentTitle = currentMarker.getTitle();
+            LatLng currentLatLng = currentMarker.getPosition();
+            if((currentTitle.equals(jobTitle)) && (currentLatLng.equals(jobLatLng))){
+                return currentMarker;
+            }
+        }
+        return null;
+    }
 }
