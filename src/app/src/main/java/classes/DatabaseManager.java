@@ -298,6 +298,10 @@ public class DatabaseManager {
         DatabaseManager.shared.setCurrentUser();
     }
 
+    /**
+     * Updates the biddedJobs field for a user on the database
+     * @param user
+     */
     public void addBidForUser(User user) {
         Map<String, Object> updates = new HashMap<>();
         updates.put(user.getUserID() + "/biddedJobs" , user.getBiddedJobs());
@@ -345,6 +349,11 @@ public class DatabaseManager {
         });
     }
 
+    /**
+     * Returns all users associated with an ID from ids
+     * @param ids list of userID strings
+     * @param listener fragment to receive the users
+     */
     public void setUsersFromListListener(final List<String> ids, final UserDataListener listener){
         userRef.orderByChild("userID").addChildEventListener(new ChildEventListener() {
             @Override

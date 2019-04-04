@@ -4,13 +4,15 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 
+/**
+ * Wrapper class for LocalDateTime
+ * Firebase requires empty constructors for classes to be written/read from database (which LocalDateTime does not have)
+ */
 public class LocalDateTimeWrapped {
     public String localDateTime;
-    public long milliseconds;
+    public long milliseconds; //used for expiring the job on the backend
 
-    public LocalDateTimeWrapped() {
-
-    }
+    public LocalDateTimeWrapped() { }
 
     public LocalDateTimeWrapped(String localDateTime) {
         this.localDateTime = localDateTime;

@@ -49,7 +49,6 @@ public class WrapperClassesTest {
         Double lng = 174.7565664;
 
         LatLng location = new LatLng(lat, lng);
-        String locString = location.toString();
         LatLngWrapped locationWrapped = new LatLngWrapped(location.toString());
 
         assertEquals(location.latitude, locationWrapped.getLat(), 0.0);

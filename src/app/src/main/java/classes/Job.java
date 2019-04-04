@@ -50,7 +50,7 @@ public class Job implements Parcelable {
         this.bids = null;
     }
 
-    // Parcable
+    // Parcable methods - needed for passing objects between fragments
     @Override
     public int describeContents() {
         return 0;
@@ -129,9 +129,7 @@ public class Job implements Parcelable {
         this.description = description;
     }
 
-    public String getPosterID() {
-        return posterID;
-    }
+    public String getPosterID() { return posterID; }
 
     public void setPosterID(String posterID) {
         this.posterID = posterID;
@@ -141,9 +139,7 @@ public class Job implements Parcelable {
         return selectedBidderID;
     }
 
-    public void setSelectedBidderID(String selectedBidderID) {
-        this.selectedBidderID = selectedBidderID;
-    }
+    public void setSelectedBidderID(String selectedBidderID) { this.selectedBidderID = selectedBidderID; }
 
     public String getLocation() {
         return location;
@@ -165,9 +161,7 @@ public class Job implements Parcelable {
         return expirationDate;
     }
 
-    public void setExpirationDate(LocalDateTimeWrapped expirationDate) {
-        this.expirationDate = expirationDate;
-    }
+    public void setExpirationDate(LocalDateTimeWrapped expirationDate) { this.expirationDate = expirationDate; }
 
     public Double getStartingPrice() {
         return startingPrice;
@@ -194,6 +188,12 @@ public class Job implements Parcelable {
     }
 
     // Custom Methods
+
+    /**
+     * Adds bidder & bid to jobs list of bids
+     * @param bidderId
+     * @param bid
+     */
     public void addBid(String bidderId, double bid) {
         if (bids == null) {
             bids = new HashMap<String, Double>();
@@ -230,6 +230,7 @@ public class Job implements Parcelable {
         return hours + " hours";
     }
 
+    // Override 'equals' method for job class so that if equal jobIds, return true
     public boolean equals(Object obj) {
         if (this == obj)
             return true;

@@ -40,7 +40,7 @@ public class User implements Parcelable {
         this.biddedJobs = null;
     }
 
-    // Parcable
+    // Parcable methods - needed for passing objects between fragments
     @Override
     public int describeContents() {
         return 0;
@@ -121,6 +121,11 @@ public class User implements Parcelable {
         this.biddedJobs = biddedJobs;
     }
 
+    /**
+     * Adds job to user's list of bidded jobs
+     * @param jobID
+     * @param bid
+     */
     public void addBid(String jobID, Double bid) {
         if (biddedJobs == null) {
             biddedJobs = new HashMap<String, Double>();
