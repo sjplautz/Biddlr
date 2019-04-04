@@ -19,6 +19,10 @@ import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
 
+/**
+ * Dialog fragment to for users to submit a bid on a job
+ * Navigated to when user taps the 'Place Bid' button on the job view
+ */
 public class JobBidDialogFragment extends DialogFragment {
     private static final String JOB_BID_DIALOG_KEY = "job_bid_dialog_key";
     private Job job;

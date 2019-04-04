@@ -21,7 +21,10 @@ import classes.User;
 import interfaces.JobDataListener;
 import interfaces.UserDataListener;
 
-
+/**
+ * Fragment to view details of a specific job
+ * Navigated to when user taps a job list item
+ */
 public class JobViewFragment extends Fragment implements UserDataListener, JobDataListener {
     private static final String JOB_FRAGMENT_KEY = "job_fragment_key";
     private Job job;
@@ -50,6 +53,7 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         job = getArguments().getParcelable(JOB_FRAGMENT_KEY);
         View v = inflater.inflate(R.layout.fragment_job_view, container, false);
 
+        // Firebase listeners
         DatabaseManager.shared.setUserFromIDListener(job.getPosterID(), this);
         DatabaseManager.shared.setJobFromIDListener(job.getJobID(), this);
 
@@ -76,19 +80,22 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         txtPosterName = (TextView) v.findViewById(R.id.txtPosterName);
 
         rtgPosterRating = (RatingBar) v.findViewById(R.id.rtgPosterRating);
-        rtgPosterRating.setRating(5);//poster.getPosterRating().floatValue());
+        rtgPosterRating.setRating(5);
 
         ImageView imgProfile = (ImageView) v.findViewById(R.id.imgProfile);
-//        DatabaseManager.shared.setImage(job.getPosterID(), imgProfile);
         imgProfile.setImageResource(R.drawable.baseline_person_24);
 
         ImageView imgJob = v.findViewById(R.id.imgJob);
         DatabaseManager.shared.setImage(job.getJobID(), imgJob);
 
         Button btnPlaceBid = v.findViewById(R.id.btnPlaceBid);
+
+        // If job is expired but hasn't been removed from active_jobs table on database yet, hide the 'Place Bid' button
         if (job.isNowPastExpirationDate()) {
             btnPlaceBid.setVisibility(View.INVISIBLE);
         }
+
+        // Show dialog to place a bid when 'Place Bid' button tapped and current user != poster
         btnPlaceBid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +127,7 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         return v;
     }
 
+    /* User Listener*/
     @Override
     public void newDataReceived(User user) {
         // Set profile info
@@ -128,6 +136,7 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         rtgPosterRating.setRating(user.getPosterRating().floatValue());
     }
 
+    /* Job Listener*/
     @Override
     public void newDataReceived(Job job) {
         // Update current bid
