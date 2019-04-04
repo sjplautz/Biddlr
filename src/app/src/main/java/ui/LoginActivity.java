@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,9 +19,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import classes.DatabaseManager;
 
+//Login activity class
 public class LoginActivity extends AppCompatActivity {
 
-//    private FirebaseAuth mAuth;
     private String TAG = "Login";
 
     @Override
@@ -60,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Check if user is signed in (non-null) and upda   te UI accordingly.
         DatabaseManager.shared.setUp();
         FirebaseUser currentUser = DatabaseManager.shared.getFirebaseUser();
 
@@ -71,14 +72,27 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
-
+// Handle's the login process
     private void actionLogin() {
-        //UtilityInterfaceTools.hideSoftKeyboard(LoginActivity.this);
+
         EditText txtEmail = findViewById(R.id.txtUsername);
         EditText txtPassword = findViewById(R.id.txtPassword);
 
         String email = txtEmail.getText().toString();
         String password = txtPassword.getText().toString();
+
+        //Validate user's email and password fields
+        if ((TextUtils.isEmpty(email)) && (TextUtils.isEmpty(password))) {
+            Toast.makeText(getApplication(), "Enter your email id and password", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getApplication(), "Enter your email id", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(password)) {
+            Toast.makeText(getApplication(), "Enter your password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         DatabaseManager.shared.mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -88,17 +102,15 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = DatabaseManager.shared.getFirebaseUser();
-
+                            // Check if the user email is verified before the first login
                             if (user.isEmailVerified()) {
                                 Toast.makeText(LoginActivity.this, "Verified Email", Toast.LENGTH_SHORT).show();
 
                                 DatabaseManager.shared.setCurrentUser();
                                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                 finish();
-
                             }
-                                //startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                          //  finish();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -109,30 +121,19 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
 
-//        if (txtEmail.getText().toString().equals("jsmith@ua.edu") && txtPassword.getText().toString().equals("testtest123")) {
-//            if (true) {
-//                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-//                finish();
-//            }
-//        } else {
-//                TextView errorMessage = findViewById(R.id.message_invalid_credentials);
-//                errorMessage.setVisibility(View.VISIBLE);
-//                txtEmail.setText("");
-//                txtPassword.setText("");
-//            }
-
     }
 
+    // Launch create user activity
     private void actionCreateUser() {
-      //  UtilityInterfaceTools.hideSoftKeyboard(LoginActivity.this);
-        startActivity(new Intent(LoginActivity.this, CreateUserActivity.class));
-       // finish();
-    }
 
+        startActivity(new Intent(LoginActivity.this, CreateUserActivity.class));
+
+    }
+    // Launch reset user password activity
     private void actionForgetPass() {
-      //  UtilityInterfaceTools.hideSoftKeyboard(LoginActivity.this);
+
         startActivity(new Intent(LoginActivity.this, ForgotPassActivity.class));
-       // finish();
+
     }
 }
 
