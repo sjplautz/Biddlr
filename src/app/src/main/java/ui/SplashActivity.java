@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.example.biddlr.R;
 
+//Represents the screen that pops up when the user first opens Biddlr
 public class SplashActivity extends AppCompatActivity {
 
     private static int SPLASH_TIME = 4000; //This is 4 seconds

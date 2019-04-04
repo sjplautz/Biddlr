@@ -27,6 +27,7 @@ import adapters.ListTouchListener;
 import classes.Job;
 import classes.User;
 
+//The Fragment that inflates when viewing another User's profile
 public class UserProfileFragment extends Fragment {
     private final static String USER = "user";
     private List<Job> jobList;

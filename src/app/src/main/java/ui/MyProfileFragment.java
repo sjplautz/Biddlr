@@ -28,6 +28,7 @@ import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
 
+//The fragment that inflates when a user views their own profile
 public class MyProfileFragment extends Fragment {
 
     private List<Job> jobList;
@@ -43,8 +44,6 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //need to add method to database manager to get the user's profile
     }
 
     @Override

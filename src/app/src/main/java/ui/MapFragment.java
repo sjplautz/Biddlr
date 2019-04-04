@@ -38,6 +38,7 @@ import interfaces.JobDataListener;
 
 import static android.support.constraint.Constraints.TAG;
 
+//class that represents the map fragment displayed on the home activity page
 public class MapFragment extends Fragment implements OnMapReadyCallback, JobDataListener {
 
     public static GoogleMap mMap;
@@ -237,17 +238,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     }
 
     @Override
+    //listener actions for when job data is removed
     public void dataRemoved(Job job) {
         //get handle to correct marker from markerlist
         Marker markerToRemove = getMarkerHandle(markerList, job);
         //now remove the marker from the map
-        //if(markerToRemove != null)
-            markerToRemove.remove();
+        markerToRemove.remove();
     }
 
     @Override
+    //listener actions for when job data is changed
     public void dataChanged(Job job) { }
 
+    //called by dataRemoved listener, gets the pin associated with the job that was removed and removes it from the map
     private Marker getMarkerHandle(List<Marker> markerList, Job job){
         String jobTitle = job.getTitle();
         LatLngWrapped latLngWrapped = job.getCoordinates();

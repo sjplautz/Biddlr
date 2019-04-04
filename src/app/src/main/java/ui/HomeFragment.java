@@ -29,6 +29,7 @@ import classes.DatabaseManager;
 import classes.Job;
 import interfaces.JobDataListener;
 
+//The fragment that inflates once the user logs in, a component of the HomeActivity
 public class HomeFragment extends Fragment implements JobDataListener {
     private JobListAdapter adapter;
     private ArrayList<Job> jobs = new ArrayList<>();
