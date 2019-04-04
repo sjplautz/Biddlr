@@ -57,6 +57,4 @@ public class JobTest {
         assertNotSame(job1, job2);
         assertEquals(job1, job2);
     }
-
-
 }
