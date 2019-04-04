@@ -230,7 +230,7 @@ public class JobCreationFragment extends DialogFragment {
     }
 
     //checks if address fits specified format for inputting addresses for job creation
-    public Boolean checkFormat(String location){
+    public static Boolean checkFormat(String location){
         //             opt              opt                  opt
         //example: 3720 N. 33rd Dr., Apt# 709, Rockford, IL 36301
 

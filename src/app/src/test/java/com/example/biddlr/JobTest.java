@@ -92,4 +92,6 @@ public class JobTest {
         assertEquals("ID", job2.getJobID());
         assertEquals("Here", job2.getLocation());
     }
+
+
 }
