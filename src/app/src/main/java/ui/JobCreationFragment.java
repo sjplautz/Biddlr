@@ -293,7 +293,7 @@ public class JobCreationFragment extends DialogFragment {
         String apiKey = "NypbUMfluOKXSv4v02Gq1Er3kIA9AfVB";
 
         //getting the location info retrieved in map fragment
-        Location currentLocation = MapFragment.mLastKnownLocation;
+        Location currentLocation = MapFragment.mCurrentLocation;
         double lat = currentLocation.getLatitude();
         double lng = currentLocation.getLongitude();
 

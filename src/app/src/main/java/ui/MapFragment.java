@@ -3,6 +3,7 @@ package ui;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -16,14 +17,11 @@ import android.location.Location;
 import android.location.LocationManager;
 
 import com.example.biddlr.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -42,9 +40,7 @@ import static android.support.constraint.Constraints.TAG;
 public class MapFragment extends Fragment implements OnMapReadyCallback, JobDataListener {
 
     public static GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
-    private CameraPosition mCameraPosition;
-    private Location mCurrentLocation;
+    public static Location mCurrentLocation;
     public static Location mLastKnownLocation;
     public static List<Marker> markerList = new ArrayList<Marker>();
 
@@ -57,6 +53,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     private static final double DEFAULT_LONG = -87.67;
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
+    private static LocationManager locationManager;
+    private static String Provider;
 
     private boolean mLocationPermissionGranted = false;
 
@@ -67,17 +65,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (savedInstanceState != null) {
             mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
-            mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_map, container, false);
         return mView;
     }
@@ -85,15 +80,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        mMapView = (MapView) mView.findViewById(R.id.map);
+        mMapView = mView.findViewById(R.id.map);
         if(mMapView != null){
-            // Construct a FusedLocationProviderClient to handle location actions
-            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
             //call the following init methods for the map
             mMapView.onCreate(null);
             mMapView.onResume();
             mMapView.getMapAsync(this);
         }
+
     }
 
     @Override
@@ -107,22 +101,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
         //turns on the my location layer and related control on the map
         updateLocationUI();
 
-        //gets the devices location
-        Location currentLocation = getDeviceLocation();
+        //sets up the location manager to be used
+        setUpLocationManager();
+
+        //attempts to update the device's current location
+        getCurrentLocation();
 
         //in the event the current location was null, sets to defaults
-        if(currentLocation == null){
-            currentLocation = new Location("");
-            currentLocation.setLatitude(DEFAULT_LAT);
-            currentLocation.setLongitude(DEFAULT_LONG);
+        if(mCurrentLocation == null){
+            Log.d("CURRENT LOCATION", "Current location is null. Trying last known location.");
+            getLastKnownLocation();
+            if(mCurrentLocation == null){
+                Log.d("CURRENT LOCATION", "Last known location is null. Using defaults.");
+                mCurrentLocation = new Location("");
+                mCurrentLocation.setLatitude(DEFAULT_LAT);
+                mCurrentLocation.setLongitude(DEFAULT_LONG);
+            }
         }
 
         //wrap the location, and then retrieve jobs within a radius of that location, creating pins for these jobs
-        LatLngWrapped wrappedCurrentLocation = LatLngWrapped.wrap(currentLocation);
+        LatLngWrapped wrappedCurrentLocation = LatLngWrapped.wrap(mCurrentLocation);
         DatabaseManager.shared.setJobsForLocationListener(wrappedCurrentLocation,100.0,50, this);
 
         //sets the map to gotten location
-        setMapCamera(currentLocation);
+        setMapCamera(mCurrentLocation);
     }
 
     //updates the ui to indicate that location permissions are either allowed or not
@@ -148,9 +150,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     //requests location permissions at runtime
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-        {
-                mLocationPermissionGranted = true;
+                android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            mLocationPermissionGranted = true;
+            mMap.setMyLocationEnabled(true);
         }
         else {
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
@@ -172,39 +174,63 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
         updateLocationUI();
     }
 
-    //gets the best and most recent location of the device, using a default if location is null
-    public Location getDeviceLocation() {
-        try {
-            if (mLocationPermissionGranted) {
-                LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+    //sets up the location manager
+    public void setUpLocationManager(){
+        if (mLocationPermissionGranted) {
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-                //setting up criteria for determining the best provider
-                Criteria criteria = new Criteria();
-                criteria.setAccuracy(Criteria.ACCURACY_FINE);
-                criteria.setAltitudeRequired(false);
-                criteria.setBearingRequired(false);
-                criteria.setCostAllowed(true);
+            //setting up criteria for determining the best provider
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            criteria.setAltitudeRequired(false);
+            criteria.setBearingRequired(false);
+            criteria.setCostAllowed(true);
 
-                //returns the string of the best provider tpye
-                String Provider = lm.getBestProvider(criteria, true);
-
-                //get current location using the best provider
-                mLastKnownLocation = lm.getLastKnownLocation(Provider);
-                //Log.d("EXPERIMENT", "get device location method called, and retrieved location with coords: "
-                        //+ mLastKnownLocation.getLatitude() + " " + mLastKnownLocation.getLongitude());
-            }
+            //returns the string of the best provider tpye
+            Provider = locationManager.getBestProvider(criteria, true);
         }
-        catch(SecurityException e)  {
+    }
+
+    //gets the best and most recent location of the device, using a default if location is null
+    public void getCurrentLocation(){
+        try {
+                //Identify a listener that responds to location updates
+                LocationListener locationListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        mCurrentLocation = location;
+                    }
+                    @Override
+                    public void onStatusChanged(String s, int i, Bundle bundle) {}
+                    @Override
+                    public void onProviderEnabled(String s) {}
+                    @Override
+                    public void onProviderDisabled(String s) {}
+                };
+
+                //request a single update to the user's location
+                locationManager.requestLocationUpdates(Provider, 0, 0, locationListener);
+                //potentially turn off location updates here
+        }
+        catch(SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
-        return mLastKnownLocation;
+    }
+
+    public void getLastKnownLocation(){
+        try {
+            mCurrentLocation = locationManager.getLastKnownLocation(Provider);
+        }
+        catch(SecurityException e) {
+            Log.e("Exception: %s", e.getMessage());
+        }
     }
 
     //centers the maps camera on the user's location, if location could not be found on default coords
     private void setMapCamera(Location mLastKnownLocation){
         //if location extraction was successful, set the map to location's coords
         if(mLastKnownLocation != null){
-            Log.d(TAG, "Current location was not null!");
+            //Log.d(TAG, "Current location was not null!");
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
         }
@@ -243,7 +269,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
         //get handle to correct marker from markerlist
         Marker markerToRemove = getMarkerHandle(markerList, job);
         //now remove the marker from the map
+        markerToRemove.setVisible(false);
         markerToRemove.remove();
+        Log.d("REMOVE PIN", "now removing a pin with title: " + markerToRemove.getTitle());
     }
 
     @Override
