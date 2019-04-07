@@ -21,12 +21,16 @@ import java.util.List;
 import adapters.ExpandableListAdapter;
 import classes.DatabaseManager;
 import classes.Job;
+import enums.JobStatus;
 import interfaces.JobDataListener;
 
 /**
  * Fragment that controls the My Job page
  */
 public class MyJobsFragment extends Fragment implements JobDataListener {
+    //TODO Change to HashMap
+    private ArrayList<Job> inProgressJobs = new ArrayList<>();
+    private ArrayList<Bitmap> inProgressPics = new ArrayList<>();
     private ArrayList<Job> postedJobs = new ArrayList<>();
     private ArrayList<Bitmap> postedPics = new ArrayList<>();
     private ArrayList<Job> biddedJobs = new ArrayList<>();
@@ -65,14 +69,17 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
         View v = inflater.inflate(R.layout.fragment_my_jobs, container, false);
 
         List<String> headers = new ArrayList<>();
+        headers.add("In Progress Jobs");
         headers.add("My Posted Jobs");
         headers.add("My Bidded Jobs");
 
         HashMap<String, List<Job>> children = new HashMap<>();
+        children.put("In Progress Jobs", inProgressJobs);
         children.put("My Posted Jobs", postedJobs);
         children.put("My Bidded Jobs", biddedJobs);
 
         HashMap<String, List<Bitmap>> pics = new HashMap<>();
+        pics.put("In Progress Jobs", inProgressPics);
         pics.put("My Posted Jobs", postedPics);
         pics.put("My Bidded Jobs", biddedPics);
 
@@ -82,7 +89,7 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
         listMyJobs.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                if(groupPosition == 0){
+                if(groupPosition == 1){
                     Fragment bidsFrag = BidderSelectFragment.newInstance(postedJobs.get(childPosition).getJobID());
                     FragmentTransaction trans = getFragmentManager().beginTransaction();
                     trans.add(android.R.id.content, bidsFrag);
@@ -103,7 +110,20 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
      */
     @Override
     public void newDataReceived(final Job job){
-        if(job.getPosterID().equals(DatabaseManager.shared.currentUser.getUserID())){
+        if(job.getStatus() == JobStatus.IN_PROGRESS){
+            inProgressJobs.add(0, job);
+            inProgressPics.add(0, null);
+            DatabaseManager.shared.getImgRef(job.getJobID()).getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    int index = inProgressJobs.indexOf(job);
+                    inProgressPics.set(index, bmp);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
+        else if(job.getPosterID().equals(DatabaseManager.shared.currentUser.getUserID())){
             postedJobs.add(0, job);
             postedPics.add(0, null);
             DatabaseManager.shared.getImgRef(job.getJobID()).getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {

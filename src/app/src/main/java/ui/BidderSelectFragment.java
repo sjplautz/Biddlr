@@ -27,6 +27,7 @@ import adapters.ListTouchListener;
 import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
+import enums.JobStatus;
 import interfaces.JobDataListener;
 import interfaces.UserDataListener;
 
@@ -105,7 +106,13 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(job != null && users.get(selectedIndex) != null){
+                    job.setStatus(JobStatus.IN_PROGRESS);
+                    job.setSelectedBidderID(users.get(selectedIndex).getUserID());
+                    DatabaseManager.shared.updateJob(job);
 
+                    getFragmentManager().popBackStack();
+                }
             }
         });
 

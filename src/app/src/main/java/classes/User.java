@@ -1,18 +1,11 @@
 package classes;
 
-import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.stfalcon.chatkit.commons.models.IUser;
 
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-import enums.JobStatus;
 
 public class User implements Parcelable, IUser {
 

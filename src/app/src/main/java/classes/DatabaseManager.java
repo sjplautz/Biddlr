@@ -127,6 +127,17 @@ public class DatabaseManager {
     }
 
     /**
+     * Updates job data associated with jobID
+     * @param job Job to update
+     */
+    public void updateJob(Job job){
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(job.getJobID(), job);
+
+        activeJobRef.updateChildren(updates);
+    }
+
+    /**
      * Active jobs in the database
      * @param limit max number of jobs
      * @param listener fragment to receive jobs
@@ -417,6 +428,11 @@ public class DatabaseManager {
 
     public StorageReference getUserRef(String userId) { return userImgRef.child(userId); }
 
+    /**
+     * Searches for an image tied to a Job. If found, sets the ImageView to display that image
+     * @param id The job ID
+     * @param iv The ImageView to display with
+     */
     public void setJobImage(String id, final ImageView iv){
         iv.setImageResource(R.drawable.ic_camera_default_gray);
         StorageReference ref = jobImgRef.child(id);
@@ -436,6 +452,11 @@ public class DatabaseManager {
         });
     }
 
+    /**
+     * Searches for an images tied to a user. If found, set the ImageView to display that image
+     * @param id The user ID
+     * @param iv The ImageView to display with
+     */
     public void setUserImage(String id, final ImageView iv){
         iv.setImageResource(R.drawable.baseline_person_24);
         StorageReference tmpRef = userImgRef.child(id);
