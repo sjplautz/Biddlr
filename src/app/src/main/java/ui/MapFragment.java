@@ -25,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     public static Location mCurrentLocation;
     public static Location mLastKnownLocation;
     public static List<Marker> markerList = new ArrayList<Marker>();
+    private ChildEventListener eventHandle;
 
     MapView mMapView;
     View mView;
@@ -107,10 +109,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
         //attempts to update the device's current location
         getCurrentLocation();
 
-        //in the event the current location was null, sets to defaults
+        //in the event the current location was null, tries to set currentLocation to last known location
         if(mCurrentLocation == null){
             Log.d("CURRENT LOCATION", "Current location is null. Trying last known location.");
             getLastKnownLocation();
+            //in the event last known location was also null, sets location to default coords
             if(mCurrentLocation == null){
                 Log.d("CURRENT LOCATION", "Last known location is null. Using defaults.");
                 mCurrentLocation = new Location("");
@@ -121,7 +124,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
 
         //wrap the location, and then retrieve jobs within a radius of that location, creating pins for these jobs
         LatLngWrapped wrappedCurrentLocation = LatLngWrapped.wrap(mCurrentLocation);
-        DatabaseManager.shared.setJobsForLocationListener(wrappedCurrentLocation,100.0,50, this);
+        eventHandle = DatabaseManager.shared.setJobsForLocationListener(wrappedCurrentLocation,100.0,50, this);
 
         //sets the map to gotten location
         setMapCamera(mCurrentLocation);
@@ -227,12 +230,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     }
 
     //centers the maps camera on the user's location, if location could not be found on default coords
-    private void setMapCamera(Location mLastKnownLocation){
+    private void setMapCamera(Location mCurrentLocation){
         //if location extraction was successful, set the map to location's coords
-        if(mLastKnownLocation != null){
+        if(mCurrentLocation != null){
             //Log.d(TAG, "Current location was not null!");
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                    new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()), DEFAULT_ZOOM));
         }
         //else set map to default coords
         else{
@@ -257,7 +260,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     //adds pins to the map for any jobs that are within the radius specified
     public void newDataReceived(Job job) {
         LatLngWrapped latLng = job.getCoordinates();
-        Log.d("MAP PINS", "adding pin with lat: " + latLng.getLat() + " and lng: " + latLng.getLng());
+        Log.d("MAP PINS", "adding pin with title: " + job.getTitle());
         MarkerOptions jobMarkerOptions = new MarkerOptions().position(new LatLng(latLng.getLat(), latLng.getLng() )).title(job.getTitle());
         Marker markerHandle = mMap.addMarker(jobMarkerOptions);
         markerList.add(markerHandle);
@@ -268,7 +271,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
     public void dataRemoved(Job job) {
         //get handle to correct marker from markerlist
         Marker markerToRemove = getMarkerHandle(markerList, job);
+
         //now remove the marker from the map
+
         markerToRemove.setVisible(false);
         markerToRemove.remove();
         Log.d("REMOVE PIN", "now removing a pin with title: " + markerToRemove.getTitle());
@@ -292,5 +297,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, JobData
             }
         }
         return null;
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        DatabaseManager.shared.removeEventListener(eventHandle);
     }
 }
