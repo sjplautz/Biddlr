@@ -1,6 +1,7 @@
 package ui;
 
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -24,11 +25,11 @@ import java.util.List;
 
 import adapters.JobListAdapter;
 import adapters.ListTouchListener;
-import classes.ChatMessage;
 import classes.DatabaseManager;
-import classes.Dialog;
 import classes.Job;
 import classes.User;
+
+import static classes.DatabaseManager.*;
 
 //The Fragment that inflates when viewing another User's profile
 public class UserProfileFragment extends Fragment {
@@ -119,18 +120,20 @@ public class UserProfileFragment extends Fragment {
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<User> users = new ArrayList<User>();
+                ArrayList<User> users = new ArrayList<>();
                 users.add(DatabaseManager.shared.currentUser);
                 users.add(user);
-                Dialog d = new Dialog("", "Dialog Name", "", users, new ChatMessage("", user, "This is the last meddage."), 2);
-                DatabaseManager.shared.addDialog(d);
+                shared.addNewDialogForUsers(users);
 
-                Fragment editFrag = AllMessagesFragment.newInstance();
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction trans = manager.beginTransaction();
-                trans.replace(R.id.frameNull, editFrag);
-                trans.addToBackStack(null);
-                trans.commit();
+                BottomNavigationView nav = getActivity().findViewById(R.id.menuNav);
+                nav.setSelectedItemId(R.id.itemMessages);
+
+//                Fragment editFrag = AllMessagesFragment.newInstance();
+//                FragmentManager manager = getFragmentManager();
+//                FragmentTransaction trans = manager.beginTransaction();
+//                trans.replace(R.id.frameNull, editFrag);
+//                trans.addToBackStack(null);
+//                trans.commit();
             }
         });
 

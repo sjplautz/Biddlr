@@ -60,18 +60,12 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseManager.shared.dialogsRef.document("tvhPhio9QHwtjgZL5yM9").collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DatabaseManager.shared.dialogsRef.document("G1K2z5SQX8okQF5xujmQ").collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
-                        String id = doc.getString("id");
-                        String text = doc.getString("text");
-                        Date createdAt = doc.getTimestamp("createdAt").toDate();
-//                               ArrayList<String> userIds = new ArrayList<String>();
-//                                userIds = (ArrayList<String>) doc.get("userIds");
-                        ChatMessage m = new ChatMessage(id, DatabaseManager.shared.currentUser, text, createdAt);
-//                                onNewDialog(d);
+                        ChatMessage m = ChatMessage.parse(doc);
                         Log.d("CHAT MESSAGE", "chat message: " + m);
 
                         ArrayList<ChatMessage> ms = new ArrayList<>();

@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -32,6 +33,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -457,7 +460,7 @@ public class DatabaseManager {
      * @param id The user ID
      * @param iv The ImageView to display with
      */
-    public void setUserImage(String id, final ImageView iv){
+    public void setUserImage(String id, final ImageView iv) {
         iv.setImageResource(R.drawable.baseline_person_24);
         StorageReference tmpRef = userImgRef.child(id);
         tmpRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -469,7 +472,30 @@ public class DatabaseManager {
         });
     }
 
-    public void addDialog(Dialog d) {
+    public void addNewDialogForUsers(final ArrayList<User> users) {
+        ArrayList<String> userIds = new ArrayList<>();
+        userIds.add(users.get(0).getId());
+        userIds.add(users.get(1).getId());
+        Collections.sort(userIds);
+        dialogsRef.whereEqualTo("users", userIds).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().isEmpty()) {
+                        Log.d("DIALOG", "Document not found");
+                        addDialog(users);
+                    } else {
+                        Log.d("DIALOG", "Document found!");
+                    }
+                } else {
+                    Log.d("DIALOG", "Failed with: ", task.getException());
+                }
+            }
+        });
+    }
+
+    public void addDialog(ArrayList<User> users) {
+        Dialog d = new Dialog("id", "name", "photo", users, new ChatMessage("id", null, ""), 0);
         HashMap<String, Object> data = d.getRepresentation();
         dialogsRef.add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

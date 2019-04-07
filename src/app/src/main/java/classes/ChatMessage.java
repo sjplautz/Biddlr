@@ -1,5 +1,6 @@
 package classes;
 
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.stfalcon.chatkit.commons.models.IMessage;
 
 import java.util.ArrayList;
@@ -65,5 +66,15 @@ public class ChatMessage implements IMessage {
         rep.put("user", user.getId());
 
         return rep;
+    }
+
+    static public ChatMessage parse(QueryDocumentSnapshot snapshot) {
+        String id = snapshot.getString("id");
+        String text = snapshot.getString("text");
+        Date createdAt = snapshot.getTimestamp("createdAt").toDate();
+//                               ArrayList<String> userIds = new ArrayList<String>();
+//                                userIds = (ArrayList<String>) doc.get("userIds");
+        ChatMessage m = new ChatMessage(id, DatabaseManager.shared.currentUser, text, createdAt);
+        return m;
     }
 }

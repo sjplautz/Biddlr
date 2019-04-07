@@ -62,16 +62,7 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
-                        String id = doc.getString("id");
-                        String dialogName = doc.getString("dialogName");
-                        String dialogPhoto = doc.getString("dialogPhoto");
-//                                ArrayList<String> userIds = new ArrayList<String>();
-//                                userIds = (ArrayList<String>) doc.get("userIds");
-                        ArrayList<User> users = new ArrayList<User>();
-                        users.add(DatabaseManager.shared.currentUser);
-                        ChatMessage lastMessage = new ChatMessage(doc.getString("lastMessage"), DatabaseManager.shared.currentUser, "This is the last message");
-                        int unreadCount = doc.getLong("unreadCount").intValue();
-                        Dialog d = new Dialog(id, dialogName, dialogPhoto, users, lastMessage, unreadCount);
+                        Dialog d = Dialog.parse(doc);
                         onNewDialog(d);
                         Log.d("ALL MESSAGES", "dialog: " + d);
                     }
