@@ -57,7 +57,7 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseManager.shared.dialogsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DatabaseManager.shared.dialogsRef.whereArrayContains("userIds", DatabaseManager.shared.currentUser.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -151,9 +151,12 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
 //    public void newDataReceived(Dialog dialog) {
 //        dialogsAdapter.addItem(dialog);
 //    }
+
+
+//    public void dataChanged(Dialog dialog) {
 //
-//    @Override
-//    public void dataChanged(Dialog dialog) { }
+//    }
+
 //
 //    @Override
 //    public void dataRemoved(Dialog dialog) { }

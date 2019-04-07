@@ -136,7 +136,7 @@ public class User implements Parcelable, IUser {
 
     @Override
     public String getName() {
-        return firstName + ' ' + lastName;
+        return firstName + " " + lastName;
     }
 
     @Override

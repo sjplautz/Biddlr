@@ -60,7 +60,7 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseManager.shared.dialogsRef.document("G1K2z5SQX8okQF5xujmQ").collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DatabaseManager.shared.dialogsRef.document("gEklTJReniSwlsgMlEbM").collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

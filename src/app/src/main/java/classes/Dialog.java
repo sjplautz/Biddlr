@@ -77,11 +77,16 @@ public class Dialog implements IDialog<ChatMessage> {
         userIds.add(users.get(1).getId());
         Collections.sort(userIds);
 
+        ArrayList<String> userNames = new ArrayList<String>();
+        userNames.add(users.get(0).getName());
+        userNames.add(users.get(1).getName());
+
         HashMap<String, Object> rep = new HashMap<>();
         rep.put("id", id);
-        rep.put("dialogName", dialogName);
+//        rep.put("dialogName", dialogName);
         rep.put("dialogPhoto", dialogPhoto);
-        rep.put("users", userIds);
+        rep.put("userIds", userIds);
+        rep.put("userNames", userNames);
         rep.put("lastMessage", lastMessage.getId());
         rep.put("unreadCount", unreadCount);
 
@@ -90,15 +95,18 @@ public class Dialog implements IDialog<ChatMessage> {
 
     static public Dialog parse(QueryDocumentSnapshot snapshot) {
         String id = snapshot.getString("id");
-        String dialogName = snapshot.getString("dialogName");
         String dialogPhoto = snapshot.getString("dialogPhoto");
-//                                ArrayList<String> userIds = new ArrayList<String>();
-//                                userIds = (ArrayList<String>) doc.get("userIds");
+
+        ArrayList<String> userIds = (ArrayList<String>) snapshot.get("userIds");
         ArrayList<User> users = new ArrayList<User>();
         users.add(DatabaseManager.shared.currentUser);
+
+        ArrayList<String> userNames = (ArrayList<String>) snapshot.get("userNames");
+        int index = userNames.get(0).equals(DatabaseManager.shared.currentUser.getName()) ? 1 : 0;
+
         ChatMessage lastMessage = new ChatMessage(snapshot.getString("lastMessage"), DatabaseManager.shared.currentUser, "This is the last message");
         int unreadCount = snapshot.getLong("unreadCount").intValue();
-        Dialog d = new Dialog(id, dialogName, dialogPhoto, users, lastMessage, unreadCount);
+        Dialog d = new Dialog(id, userNames.get(index), dialogPhoto, users, lastMessage, unreadCount);
         return d;
     }
 }
