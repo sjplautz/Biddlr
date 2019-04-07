@@ -54,7 +54,8 @@ public class DatabaseManager {
     private DatabaseReference activeJobRef;
     private DatabaseReference expiredJobRef;
     private DatabaseReference userRef;
-    private StorageReference imgRef;
+    private StorageReference jobImgRef;
+    private StorageReference userImgRef;
 
     public void setUp() {
         mAuth = FirebaseAuth.getInstance();
@@ -74,7 +75,8 @@ public class DatabaseManager {
         userRef = database.getReference("user");
 
         storage = FirebaseStorage.getInstance();
-        imgRef = storage.getReference("images");
+        jobImgRef = storage.getReference("images/jobs");
+        userImgRef = storage.getReference("images/users");
     }
 
     /**
@@ -104,7 +106,7 @@ public class DatabaseManager {
     public void addNewJob(Job job, byte[] image) {
         String id = activeJobRef.push().getKey();
         if(image != null) {
-            StorageReference tmpRef = imgRef.child(id);
+            StorageReference tmpRef = jobImgRef.child(id);
             tmpRef.putBytes(image);
         }
         job.setJobID(id);
@@ -331,9 +333,13 @@ public class DatabaseManager {
      * Updates user data associated with userID
      * @param user
      */
-    public void updateUser(User user) {
+    public void updateUser(User user, byte[] image) {
         Map<String, Object> updates = new HashMap<>();
         updates.put(user.getUserID() , user);
+        if(image != null){
+            StorageReference tmpRef = userImgRef.child(user.getUserID());
+            tmpRef.putBytes(image);
+        }
 
         userRef.updateChildren(updates);
     }
@@ -406,12 +412,12 @@ public class DatabaseManager {
     }
 
     public StorageReference getImgRef(String jobId){
-        return imgRef.child(jobId);
+        return jobImgRef.child(jobId);
     }
 
     public void setImage(String id, final ImageView iv){
         iv.setImageResource(R.drawable.ic_camera_default_gray);
-        StorageReference ref = imgRef.child(id);
+        StorageReference ref = jobImgRef.child(id);
         ref.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {

@@ -2,6 +2,7 @@ package ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetDialog;
@@ -10,11 +11,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.biddlr.R;
+
+import java.io.ByteArrayOutputStream;
+
+import classes.DatabaseManager;
+import classes.User;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -22,6 +29,9 @@ import static android.app.Activity.RESULT_OK;
 public class EditProfileFragment extends Fragment{
     private ImageView imgProfilePicture;
     private BottomSheetDialog typePicker;
+    private EditText editProfile;
+
+    private User currentUser;
 
 
     public static EditProfileFragment newInstance() {
@@ -31,6 +41,7 @@ public class EditProfileFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentUser = DatabaseManager.shared.currentUser;
     }
 
     @Override
@@ -41,10 +52,10 @@ public class EditProfileFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
         //get handle to my profile bio
-        EditText editProfile = v.findViewById(R.id.txtEditBio);
+        editProfile = v.findViewById(R.id.txtEditBio);
 
         //set text to my bio
-        String myBio = getActivity().getResources().getString(R.string.exampleBio);
+        String myBio = currentUser.getBio();
         editProfile.setText(myBio);
 
         imgProfilePicture = v.findViewById(R.id.imgMyProfileImage);
@@ -76,6 +87,25 @@ public class EditProfileFragment extends Fragment{
 
                 typePicker.setContentView(sheetView);
                 typePicker.show();
+            }
+        });
+
+        Button btnSaveChanges = v.findViewById(R.id.btnSaveChanges);
+        btnSaveChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentUser = DatabaseManager.shared.currentUser;
+                currentUser.setBio(editProfile.getText().toString());
+                byte[] imgArr = null;
+                if(imgProfilePicture.getDrawable() != null) {
+                    Bitmap image = ((BitmapDrawable) imgProfilePicture.getDrawable()).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    imgArr = stream.toByteArray();
+                    image.recycle();
+                }
+                DatabaseManager.shared.updateUser(currentUser, imgArr);
+                getFragmentManager().popBackStack();
             }
         });
 
