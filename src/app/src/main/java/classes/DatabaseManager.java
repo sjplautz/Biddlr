@@ -415,7 +415,9 @@ public class DatabaseManager {
         return jobImgRef.child(jobId);
     }
 
-    public void setImage(String id, final ImageView iv){
+    public StorageReference getUserRef(String userId) { return userImgRef.child(userId); }
+
+    public void setJobImage(String id, final ImageView iv){
         iv.setImageResource(R.drawable.ic_camera_default_gray);
         StorageReference ref = jobImgRef.child(id);
         ref.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -430,6 +432,18 @@ public class DatabaseManager {
             public void onFailure(@NonNull Exception e) {
             iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
             iv.setBackgroundColor(iv.getContext().getResources().getColor(R.color.gray, null));
+            }
+        });
+    }
+
+    public void setUserImage(String id, final ImageView iv){
+        iv.setImageResource(R.drawable.baseline_person_24);
+        StorageReference tmpRef = userImgRef.child(id);
+        tmpRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                iv.setImageBitmap(bmp);
             }
         });
     }

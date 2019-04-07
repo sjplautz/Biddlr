@@ -86,7 +86,7 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         imgProfile.setImageResource(R.drawable.baseline_person_24);
 
         ImageView imgJob = v.findViewById(R.id.imgJob);
-        DatabaseManager.shared.setImage(job.getJobID(), imgJob);
+        DatabaseManager.shared.setJobImage(job.getJobID(), imgJob);
 
         Button btnPlaceBid = v.findViewById(R.id.btnPlaceBid);
 

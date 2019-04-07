@@ -67,16 +67,19 @@ public class UserProfileFragment extends Fragment {
         txtName.setText(user.getFirstName() + " " + user.getLastName());
 
         //create handle for rating bar and set star ount (stars possible) to 5
-        RatingBar rating = (RatingBar) v.findViewById(R.id.userRatingBar);
+        RatingBar rating = v.findViewById(R.id.userRatingBar);
         rating.setNumStars(5);
 
         //setting the profile image resource to default baseline image
-        ImageView imgProfile = (ImageView) v.findViewById(R.id.userProfileImage);
-        imgProfile.setImageResource(R.drawable.baseline_person_24);
+        ImageView imgProfile = v.findViewById(R.id.userProfileImage);
+        DatabaseManager.shared.setUserImage(user.getId(), imgProfile);
 
         //setting the rating on the rating bar to the default of 4/5 stars for other users
         double default_rating = 4.0;
         rating.setRating((float)default_rating);
+
+        TextView txtUserBio = v.findViewById(R.id.userProfileBio);
+        txtUserBio.setText(user.getBio());
 
         //grabbing a handle to recycler view
         recycler = v.findViewById(R.id.userCompletedJobsRecycler);

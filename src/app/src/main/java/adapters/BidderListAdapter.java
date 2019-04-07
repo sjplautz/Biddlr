@@ -12,10 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.biddlr.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 import java.util.Locale;
 
+import classes.DatabaseManager;
 import classes.User;
 
 /**
@@ -81,7 +83,10 @@ public class BidderListAdapter extends RecyclerView.Adapter<BidderListAdapter.Bi
 
         User user = bids.get(pos);
 
-        holder.imgUserPic.setImageResource(R.drawable.baseline_person_24);
+//        holder.imgUserPic.setImageResource(R.drawable.baseline_person_24);
+        if(pics != null && pos < pics.size() && pics.get(pos) != null) holder.imgUserPic.setImageBitmap(pics.get(pos));
+        else holder.imgUserPic.setImageResource(R.drawable.baseline_person_24);
+
 
         String fullName = user.getFirstName() + " " + user.getLastName();
         holder.txtUserName.setText(fullName);

@@ -59,6 +59,7 @@ public class EditProfileFragment extends Fragment{
         editProfile.setText(myBio);
 
         imgProfilePicture = v.findViewById(R.id.imgMyProfileImage);
+        DatabaseManager.shared.setUserImage(currentUser.getId(), imgProfilePicture);
 
         FloatingActionButton btnImagePicker = v.findViewById(R.id.btnProfileImagePicker);
         btnImagePicker.setOnClickListener(new View.OnClickListener() {

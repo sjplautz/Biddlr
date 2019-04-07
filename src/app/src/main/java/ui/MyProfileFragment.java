@@ -59,12 +59,15 @@ public class MyProfileFragment extends Fragment {
         txtUserName.setText(currUser.getFirstName() + " " + currUser.getLastName());
 
         //create handle for rating bar and set star count (stars possible) to 5
-        RatingBar rating = (RatingBar) v.findViewById(R.id.myRatingBar);
+        RatingBar rating = v.findViewById(R.id.myRatingBar);
         rating.setNumStars(5);
 
         //setting the profile image resource to default baseline image
-        ImageView imgProfile = (ImageView) v.findViewById(R.id.myProfileImage);
-        imgProfile.setImageResource(R.drawable.baseline_person_24);
+        ImageView imgProfile = v.findViewById(R.id.myProfileImage);
+        DatabaseManager.shared.setUserImage(currUser.getId(), imgProfile);
+
+        TextView txtUserBio = v.findViewById(R.id.myProfileBio);
+        txtUserBio.setText(currUser.getBio());
 
         //setting the star count in the my rating bar to default 4.5/5 for my profile
         double default_rating = 4.5;

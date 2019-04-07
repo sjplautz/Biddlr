@@ -1,5 +1,7 @@
 package ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.biddlr.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +38,7 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
     private static final String JOB_ID = "job_id";
     private BidderListAdapter adapter;
     private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<Bitmap> pics = new ArrayList<>();
     private int selectedIndex = -1;
 
     private Job job = null;
@@ -111,7 +115,7 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
         recycler.setLayoutManager(manager);
         recycler.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new BidderListAdapter(getArguments().getString(JOB_ID), users, null);
+        adapter = new BidderListAdapter(getArguments().getString(JOB_ID), users, pics);
         recycler.setAdapter(adapter);
 
         recycler.addOnItemTouchListener(new ListTouchListener(getContext().getApplicationContext(), recycler, new ListTouchListener.ClickListener(){
@@ -164,8 +168,18 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
      * @param user A user that has bidded on this job
      */
     @Override
-    public void newDataReceived(User user){
+    public void newDataReceived(final User user){
         users.add(user);
+        pics.add(null);
+        DatabaseManager.shared.getUserRef(user.getUserID()).getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                int index = users.indexOf(user);
+                pics.set(index, bmp);
+                adapter.notifyDataSetChanged();
+            }
+        });
         adapter.notifyDataSetChanged();
     }
 }
