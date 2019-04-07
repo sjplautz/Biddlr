@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.stfalcon.chatkit.commons.models.IUser;
+
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.List;
 
 import enums.JobStatus;
 
-public class User implements Parcelable {
+public class User implements Parcelable, IUser {
 
     // Properties
     private String userID;
@@ -133,4 +135,24 @@ public class User implements Parcelable {
         biddedJobs.put(jobID, bid);
         DatabaseManager.shared.addBidForUser(this);
     }
+
+    @Override
+    public String getId() {
+        return userID;
+    }
+
+    @Override
+    public String getName() {
+        return firstName + ' ' + lastName;
+    }
+
+    @Override
+    public String getAvatar() {
+        return profilePic;
+    }
+
+    public boolean isOnline() {
+        return true;
+    }
+
 }

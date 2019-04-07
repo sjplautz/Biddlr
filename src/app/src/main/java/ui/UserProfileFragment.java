@@ -24,6 +24,9 @@ import java.util.List;
 
 import adapters.JobListAdapter;
 import adapters.ListTouchListener;
+import classes.ChatMessage;
+import classes.DatabaseManager;
+import classes.Dialog;
 import classes.Job;
 import classes.User;
 
@@ -32,7 +35,7 @@ public class UserProfileFragment extends Fragment {
     private final static String USER = "user";
     private List<Job> jobList;
     private RecyclerView recycler;
-    private Button btnEdit;
+    private Button btnContact;
     private JobListAdapter adapter;
     private TextView txtEmpty;
 
@@ -54,7 +57,7 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        User user = getArguments().getParcelable(USER);
+        final User user = getArguments().getParcelable(USER);
         jobList = new ArrayList<>();
         adapter = new JobListAdapter(jobList, null);
 
@@ -106,6 +109,27 @@ public class UserProfileFragment extends Fragment {
 
             }
         }));
+
+        //getting a handle to the edit button
+        btnContact = v.findViewById(R.id.btnContact);
+        //adding a click listener to the button to navigate to profile editing fragment
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<User> users = new ArrayList<User>();
+                users.add(DatabaseManager.shared.currentUser);
+                users.add(user);
+                Dialog d = new Dialog("", "Dialog Name", "", users, new ChatMessage("", user, "This is the last meddage."), 2);
+                DatabaseManager.shared.addDialog(d);
+
+                Fragment editFrag = AllMessagesFragment.newInstance();
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction();
+                trans.replace(R.id.frameNull, editFrag);
+                trans.addToBackStack(null);
+                trans.commit();
+            }
+        });
 
         //grabbing handle to empty text view to sub in if recycler is empty
         txtEmpty = v.findViewById(R.id.userTxtEmpty);

@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     case R.id.itemMessages:
                         tag = "MESSAGES";
-                        selectedFrag = MessagesFragment.newInstance();
+                        selectedFrag = AllMessagesFragment.newInstance();
                         break;
                 }
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

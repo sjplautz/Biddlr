@@ -8,8 +8,11 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.biddlr.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -18,9 +21,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +47,10 @@ public class DatabaseManager {
 
     public FirebaseAuth mAuth;
     private FirebaseDatabase database;
+    private FirebaseFirestore firestore;
     private FirebaseStorage storage;
+
+    public CollectionReference dialogsRef;
     private DatabaseReference activeJobRef;
     private DatabaseReference expiredJobRef;
     private DatabaseReference userRef;
@@ -45,6 +59,10 @@ public class DatabaseManager {
     public void setUp() {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+
+        // firestore
+        dialogsRef = firestore.collection("dialogs");
 
         // create reference to active job table
         activeJobRef = database.getReference("active_job");
@@ -409,4 +427,47 @@ public class DatabaseManager {
             }
         });
     }
+
+    public void addDialog(Dialog d) {
+        HashMap<String, Object> data = d.getRepresentation();
+        dialogsRef.add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("DIALOG", "DocumentSnapshot written with ID: " + documentReference.getId());
+                        ChatMessage m = new ChatMessage("id", currentUser,"Chat message");
+                        HashMap<String, Object> mData = m.getRepresentation();
+                        dialogsRef.document(documentReference.getId()).collection("messages").add(mData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d("MESSAGE", "DocumentSnapshot written with ID: " + documentReference.getId());
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("DIALOG", "Error adding document", e);
+                    }
+                });
+    }
+
+    public ArrayList<Dialog> getDialogs() {
+        ArrayList<Dialog> dialogs = new ArrayList<Dialog>();
+        return dialogs;
+    }
+
+    public ArrayList<ChatMessage> getMessages() {
+//        ChatMessage m = new ChatMessage("abc", currentUser, "This is a messages");
+//        ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
+//        messages.add(m);
+        return null;
+    }
+
+    public ChatMessage getTextMessage(String input) {
+        ChatMessage m = new ChatMessage("abc", currentUser, "This is a message");
+        return m;
+    }
+
 }
