@@ -84,7 +84,7 @@ public class Dialog implements IDialog<ChatMessage> {
         HashMap<String, Object> rep = new HashMap<>();
         rep.put("id", id);
 //        rep.put("dialogName", dialogName);
-        rep.put("dialogPhoto", dialogPhoto);
+//        rep.put("dialogPhoto", dialogPhoto);
         rep.put("userIds", userIds);
         rep.put("userNames", userNames);
         rep.put("lastMessage", lastMessage.getId());
@@ -95,18 +95,19 @@ public class Dialog implements IDialog<ChatMessage> {
 
     static public Dialog parse(QueryDocumentSnapshot snapshot) {
         String id = snapshot.getString("id");
-        String dialogPhoto = snapshot.getString("dialogPhoto");
 
         ArrayList<String> userIds = (ArrayList<String>) snapshot.get("userIds");
+        int idsIndex = userIds.get(0).equals(DatabaseManager.shared.currentUser.getName()) ? 1 : 0;
+
         ArrayList<User> users = new ArrayList<User>();
         users.add(DatabaseManager.shared.currentUser);
 
         ArrayList<String> userNames = (ArrayList<String>) snapshot.get("userNames");
-        int index = userNames.get(0).equals(DatabaseManager.shared.currentUser.getName()) ? 1 : 0;
+        int namesIndex = userNames.get(0).equals(DatabaseManager.shared.currentUser.getName()) ? 1 : 0;
 
         ChatMessage lastMessage = new ChatMessage(snapshot.getString("lastMessage"), DatabaseManager.shared.currentUser, "This is the last message");
         int unreadCount = snapshot.getLong("unreadCount").intValue();
-        Dialog d = new Dialog(id, userNames.get(index), dialogPhoto, users, lastMessage, unreadCount);
+        Dialog d = new Dialog(id, userNames.get(namesIndex), userIds.get(idsIndex), users, lastMessage, unreadCount);
         return d;
     }
 }

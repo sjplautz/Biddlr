@@ -141,7 +141,7 @@ public class User implements Parcelable, IUser {
 
     @Override
     public String getAvatar() {
-        return profilePic;
+        return userID;
     }
 
     public boolean isOnline() {

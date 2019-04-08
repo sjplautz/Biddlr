@@ -502,6 +502,7 @@ public class DatabaseManager {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d("DIALOG", "DocumentSnapshot written with ID: " + documentReference.getId());
+                        setDialogId(documentReference.getId());
                         ChatMessage m = new ChatMessage("id", currentUser,"Chat message");
                         HashMap<String, Object> mData = m.getRepresentation();
                         dialogsRef.document(documentReference.getId()).collection("messages").add(mData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -520,6 +521,13 @@ public class DatabaseManager {
                 });
     }
 
+    public void setDialogId(String dialogId) {
+        dialogsRef.document(dialogId)
+                .update(
+                        "id", dialogId
+                );
+    }
+
     public ArrayList<Dialog> getDialogs() {
         ArrayList<Dialog> dialogs = new ArrayList<Dialog>();
         return dialogs;
@@ -529,11 +537,28 @@ public class DatabaseManager {
 //        ChatMessage m = new ChatMessage("abc", currentUser, "This is a messages");
 //        ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
 //        messages.add(m);
+
         return null;
     }
 
-    public ChatMessage getTextMessage(String input) {
-        ChatMessage m = new ChatMessage("abc", currentUser, "This is a message");
+    public ChatMessage addNewMessage(String dialogID, String input) {
+        ChatMessage m = new ChatMessage("id", currentUser, input);
+        HashMap<String, Object> data = m.getRepresentation();
+
+        dialogsRef.document(dialogID).collection("messages").add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("MESSAGE", "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("DIALOG", "Error adding document", e);
+                    }
+                });
+
         return m;
     }
 

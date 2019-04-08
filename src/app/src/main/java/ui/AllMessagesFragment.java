@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -56,7 +57,6 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         DatabaseManager.shared.dialogsRef.whereArrayContains("userIds", DatabaseManager.shared.currentUser.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -84,6 +84,7 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
         imageLoader = new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, String url, Object payload) {
+                DatabaseManager.shared.setUserImage(url, imageView);
 //                Picasso.with(DemoDialogsActivity.this).load(url).into(imageView);
             }
         };
@@ -95,7 +96,7 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
     public void onDialogClick(Dialog dialog) {
 //        DefaultMessagesActivity.open(this);
 //        Job job = jobs.get(pos);
-        Fragment messageFrag = MessageFragment.newInstance();
+        Fragment messageFrag = MessageFragment.newInstance(dialog.getId());
         FragmentManager manager = getFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.replace(R.id.frameNull, messageFrag);

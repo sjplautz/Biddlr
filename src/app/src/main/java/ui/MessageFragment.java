@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -38,8 +39,9 @@ import classes.User;
 
 public class MessageFragment extends Fragment implements MessagesListAdapter.SelectionListener, MessageInput.InputListener,
         MessageInput.AttachmentsListener, MessageInput.TypingListener, MessagesListAdapter.OnLoadMoreListener {
-
+    private static final String MESSAGE_FRAGMENT_KEY = "message_fragment_key";
     private static final int TOTAL_MESSAGES_COUNT = 100;
+    private String dialogID;
 
     protected final String senderId = "0";
     protected ImageLoader imageLoader;
@@ -50,17 +52,19 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
     private int selectionCount;
     private Date lastLoadedDate;
 
-    public static MessageFragment newInstance() {
+    public static MessageFragment newInstance(String dialogId) {
         Bundle bundle = new Bundle();
+        bundle.putString(MESSAGE_FRAGMENT_KEY, dialogId);
         MessageFragment fragment = new MessageFragment();
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        DatabaseManager.shared.dialogsRef.document("gEklTJReniSwlsgMlEbM").collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        dialogID = getArguments().getString(MESSAGE_FRAGMENT_KEY);
+        DatabaseManager.shared.dialogsRef.document(dialogID).collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -184,7 +188,7 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
     @Override
     public boolean onSubmit(CharSequence input) {
         messagesAdapter.addToStart(
-                DatabaseManager.shared.getTextMessage(input.toString()), true);
+                DatabaseManager.shared.addNewMessage(dialogID, input.toString()), true);
         return true;
     }
 
