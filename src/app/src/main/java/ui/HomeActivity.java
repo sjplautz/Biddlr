@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -89,6 +90,23 @@ public class HomeActivity extends AppCompatActivity {
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.frameNull, HomeFragment.newInstance());
         trans.commit();
+    }
+
+    public void resetActionBar(){
+        bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+    }
+
+    public void setSearchBar(){
+        bar.setCustomView(R.layout.job_search_bar);
+        View barView = bar.getCustomView();
+
+        EditText txtSearch = barView.findViewById(R.id.txtSearch);
+
+        ImageButton btnActiveSearch = barView.findViewById(R.id.btnActiveSearch);
+
+        ImageButton btnFilter = barView.findViewById(R.id.btnFilter);
+
+        bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
     }
 
     /**

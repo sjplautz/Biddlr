@@ -278,13 +278,13 @@ public class DatabaseManager {
      * @param limit max number of jobs
      * @param listener fragment to receive jobs
      */
-    public void setJobsForLocationListener(LatLngWrapped coordinate, Double radius, int limit, final JobDataListener listener) {
+    public ChildEventListener setJobsForLocationListener(LatLngWrapped coordinate, Double radius, int limit, final JobDataListener listener) {
         Double maxLat = coordinate.lat + radius;
         final Double maxLng = coordinate.lng + radius;
         Double minLat = coordinate.lat - radius;
         final Double minLng = coordinate.lng - radius;
 
-        activeJobRef.orderByChild("coordinates/lat").startAt(minLat).endAt(maxLat).limitToFirst(limit).addChildEventListener(new ChildEventListener() {
+        ChildEventListener eventHandle = activeJobRef.orderByChild("coordinates/lat").startAt(minLat).endAt(maxLat).limitToFirst(limit).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
@@ -304,7 +304,7 @@ public class DatabaseManager {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 Job job = dataSnapshot.getValue(Job.class);
-                Log.d("JOB REMOVED", "job: " + job);
+                Log.d("JOB REMOVED location jobs listener", "job: " + job.getTitle());
                 listener.dataRemoved(job);
             }
             @Override
@@ -312,6 +312,7 @@ public class DatabaseManager {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
+        return eventHandle;
     }
 
     /* USER DATABASE */
@@ -560,6 +561,10 @@ public class DatabaseManager {
                 });
 
         return m;
+    }
+
+    public void removeEventListener(ChildEventListener listenerHandle){
+        activeJobRef.removeEventListener(listenerHandle);
     }
 
 }

@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 
 import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.core.view.filter.ChildChangeAccumulator;
 
 import java.util.ArrayList;
 
@@ -66,7 +68,6 @@ public class ExploreFragment extends Fragment implements JobDataListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.fragment_explore, container, false);
 
         RecyclerView recycler = v.findViewById(R.id.exploreRecycler);
