@@ -68,7 +68,6 @@ public class ExploreFragment extends Fragment implements JobDataListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.fragment_explore, container, false);
 
         RecyclerView recycler = v.findViewById(R.id.exploreRecycler);
