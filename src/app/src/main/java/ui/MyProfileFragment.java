@@ -67,7 +67,12 @@ public class MyProfileFragment extends Fragment {
         DatabaseManager.shared.setUserImage(currUser.getId(), imgProfile);
 
         TextView txtUserBio = v.findViewById(R.id.myProfileBio);
-        txtUserBio.setText(currUser.getBio());
+        if(currUser.getBio() != null){
+            txtUserBio.setText(currUser.getBio());
+        }
+        else{
+            txtUserBio.setText("You have not yet created a bio. Please enter a description of yourself");
+        }
 
         //setting the star count in the my rating bar to default 4.5/5 for my profile
         double default_rating = 4.5;

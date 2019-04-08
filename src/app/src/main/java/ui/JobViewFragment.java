@@ -57,33 +57,33 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         DatabaseManager.shared.setUserFromIDListener(job.getPosterID(), this);
         DatabaseManager.shared.setJobFromIDListener(job.getJobID(), this);
 
-        TextView txtJobTitle = (TextView) v.findViewById(R.id.txtJobTitle);
+        TextView txtJobTitle = v.findViewById(R.id.txtJobTitle);
         txtJobTitle.setText(job.getTitle());
 
-        TextView txtJobDescription = (TextView) v.findViewById(R.id.txtJobDescription);
+        TextView txtJobDescription = v.findViewById(R.id.txtJobDescription);
         txtJobDescription.setText(job.getDescription());
 
-        TextView txtJobLocation = (TextView) v.findViewById(R.id.txtJobLocation);
+        TextView txtJobLocation = v.findViewById(R.id.txtJobLocation);
         txtJobLocation.setText(job.getLocation());
 
-        TextView txtTimeToExpiration = (TextView) v.findViewById(R.id.txtTimeToExpiration);
+        TextView txtTimeToExpiration = v.findViewById(R.id.txtTimeToExpiration);
         txtTimeToExpiration.setText(job.formattedTimeFromNow());
 
-        TextView txtJobAskingPrice = (TextView) v.findViewById(R.id.txtJobAskingPrice);
+        TextView txtJobAskingPrice = v.findViewById(R.id.txtJobAskingPrice);
         String start = "$" + String.format("%.2f", job.getStartingPrice());
         txtJobAskingPrice.setText(start);
 
-        txtJobCurrentBid = (TextView) v.findViewById(R.id.txtJobCurrentBid);
+        txtJobCurrentBid = v.findViewById(R.id.txtJobCurrentBid);
         String current = "$" + String.format("%.2f", job.getCurrentBid());
         txtJobCurrentBid.setText(current);
 
-        txtPosterName = (TextView) v.findViewById(R.id.txtPosterName);
+        txtPosterName = v.findViewById(R.id.txtPosterName);
 
-        rtgPosterRating = (RatingBar) v.findViewById(R.id.rtgPosterRating);
+        rtgPosterRating = v.findViewById(R.id.rtgPosterRating);
         rtgPosterRating.setRating(5);
 
-        ImageView imgProfile = (ImageView) v.findViewById(R.id.imgProfile);
-        imgProfile.setImageResource(R.drawable.baseline_person_24);
+        ImageView imgProfile = v.findViewById(R.id.imgProfile);
+        DatabaseManager.shared.setUserImage(job.getPosterID(), imgProfile);
 
         ImageView imgJob = v.findViewById(R.id.imgJob);
         DatabaseManager.shared.setJobImage(job.getJobID(), imgJob);

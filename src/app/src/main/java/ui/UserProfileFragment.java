@@ -80,7 +80,12 @@ public class UserProfileFragment extends Fragment {
         rating.setRating((float)default_rating);
 
         TextView txtUserBio = v.findViewById(R.id.userProfileBio);
-        txtUserBio.setText(user.getBio());
+        if(user.getBio() != null){
+            txtUserBio.setText(user.getBio());
+        }
+        else{
+            txtUserBio.setText("This user has not yet set up a bio.");
+        }
 
         //grabbing a handle to recycler view
         recycler = v.findViewById(R.id.userCompletedJobsRecycler);
