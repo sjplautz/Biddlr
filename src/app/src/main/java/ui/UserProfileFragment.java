@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.biddlr.R;
 
@@ -125,6 +126,10 @@ public class UserProfileFragment extends Fragment {
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (user.getId().equals(DatabaseManager.shared.currentUser.getUserID())) {
+                    Toast.makeText(getActivity(), "You cannot contact yourself!", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 ArrayList<User> users = new ArrayList<>();
                 users.add(DatabaseManager.shared.currentUser);
                 users.add(user);
