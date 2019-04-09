@@ -53,12 +53,13 @@ public class DatabaseManager {
     private FirebaseFirestore firestore;
     private FirebaseStorage storage;
 
-    public CollectionReference dialogsRef;
     private DatabaseReference activeJobRef;
     private DatabaseReference expiredJobRef;
     private DatabaseReference userRef;
     private StorageReference jobImgRef;
     private StorageReference userImgRef;
+
+    public CollectionReference dialogsRef;
 
     public void setUp() {
         mAuth = FirebaseAuth.getInstance();

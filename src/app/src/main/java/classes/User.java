@@ -35,6 +35,18 @@ public class User implements Parcelable, IUser {
         this.biddedJobs = null;
     }
 
+    public User(String id) {
+        this.userID = id;
+        this.firstName = null;
+        this.lastName = null;
+        this.email = null;
+        this.bio = null;
+        this.profilePic = null;
+        this.bidderRating = null;
+        this.posterRating = null;
+        this.biddedJobs = null;
+    }
+
     // Parcable methods - needed for passing objects between fragments
     @Override
     public int describeContents() {
@@ -129,6 +141,7 @@ public class User implements Parcelable, IUser {
         DatabaseManager.shared.addBidForUser(this);
     }
 
+    // Chat Kit methods
     @Override
     public String getId() {
         return userID;

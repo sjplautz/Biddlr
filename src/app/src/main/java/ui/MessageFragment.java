@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.stfalcon.chatkit.commons.ImageLoader;
@@ -41,7 +42,9 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
         MessageInput.AttachmentsListener, MessageInput.TypingListener, MessagesListAdapter.OnLoadMoreListener {
     private static final String MESSAGE_FRAGMENT_KEY = "message_fragment_key";
     private static final int TOTAL_MESSAGES_COUNT = 100;
+
     private String dialogID;
+    private User user;
 
     protected final String senderId = "0";
     protected ImageLoader imageLoader;
@@ -64,7 +67,7 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dialogID = getArguments().getString(MESSAGE_FRAGMENT_KEY);
-        DatabaseManager.shared.dialogsRef.document(dialogID).collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DatabaseManager.shared.dialogsRef.document(dialogID).collection("messages").orderBy("createdAt", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -92,7 +95,7 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
         imageLoader = new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, String url, Object payload) {
-//                Picasso.with(DemoDialogsActivity.this).load(url).into(imageView);
+                DatabaseManager.shared.setUserImage(url, imageView);
             }
         };
 
@@ -207,6 +210,7 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
                     @Override
                     public void onMessageViewClick(View view, ChatMessage message) {
                         Toast.makeText(getActivity(), message.getUser() + " avatar click", Toast.LENGTH_LONG).show();
+
                     }
                 });
         this.messagesList.setAdapter(messagesAdapter);
@@ -221,4 +225,6 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
     public void onStopTyping() {
         Log.v("Typing listener", "Stop typing");
     }
+
+
 }

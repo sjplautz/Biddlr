@@ -72,9 +72,8 @@ public class ChatMessage implements IMessage {
         String id = snapshot.getString("id");
         String text = snapshot.getString("text");
         Date createdAt = snapshot.getTimestamp("createdAt").toDate();
-//                               ArrayList<String> userIds = new ArrayList<String>();
-//                                userIds = (ArrayList<String>) doc.get("userIds");
-        ChatMessage m = new ChatMessage(id, DatabaseManager.shared.currentUser, text, createdAt);
+        String userId = snapshot.getString("user");
+        ChatMessage m = new ChatMessage(id, new User(userId), text, createdAt);
         return m;
     }
 }

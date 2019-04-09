@@ -97,7 +97,7 @@ public class Dialog implements IDialog<ChatMessage> {
         String id = snapshot.getString("id");
 
         ArrayList<String> userIds = (ArrayList<String>) snapshot.get("userIds");
-        int idsIndex = userIds.get(0).equals(DatabaseManager.shared.currentUser.getName()) ? 1 : 0;
+        int idsIndex = userIds.get(0).equals(DatabaseManager.shared.currentUser.getUserID()) ? 1 : 0;
 
         ArrayList<User> users = new ArrayList<User>();
         users.add(DatabaseManager.shared.currentUser);

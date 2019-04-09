@@ -85,7 +85,6 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
             @Override
             public void loadImage(ImageView imageView, String url, Object payload) {
                 DatabaseManager.shared.setUserImage(url, imageView);
-//                Picasso.with(DemoDialogsActivity.this).load(url).into(imageView);
             }
         };
 
