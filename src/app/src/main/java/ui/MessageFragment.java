@@ -19,6 +19,14 @@ import android.widget.Toast;
 import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -27,6 +35,7 @@ import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +62,7 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
 
     private Menu menu;
     private int selectionCount;
-    private Date lastLoadedDate;
+    private Timestamp lastLoadedDate;
 
     public static MessageFragment newInstance(String dialogId) {
         Bundle bundle = new Bundle();
@@ -67,21 +76,33 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dialogID = getArguments().getString(MESSAGE_FRAGMENT_KEY);
-        DatabaseManager.shared.dialogsRef.document(dialogID).collection("messages").orderBy("createdAt", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot doc : task.getResult()) {
-                        ChatMessage m = ChatMessage.parse(doc);
-                        Log.d("CHAT MESSAGE", "chat message: " + m);
 
-                        ArrayList<ChatMessage> ms = new ArrayList<>();
-                        ms.add(m);
-                        messagesAdapter.addToEnd(ms, false);
-                    }
-                } else {
-                    Log.d("CHAT MESSAGE", "Error getting documents: ", task.getException());
+        DatabaseManager.shared.dialogsRef.document(dialogID).collection("messages").orderBy("createdAt", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("CHAT MESSAGE", "listen:error", e);
+                    return;
                 }
+
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    ChatMessage m = ChatMessage.parse(dc.getDocument());
+                    switch (dc.getType()) {
+                        case REMOVED:
+                            Log.d("CHAT MESSAGE", "Removed message: " + m.getText());
+                            messagesAdapter.addToStart(m, true);
+                            break;
+                        case MODIFIED:
+                            Log.d("CHAT MESSAGE", "Modified message: " + m.getText());
+                            break;
+                        case ADDED:
+                            Log.d("CHAT MESSAGE", "New message: " + m.getText());
+                            messagesAdapter.addToStart(m, true);
+                            break;
+                    }
+                }
+
             }
         });
     }
@@ -120,20 +141,6 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
 //        this.menu = menu;
 //        getMenuInflater().inflate(R.menu.chat_actions_menu, menu);
 //        onSelectionChanged(0);
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_delete:
-//                messagesAdapter.deleteSelectedMessages();
-//                break;
-//            case R.id.action_copy:
-//                messagesAdapter.copySelectedMessagesText(this, getMessageStringFormatter(), true);
-//                AppUtils.showToast(this, R.string.copied_message, true);
-//                break;
-//        }
 //        return true;
 //    }
 
@@ -190,8 +197,9 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
 
     @Override
     public boolean onSubmit(CharSequence input) {
-        messagesAdapter.addToStart(
-                DatabaseManager.shared.addNewMessage(dialogID, input.toString()), true);
+//        messagesAdapter.addToStart(
+                DatabaseManager.shared.addNewMessage(dialogID, input.toString());
+//                , true);
         return true;
     }
 
@@ -210,7 +218,6 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
                     @Override
                     public void onMessageViewClick(View view, ChatMessage message) {
                         Toast.makeText(getActivity(), message.getUser() + " avatar click", Toast.LENGTH_LONG).show();
-
                     }
                 });
         this.messagesList.setAdapter(messagesAdapter);

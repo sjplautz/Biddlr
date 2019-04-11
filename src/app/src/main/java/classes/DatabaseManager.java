@@ -524,8 +524,7 @@ public class DatabaseManager {
     }
 
     public void setDialogId(String dialogId) {
-        dialogsRef.document(dialogId)
-                .update(
+        dialogsRef.document(dialogId).update(
                         "id", dialogId
                 );
     }
