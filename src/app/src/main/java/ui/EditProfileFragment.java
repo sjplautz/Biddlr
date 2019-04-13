@@ -8,6 +8,8 @@ import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +109,19 @@ public class EditProfileFragment extends Fragment{
                 }
                 DatabaseManager.shared.updateUser(currentUser, imgArr);
                 getFragmentManager().popBackStack();
+            }
+        });
+
+        Button editPaymentMethodButton = v.findViewById(R.id.editPaymentMethodButton);
+        editPaymentMethodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment editPaymentMethodFragment = EditPaymentMethodFragment.newInstance();
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction();
+                trans.replace(R.id.frameNull, editPaymentMethodFragment);
+                trans.addToBackStack(null);
+                trans.commit();
             }
         });
 
