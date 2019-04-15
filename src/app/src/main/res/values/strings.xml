@@ -45,5 +45,7 @@
     <string name="strViewProfile">View Profile</string>
     <string name="strChoose">Choose</string>
     <string name="txtLowestBid">Lowest Bid:</string>
+    <string name="strComplete">Mark Completed</string>
+    <string name="strFinalPrice">Final Price</string>
 
 </resources>

@@ -89,10 +89,24 @@ public class MyJobsFragment extends Fragment implements JobDataListener {
         listMyJobs.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                if(groupPosition == 1){
-                    Fragment bidsFrag = BidderSelectFragment.newInstance(postedJobs.get(childPosition).getJobID());
+                Fragment newFrag;
+                switch(groupPosition){
+                    case 0:
+                        newFrag = JobCompletionFragment.newInstance(inProgressJobs.get(childPosition));
+                        break;
+                    case 1:
+                        newFrag = BidderSelectFragment.newInstance(postedJobs.get(childPosition).getJobID());
+                        break;
+                    case 2:
+                        newFrag = JobViewFragment.newInstance(biddedJobs.get(childPosition));
+                        break;
+                    default:
+                        newFrag = null;
+                        break;
+                }
+                if(newFrag != null){
                     FragmentTransaction trans = getFragmentManager().beginTransaction();
-                    trans.add(android.R.id.content, bidsFrag);
+                    trans.replace(R.id.frameNull, newFrag);
                     trans.addToBackStack("JOBS");
                     trans.commit();
                 }

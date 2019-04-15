@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import enums.JobStatus;
 import interfaces.JobDataListener;
 import interfaces.UserDataListener;
 
@@ -55,6 +56,7 @@ public class DatabaseManager {
 
     private DatabaseReference activeJobRef;
     private DatabaseReference expiredJobRef;
+    private DatabaseReference completedJobRef;
     private DatabaseReference userRef;
     private StorageReference jobImgRef;
     private StorageReference userImgRef;
@@ -74,6 +76,9 @@ public class DatabaseManager {
 
         // create reference to expired job table
         expiredJobRef = database.getReference("expired_job");
+
+        // create reference to completed job table
+        completedJobRef = database.getReference("completed_job");
 
         // create reference to user table
         userRef = database.getReference("user");
@@ -314,6 +319,14 @@ public class DatabaseManager {
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
         return eventHandle;
+    }
+
+    public void markJobCompleted(Job job){
+        if(job.getStatus() == JobStatus.COMPLETED){
+            completedJobRef.child(job.getJobID()).setValue(job);
+
+            activeJobRef.child(job.getJobID()).removeValue();
+        }
     }
 
     /* USER DATABASE */
