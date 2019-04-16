@@ -24,6 +24,8 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
     private List<Job> jobsList;
     private List<Bitmap> picsList;
 
+    private String filter;
+
     /**
      * Describes the ui of each list item
      */
@@ -97,7 +99,18 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewH
      */
     @Override
     public int getItemCount(){
-        return jobsList.size();
+        if(filter == null || filter.isEmpty()) return jobsList.size();
+
+        int count = 0;
+        for(Job job: jobsList){
+            if(job.getTitle().contains(filter))
+                ++count;
+        }
+        return count;
+    }
+
+    public void setFilter(String filter){
+        this.filter = filter;
     }
 
     /**

@@ -12,9 +12,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +41,9 @@ public class ExploreFragment extends Fragment implements JobDataListener {
     private ArrayList<Bitmap> pics = new ArrayList<>();
     private ArrayList<Job> jobs = new ArrayList<>();
 
+    private ChildEventListener eventListener = null;
+    private JobDataListener listener = this;
+
     /**
      * Creates a new instance of the ExploreFragment
      * @return A new instance of the ExploreFragment
@@ -54,7 +61,8 @@ public class ExploreFragment extends Fragment implements JobDataListener {
         super.onCreate(savedInstanceState);
 
         // Call the query you want with 'this' as the listener
-        DatabaseManager.shared.setActiveJobsListener(50, this);
+        //DatabaseManager.shared.setActiveJobsListener(50, this);
+        eventListener = DatabaseManager.shared.setJobsFromSearchListener("", this);
         adapter = new JobListAdapter(jobs, pics);
     }
 
@@ -69,6 +77,18 @@ public class ExploreFragment extends Fragment implements JobDataListener {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_explore, container, false);
+
+        final EditText txtSearch = v.findViewById(R.id.txtSearch);
+        ImageButton btnActiveSearch = v.findViewById(R.id.btnActiveSearch);
+        btnActiveSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseManager.shared.removeEventListener(eventListener);
+                jobs.clear();
+                pics.clear();
+                eventListener = DatabaseManager.shared.setJobsFromSearchListener(txtSearch.getText().toString(), listener);
+            }
+        });
 
         RecyclerView recycler = v.findViewById(R.id.exploreRecycler);
 

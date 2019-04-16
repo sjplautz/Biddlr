@@ -321,6 +321,39 @@ public class DatabaseManager {
         return eventHandle;
     }
 
+    public ChildEventListener setJobsFromSearchListener(final String filter, final JobDataListener listener){
+        return activeJobRef.orderByChild("title").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Job job = dataSnapshot.getValue(Job.class);
+                if(job.getTitle().contains(filter)){
+                    Log.d("SEARCH_JOB_ADDED", "job: " + job.getTitle());
+                    listener.newDataReceived(job);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void markJobCompleted(Job job){
         if(job.getStatus() == JobStatus.COMPLETED){
             completedJobRef.child(job.getJobID()).setValue(job);
