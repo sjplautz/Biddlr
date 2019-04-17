@@ -62,16 +62,17 @@
         android:text="@string/exampleBio"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/JobsCompletedText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@id/myProfileImage"
-        app:layout_constraintTop_toBottomOf="@+id/myProfileImage" />
+        app:layout_constraintTop_toBottomOf="@+id/myProfileImage"
+        app:layout_constraintBottom_toTopOf="@+id/BiddlrPointsHeaderText"/>
 
     <TextView
         android:id="@+id/JobsCompletedText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/strJobsCompleted"
@@ -79,8 +80,8 @@
         android:textColor="@color/common_google_signin_btn_text_light_default"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/myViewSwitcherCompletedJobs"
-        app:layout_constraintStart_toStartOf="@+id/myProfileBio"
-        app:layout_constraintTop_toBottomOf="@id/myProfileBio" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/BiddlrPointsBalanceText" />
 
     <ViewSwitcher
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -112,6 +113,35 @@
             />
 
     </ViewSwitcher>
+
+    <TextView
+        android:id="@+id/BiddlrPointsHeaderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Biddlr Points"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/BiddlrPointsBalanceText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myProfileBio" />
+
+    <TextView
+        android:id="@+id/BiddlrPointsBalanceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="24dp"
+        android:text="10,000"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/JobsCompletedText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/BiddlrPointsHeaderText" />
 
 
 </android.support.constraint.ConstraintLayout>

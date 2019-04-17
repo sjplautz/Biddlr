@@ -112,19 +112,6 @@ public class EditProfileFragment extends Fragment{
             }
         });
 
-        Button editPaymentMethodButton = v.findViewById(R.id.editPaymentMethodButton);
-        editPaymentMethodButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment editPaymentMethodFragment = EditPaymentMethodFragment.newInstance();
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction trans = manager.beginTransaction();
-                trans.replace(R.id.frameNull, editPaymentMethodFragment);
-                trans.addToBackStack(null);
-                trans.commit();
-            }
-        });
-
         return v;
     }
 

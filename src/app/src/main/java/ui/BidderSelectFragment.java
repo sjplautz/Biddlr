@@ -111,6 +111,8 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
                     job.setSelectedBidderID(users.get(selectedIndex).getUserID());
                     DatabaseManager.shared.updateJob(job);
 
+                    //add logic here for points changes
+
                     getFragmentManager().popBackStack();
                 }
             }
