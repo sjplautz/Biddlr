@@ -41,6 +41,7 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
     private ArrayList<User> users = new ArrayList<>();
     private ArrayList<Bitmap> pics = new ArrayList<>();
     private int selectedIndex = -1;
+    private Integer bidAmount = 0;
 
     private Job job = null;
     private TextView txtLowBid;
@@ -109,10 +110,21 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
                 if(job != null && users.get(selectedIndex) != null){
                     job.setStatus(JobStatus.IN_PROGRESS);
                     job.setSelectedBidderID(users.get(selectedIndex).getUserID());
+
+                    //get the bid amount for the user chosen by the poster
+                    User selectedUser = users.get(selectedIndex);
+                    User currUser = DatabaseManager.shared.currentUser;
+                    Double bidAmount = job.getBids().get(selectedUser.getId());
+
+                    //update job object to have current bid as the bid of user selected
+                    job.setCurrentBid(bidAmount);
+
+                    //add logic for transaction here
+                    Integer paymentAmount = 100 * bidAmount.intValue();
+                    //subtract negative amount of points from poster account
+                    currUser.updateBiddlrPoints(-paymentAmount);
+
                     DatabaseManager.shared.updateJob(job);
-
-                    //add logic here for points changes
-
                     getFragmentManager().popBackStack();
                 }
             }

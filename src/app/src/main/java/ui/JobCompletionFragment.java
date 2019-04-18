@@ -96,6 +96,13 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
                 View view = inflater.inflate(R.layout.bidder_rating, null);
                 final RatingBar rtgRateBidder = view.findViewById(R.id.rtgRateBidder);
 
+                //get the amount of points to pay to bidder
+                Double bidAmount = job.getCurrentBid();
+                Integer paymentAmount = 100 * bidAmount.intValue();
+
+                //add positive amount of points to bidder account
+                bidder.updateBiddlrPoints(paymentAmount);
+
                 builder.setView(view);
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
