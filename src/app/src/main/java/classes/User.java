@@ -19,6 +19,7 @@ public class User implements Parcelable, IUser {
     private Double bidderRating;
     private Double posterRating;
     private HashMap<String, Double> biddedJobs; //string jobID
+    private Integer biddlrPoints;
 
     // Initializers
     public User() { }
@@ -33,6 +34,7 @@ public class User implements Parcelable, IUser {
         this.bidderRating = null;
         this.posterRating = 0.0;
         this.biddedJobs = null;
+        this.biddlrPoints = 100000;
     }
 
     public User(String id) {
@@ -45,6 +47,7 @@ public class User implements Parcelable, IUser {
         this.bidderRating = null;
         this.posterRating = null;
         this.biddedJobs = null;
+        this.biddlrPoints = 100000;
     }
 
     // Parcable methods - needed for passing objects between fragments
@@ -64,6 +67,7 @@ public class User implements Parcelable, IUser {
         dest.writeDouble(this.bidderRating);
         dest.writeDouble(this.posterRating);
         dest.writeSerializable(this.biddedJobs);
+        dest.writeInt(this.biddlrPoints);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -85,6 +89,7 @@ public class User implements Parcelable, IUser {
         this.bidderRating = src.readDouble();
         this.posterRating = src.readDouble();
         this.biddedJobs = (HashMap<String, Double>) src.readSerializable();
+        this.biddlrPoints = src.readInt();
     }
 
     // Accessors
@@ -126,6 +131,15 @@ public class User implements Parcelable, IUser {
 
     public void setBiddedJobs(HashMap<String, Double> biddedJobs) {
         this.biddedJobs = biddedJobs;
+    }
+
+    public Integer getBiddlrPoints(){return biddlrPoints;}
+
+    public void setBiddlrPoints(Integer biddlrPoints) {this.biddlrPoints = biddlrPoints;}
+
+    public void updateBiddlrPoints(Integer biddlrPoints) {
+        this.biddlrPoints += biddlrPoints;
+        DatabaseManager.shared.updatePoints(this, this.biddlrPoints);
     }
 
     /**

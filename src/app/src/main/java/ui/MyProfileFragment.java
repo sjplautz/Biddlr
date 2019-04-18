@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,12 @@ public class MyProfileFragment extends Fragment {
         //create handle for rating bar and set star count (stars possible) to 5
         RatingBar rating = v.findViewById(R.id.myRatingBar);
         rating.setNumStars(5);
+
+        //create handle to user's point balance and set text view to the balance
+        TextView txtPointBalance = v.findViewById(R.id.BiddlrPointsBalanceText);
+        //setting user's point balance here does not persist currently
+        String pointsString = String.valueOf(currUser.getBiddlrPoints());
+        txtPointBalance.setText(pointsString);
 
         //setting the profile image resource to default baseline image
         ImageView imgProfile = v.findViewById(R.id.myProfileImage);

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -391,6 +392,10 @@ public class DatabaseManager {
         userRef.updateChildren(updates);
     }
 
+    public void setUserPoints(User user){
+
+    }
+
     /**
      * Updates user data associated with userID
      * @param user
@@ -611,6 +616,13 @@ public class DatabaseManager {
 
     public void removeEventListener(ChildEventListener listenerHandle){
         activeJobRef.removeEventListener(listenerHandle);
+    }
+
+    public void updatePoints(User user, Integer points){
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(user.getUserID() + "/biddlrPoints" , user.getBiddlrPoints());
+
+        userRef.updateChildren(updates);
     }
 
 }
