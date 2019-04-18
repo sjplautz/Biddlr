@@ -65,5 +65,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relSearchLayout"
-        tools:listitem="@layout/job_list_item" />
+        tools:listitem="@layout/job_list_item" >
+
+    </android.support.v7.widget.RecyclerView>
+
 </android.support.constraint.ConstraintLayout>

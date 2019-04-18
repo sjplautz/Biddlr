@@ -47,5 +47,6 @@
     <string name="txtLowestBid">Lowest Bid:</string>
     <string name="strComplete">Mark Completed</string>
     <string name="strFinalPrice">Final Price</string>
+    <string name="strRatingMsg">Would you like to rate your worker?</string>
 
 </resources>

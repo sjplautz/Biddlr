@@ -80,7 +80,6 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         txtPosterName = v.findViewById(R.id.txtPosterName);
 
         rtgPosterRating = v.findViewById(R.id.rtgPosterRating);
-        rtgPosterRating.setRating(5);
 
         ImageView imgProfile = v.findViewById(R.id.imgProfile);
         DatabaseManager.shared.setUserImage(job.getPosterID(), imgProfile);
@@ -133,7 +132,7 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         // Set profile info
         poster = user;
         txtPosterName.setText(user.getFirstName() + " " + user.getLastName());
-        rtgPosterRating.setRating(user.getPosterRating().floatValue());
+        rtgPosterRating.setRating(user.getBidderRating().floatValue());
     }
 
     /* Job Listener*/

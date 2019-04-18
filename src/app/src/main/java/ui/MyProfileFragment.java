@@ -60,7 +60,7 @@ public class MyProfileFragment extends Fragment {
 
         //create handle for rating bar and set star count (stars possible) to 5
         RatingBar rating = v.findViewById(R.id.myRatingBar);
-        rating.setNumStars(5);
+        rating.setRating(currUser.getBidderRating().floatValue());
 
         //setting the profile image resource to default baseline image
         ImageView imgProfile = v.findViewById(R.id.myProfileImage);
@@ -73,10 +73,6 @@ public class MyProfileFragment extends Fragment {
         else{
             txtUserBio.setText("You have not yet created a bio. Please enter a description of yourself");
         }
-
-        //setting the star count in the my rating bar to default 4.5/5 for my profile
-        double default_rating = 4.5;
-        rating.setRating((float)default_rating);
 
         //grabbing a handle to recycler view
         recycler = v.findViewById(R.id.myCompletedJobsRecycler);

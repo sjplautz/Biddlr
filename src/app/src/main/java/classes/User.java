@@ -30,7 +30,7 @@ public class User implements Parcelable, IUser {
         this.email = null;
         this.bio = null;
         this.profilePic = null;
-        this.bidderRating = null;
+        this.bidderRating = 0.0;
         this.posterRating = 0.0;
         this.biddedJobs = null;
     }

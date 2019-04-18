@@ -70,15 +70,11 @@ public class UserProfileFragment extends Fragment {
 
         //create handle for rating bar and set star ount (stars possible) to 5
         RatingBar rating = v.findViewById(R.id.userRatingBar);
-        rating.setNumStars(5);
+        rating.setRating(user.getBidderRating().floatValue());
 
         //setting the profile image resource to default baseline image
         ImageView imgProfile = v.findViewById(R.id.userProfileImage);
         DatabaseManager.shared.setUserImage(user.getId(), imgProfile);
-
-        //setting the rating on the rating bar to the default of 4/5 stars for other users
-        double default_rating = 4.0;
-        rating.setRating((float)default_rating);
 
         TextView txtUserBio = v.findViewById(R.id.userProfileBio);
         if(user.getBio() != null){
