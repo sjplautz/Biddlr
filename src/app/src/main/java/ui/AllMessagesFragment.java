@@ -71,8 +71,6 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
                 }
             }
         });
-
-
     }
 
     @Override
@@ -160,4 +158,3 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
 //
 //    @Override
 //    public void dataRemoved(Dialog dialog) { }
-

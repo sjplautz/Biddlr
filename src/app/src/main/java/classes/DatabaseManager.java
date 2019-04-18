@@ -530,7 +530,7 @@ public class DatabaseManager {
         userIds.add(users.get(0).getId());
         userIds.add(users.get(1).getId());
         Collections.sort(userIds);
-        dialogsRef.whereEqualTo("users", userIds).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        dialogsRef.whereEqualTo("userIds", userIds).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -596,6 +596,8 @@ public class DatabaseManager {
     public ChatMessage addNewMessage(final String dialogID, final String input) {
         ChatMessage m = new ChatMessage("id", currentUser, input);
         HashMap<String, Object> data = m.getRepresentation();
+
+
 
         dialogsRef.document(dialogID).collection("messages").add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

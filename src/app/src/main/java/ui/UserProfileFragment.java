@@ -68,7 +68,7 @@ public class UserProfileFragment extends Fragment {
         TextView txtName = v.findViewById(R.id.userProfileName);
         txtName.setText(user.getFirstName() + " " + user.getLastName());
 
-        //create handle for rating bar and set star ount (stars possible) to 5
+        //create handle for rating bar and set star count (stars possible) to 5
         RatingBar rating = v.findViewById(R.id.userRatingBar);
         rating.setRating(user.getBidderRating().floatValue());
 
@@ -129,7 +129,7 @@ public class UserProfileFragment extends Fragment {
                 ArrayList<User> users = new ArrayList<>();
                 users.add(DatabaseManager.shared.currentUser);
                 users.add(user);
-                shared.addNewDialogForUsers(users);
+                DatabaseManager.shared.addNewDialogForUsers(users);
 
                 BottomNavigationView nav = getActivity().findViewById(R.id.menuNav);
                 nav.setSelectedItemId(R.id.itemMessages);
