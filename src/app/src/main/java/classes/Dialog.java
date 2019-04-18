@@ -2,6 +2,8 @@ package classes;
 
 import android.os.Message;
 
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.stfalcon.chatkit.commons.models.IDialog;
 
@@ -93,7 +95,7 @@ public class Dialog implements IDialog<ChatMessage> {
         return rep;
     }
 
-    static public Dialog parse(QueryDocumentSnapshot snapshot) {
+    static public Dialog parse(DocumentSnapshot snapshot) {
         String id = snapshot.getString("id");
 
         ArrayList<String> userIds = (ArrayList<String>) snapshot.get("userIds");
@@ -105,7 +107,7 @@ public class Dialog implements IDialog<ChatMessage> {
         ArrayList<String> userNames = (ArrayList<String>) snapshot.get("userNames");
         int namesIndex = userNames.get(0).equals(DatabaseManager.shared.currentUser.getName()) ? 1 : 0;
 
-        ChatMessage lastMessage = new ChatMessage(snapshot.getString("lastMessage"), DatabaseManager.shared.currentUser, "This is the last message");
+        ChatMessage lastMessage = new ChatMessage("id", DatabaseManager.shared.currentUser, snapshot.getString("lastMessage"));
         int unreadCount = snapshot.getLong("unreadCount").intValue();
         Dialog d = new Dialog(id, userNames.get(namesIndex), userIds.get(idsIndex), users, lastMessage, unreadCount);
         return d;
