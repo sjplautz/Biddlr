@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 
 import com.example.biddlr.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -87,6 +88,19 @@ public class ExploreFragment extends Fragment implements JobDataListener {
                 jobs.clear();
                 pics.clear();
                 eventListener = DatabaseManager.shared.setJobsFromSearchListener(txtSearch.getText().toString(), listener);
+            }
+        });
+
+        ImageButton btnFilter = v.findViewById(R.id.btnFilter);
+        btnFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu dropdown = new PopupMenu(getContext(), v);
+                dropdown.getMenu().add("Within 1 mile");
+                dropdown.getMenu().add("Within 5 miles");
+                dropdown.getMenu().add("Within 10 miles");
+                dropdown.getMenu().add("Within 25 miles");
+                dropdown.show();
             }
         });
 

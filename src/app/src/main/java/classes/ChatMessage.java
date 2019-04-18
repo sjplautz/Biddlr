@@ -1,5 +1,6 @@
 package classes;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.stfalcon.chatkit.commons.models.IMessage;
 
@@ -68,7 +69,7 @@ public class ChatMessage implements IMessage {
         return rep;
     }
 
-    static public ChatMessage parse(QueryDocumentSnapshot snapshot) {
+    static public ChatMessage parse(DocumentSnapshot snapshot) {
         String id = snapshot.getString("id");
         String text = snapshot.getString("text");
         Date createdAt = snapshot.getTimestamp("createdAt").toDate();

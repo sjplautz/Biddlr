@@ -593,7 +593,7 @@ public class DatabaseManager {
         return null;
     }
 
-    public ChatMessage addNewMessage(String dialogID, String input) {
+    public ChatMessage addNewMessage(final String dialogID, final String input) {
         ChatMessage m = new ChatMessage("id", currentUser, input);
         HashMap<String, Object> data = m.getRepresentation();
 
@@ -602,16 +602,27 @@ public class DatabaseManager {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d("MESSAGE", "DocumentSnapshot written with ID: " + documentReference.getId());
+                        updateLastMessage(dialogID, documentReference.getId(), input );
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("DIALOG", "Error adding document", e);
+                        Log.w("MESSAGE", "Error adding document", e);
                     }
                 });
 
         return m;
+    }
+
+    public void updateLastMessage(String dialogID, String messageID, String text) {
+        dialogsRef.document(dialogID).collection("messages").document(messageID).update(
+                "id", messageID
+        );
+
+        dialogsRef.document(dialogID).update(
+                "lastMessage", text
+                );
     }
 
     public void removeEventListener(ChildEventListener listenerHandle){

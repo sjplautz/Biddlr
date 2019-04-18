@@ -1,5 +1,8 @@
 package ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.media.Rating;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -24,6 +27,8 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
 
     private Job job;
 
+    private User bidder;
+
     private TextView txtPosterName;
     private RatingBar rtgPosterRating;
 
@@ -41,10 +46,11 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
 
         job = getArguments().getParcelable(JOB_FRAGMENT_KEY);
         DatabaseManager.shared.setUserFromIDListener(job.getPosterID(), this);
+        DatabaseManager.shared.setUserFromIDListener(job.getSelectedBidderID(), this);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_job_completion, container, false);
 
@@ -84,10 +90,33 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                job.setStatus(JobStatus.COMPLETED);
-                DatabaseManager.shared.markJobCompleted(job);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                getFragmentManager().popBackStack();
+                LayoutInflater inflater = getLayoutInflater();
+                View view = inflater.inflate(R.layout.bidder_rating, null);
+                final RatingBar rtgRateBidder = view.findViewById(R.id.rtgRateBidder);
+
+                builder.setView(view);
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        bidder.setBidderRating((double)rtgRateBidder.getRating());
+
+                        job.setStatus(JobStatus.COMPLETED);
+                        DatabaseManager.shared.markJobCompleted(job);
+                        DatabaseManager.shared.updateUser(bidder, null);
+
+                        getFragmentManager().popBackStack();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                AlertDialog ad = builder.create();
+                ad.show();
             }
         });
 
@@ -96,7 +125,12 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
 
     @Override
     public void newDataReceived(User user) {
-        txtPosterName.setText(user.getName());
-        rtgPosterRating.setRating(user.getPosterRating().floatValue());
+        if(user.getId().equals(job.getPosterID())) {
+            txtPosterName.setText(user.getName());
+            rtgPosterRating.setRating(user.getPosterRating().floatValue());
+        }
+        else if(user.getId().equals(job.getSelectedBidderID())){
+            bidder = user;
+        }
     }
 }
