@@ -119,8 +119,9 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
                     //update job object to have current bid as the bid of user selected
                     job.setCurrentBid(bidAmount);
 
-                    //add logic for transaction here
-                    Integer paymentAmount = 100 * bidAmount.intValue();
+                    //convert double type to biddlr int type, rate of 100 points per dollar
+                    Double adjustedAmount = 100 * bidAmount;
+                    Integer paymentAmount = 100 * adjustedAmount.intValue();
                     //subtract negative amount of points from poster account
                     currUser.updateBiddlrPoints(-paymentAmount);
 
