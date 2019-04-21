@@ -3,6 +3,7 @@ package ui;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetDialog;
@@ -100,7 +101,7 @@ public class EditProfileFragment extends Fragment{
                 currentUser = DatabaseManager.shared.currentUser;
                 currentUser.setBio(editProfile.getText().toString());
                 byte[] imgArr = null;
-                if(imgProfilePicture.getDrawable() != null) {
+                if(imgProfilePicture.getDrawable().equals(Drawable.createFromPath("/drawable/baseline_person_24.xml"))) {
                     Bitmap image = ((BitmapDrawable) imgProfilePicture.getDrawable()).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     image.compress(Bitmap.CompressFormat.PNG, 100, stream);
