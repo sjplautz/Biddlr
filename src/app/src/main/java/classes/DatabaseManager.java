@@ -322,14 +322,22 @@ public class DatabaseManager {
         return eventHandle;
     }
 
-    public ChildEventListener setJobsFromSearchListener(final String filter, final JobDataListener listener){
-        return activeJobRef.orderByChild("title").addChildEventListener(new ChildEventListener() {
+    public ChildEventListener setJobsFromSearchListener(LatLngWrapped coordinate, final String filter, final double radius, final JobDataListener listener){
+        final Double maxLat = coordinate.lat + (radius / 69.2);
+        final Double maxLng = coordinate.lng + (radius / 55.2);
+        final Double minLat = coordinate.lat - (radius / 69.2);
+        final Double minLng = coordinate.lng - (radius / 55.2);
+        return activeJobRef.orderByChild("status").equalTo("IN_BIDDING").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
                 if(job.getTitle().contains(filter)){
-                    Log.d("SEARCH_JOB_ADDED", "job: " + job.getTitle());
-                    listener.newDataReceived(job);
+                    if(radius == -1 || (job.getCoordinates().getLat() > minLat && job.getCoordinates().getLat() < maxLat)) {
+                        if(radius == -1 || (job.getCoordinates().getLng() > minLng && job.getCoordinates().getLng() < maxLng)){
+                            Log.d("SEARCH_JOB_ADDED", "job: " + job.getTitle());
+                            listener.newDataReceived(job);
+                        }
+                    }
                 }
             }
 

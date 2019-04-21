@@ -96,19 +96,6 @@ public class HomeActivity extends AppCompatActivity {
         bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
     }
 
-    public void setSearchBar(){
-        bar.setCustomView(R.layout.job_search_bar);
-        View barView = bar.getCustomView();
-
-        EditText txtSearch = barView.findViewById(R.id.txtSearch);
-
-        ImageButton btnActiveSearch = barView.findViewById(R.id.btnActiveSearch);
-
-        ImageButton btnFilter = barView.findViewById(R.id.btnFilter);
-
-        bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-    }
-
     /**
      * Opens a fullscreen dialog for job creation
      */

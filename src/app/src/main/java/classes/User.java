@@ -19,6 +19,7 @@ public class User implements Parcelable, IUser {
     private Double bidderRating;
     private Double posterRating;
     private HashMap<String, Double> biddedJobs; //string jobID
+    private Integer jobsCompleted;
     private Integer biddlrPoints;
 
     // Initializers
@@ -34,6 +35,7 @@ public class User implements Parcelable, IUser {
         this.bidderRating = 0.0;
         this.posterRating = 0.0;
         this.biddedJobs = null;
+        this.jobsCompleted = 0;
         this.biddlrPoints = 100000;
     }
 

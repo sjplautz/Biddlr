@@ -1,5 +1,6 @@
 package ui;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -15,8 +16,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -32,6 +35,7 @@ import adapters.JobListAdapter;
 import adapters.ListTouchListener;
 import classes.DatabaseManager;
 import classes.Job;
+import classes.LatLngWrapped;
 import interfaces.JobDataListener;
 
 /**
@@ -44,6 +48,9 @@ public class ExploreFragment extends Fragment implements JobDataListener {
 
     private ChildEventListener eventListener = null;
     private JobDataListener listener = this;
+
+    private String filter = "";
+    private double radius = -1;
 
     /**
      * Creates a new instance of the ExploreFragment
@@ -63,7 +70,7 @@ public class ExploreFragment extends Fragment implements JobDataListener {
 
         // Call the query you want with 'this' as the listener
         //DatabaseManager.shared.setActiveJobsListener(50, this);
-        eventListener = DatabaseManager.shared.setJobsFromSearchListener("", this);
+        eventListener = DatabaseManager.shared.setJobsFromSearchListener(new LatLngWrapped(MapFragment.mCurrentLocation.getLatitude(), MapFragment.mCurrentLocation.getLongitude()), filter, radius, this);
         adapter = new JobListAdapter(jobs, pics);
     }
 
@@ -84,10 +91,13 @@ public class ExploreFragment extends Fragment implements JobDataListener {
         btnActiveSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
                 DatabaseManager.shared.removeEventListener(eventListener);
                 jobs.clear();
                 pics.clear();
-                eventListener = DatabaseManager.shared.setJobsFromSearchListener(txtSearch.getText().toString(), listener);
+                filter = txtSearch.getText().toString();
+                eventListener = DatabaseManager.shared.setJobsFromSearchListener(new LatLngWrapped(MapFragment.mCurrentLocation.getLatitude(), MapFragment.mCurrentLocation.getLongitude()), filter, radius, listener);
             }
         });
 
@@ -96,10 +106,43 @@ public class ExploreFragment extends Fragment implements JobDataListener {
             @Override
             public void onClick(View v) {
                 PopupMenu dropdown = new PopupMenu(getContext(), v);
+                dropdown.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        String title = item.getTitle().toString();
+                        switch(title) {
+                            case "Within 1 mile":
+                                radius = 1.0;
+                                break;
+                            case "Within 5 miles":
+                                radius = 5.0;
+                                break;
+                            case "Within 10 miles":
+                                radius = 10.0;
+                                break;
+                            case "Within 25 miles":
+                                radius = 25.0;
+                                break;
+                            case "No radius":
+                                radius = -1;
+                                break;
+                        }
+                        Log.d("DISTANCE_SELECTED", "Distance: " + radius + " Id: " + item.getItemId());
+
+                        DatabaseManager.shared.removeEventListener(eventListener);
+                        jobs.clear();
+                        pics.clear();
+                        eventListener = DatabaseManager.shared.setJobsFromSearchListener(new LatLngWrapped(MapFragment.mCurrentLocation.getLatitude(), MapFragment.mCurrentLocation.getLongitude()), filter, radius, listener);
+
+                        return false;
+                    }
+                });
+
                 dropdown.getMenu().add("Within 1 mile");
                 dropdown.getMenu().add("Within 5 miles");
                 dropdown.getMenu().add("Within 10 miles");
                 dropdown.getMenu().add("Within 25 miles");
+                dropdown.getMenu().add("No radius");
                 dropdown.show();
             }
         });

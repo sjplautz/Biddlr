@@ -28,7 +28,6 @@ public class JobsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((HomeActivity) getActivity()).setSearchBar();
     }
 
     /**
