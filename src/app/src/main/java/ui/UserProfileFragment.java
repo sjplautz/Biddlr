@@ -70,7 +70,7 @@ public class UserProfileFragment extends Fragment {
 
         //create handle for rating bar and set star count (stars possible) to 5
         RatingBar rating = v.findViewById(R.id.userRatingBar);
-        rating.setRating(user.getBidderRating().floatValue());
+        rating.setRating((float)user.getAvgBidderRating());
 
         //setting the profile image resource to default baseline image
         ImageView imgProfile = v.findViewById(R.id.userProfileImage);

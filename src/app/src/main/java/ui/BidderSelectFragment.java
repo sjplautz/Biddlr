@@ -121,7 +121,7 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
 
                     //convert double type to biddlr int type, rate of 100 points per dollar
                     Double adjustedAmount = 100 * bidAmount;
-                    Integer paymentAmount = 100 * adjustedAmount.intValue();
+                    Integer paymentAmount = adjustedAmount.intValue();
                     //subtract negative amount of points from poster account
                     currUser.updateBiddlrPoints(-paymentAmount);
 

@@ -49,6 +49,7 @@ public class User implements Parcelable, IUser {
         this.bidderRating = null;
         this.posterRating = null;
         this.biddedJobs = null;
+        jobsCompleted = null;
         this.biddlrPoints = 100000;
     }
 
@@ -123,6 +124,14 @@ public class User implements Parcelable, IUser {
 
     public void setBidderRating(Double bidderRating) { this.bidderRating = bidderRating; }
 
+    public double getAvgBidderRating(){
+        return bidderRating == 0.0 ? 0.0 : bidderRating / jobsCompleted;
+    }
+
+    public void addBidderRating(double newRating){
+        this.bidderRating += newRating;
+    }
+
     public Double getPosterRating() { return posterRating == null ? 5.0 : posterRating; }
 
     public void setPosterRating(Double posterRating) { this.posterRating = posterRating; }
@@ -133,6 +142,14 @@ public class User implements Parcelable, IUser {
 
     public void setBiddedJobs(HashMap<String, Double> biddedJobs) {
         this.biddedJobs = biddedJobs;
+    }
+
+    public Integer getJobsCompleted(){
+        return jobsCompleted;
+    }
+
+    public void setJobsCompleted(Integer jobsCompleted){
+        this.jobsCompleted = jobsCompleted;
     }
 
     public Integer getBiddlrPoints(){return biddlrPoints;}

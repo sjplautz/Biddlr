@@ -132,7 +132,7 @@ public class JobViewFragment extends Fragment implements UserDataListener, JobDa
         // Set profile info
         poster = user;
         txtPosterName.setText(user.getFirstName() + " " + user.getLastName());
-        rtgPosterRating.setRating(user.getBidderRating().floatValue());
+        rtgPosterRating.setRating((float)user.getAvgBidderRating());
     }
 
     /* Job Listener*/

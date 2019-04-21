@@ -108,7 +108,8 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        bidder.setBidderRating((double)rtgRateBidder.getRating());
+                        bidder.addBidderRating((double)rtgRateBidder.getRating());
+                        bidder.setJobsCompleted(bidder.getJobsCompleted() + 1);
 
                         job.setStatus(JobStatus.COMPLETED);
                         DatabaseManager.shared.markJobCompleted(job);

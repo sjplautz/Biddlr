@@ -57,11 +57,11 @@ public class MyProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
         TextView txtUserName = v.findViewById(R.id.myProfileName);
-        txtUserName.setText(currUser.getFirstName() + " " + currUser.getLastName());
+        txtUserName.setText(currUser.getName());
 
         //create handle for rating bar and set star count (stars possible) to 5
         RatingBar rating = v.findViewById(R.id.myRatingBar);
-        rating.setRating(currUser.getBidderRating().floatValue());
+        rating.setRating((float)currUser.getAvgBidderRating());
 
         //create handle to user's point balance and set text view to the balance
         TextView txtPointBalance = v.findViewById(R.id.BiddlrPointsBalanceText);
