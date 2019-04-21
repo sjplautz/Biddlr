@@ -23,6 +23,10 @@ import classes.User;
 import enums.JobStatus;
 import interfaces.UserDataListener;
 
+/**
+ * This controls the ui that allows a poster to mark
+ * a job as completed
+ */
 public class JobCompletionFragment extends Fragment implements UserDataListener {
     private static final String JOB_FRAGMENT_KEY = "job_fragment_key";
 
@@ -33,6 +37,11 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
     private TextView txtPosterName;
     private RatingBar rtgPosterRating;
 
+    /**
+     * Method for creating an instance of this controller
+     * @param job The job to potentially mark as completed
+     * @return A JobCompletionFragment object
+     */
     public static JobCompletionFragment newInstance(Job job) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(JOB_FRAGMENT_KEY, job);
@@ -41,6 +50,10 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
         return fragment;
     }
 
+    /**
+     * Sets the required listeners to get the relevant users
+     * @param savedInstanceState The saved state of the Fragment if it exists
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +63,13 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
         DatabaseManager.shared.setUserFromIDListener(job.getSelectedBidderID(), this);
     }
 
+    /**
+     * Creates the View for the ui that this controller manages
+     * @param inflater Used to inflate the xml file
+     * @param container
+     * @param savedInstanceState The saved state of this fragment if it exists
+     * @return A View describing the ui element
+     */
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -135,6 +155,10 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
         return v;
     }
 
+    /**
+     * Gets the users relevant to this Fragment
+     * @param user The user returned from the database query
+     */
     @Override
     public void newDataReceived(User user) {
         if(user.getId().equals(job.getPosterID())) {

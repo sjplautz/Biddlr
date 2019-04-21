@@ -322,6 +322,14 @@ public class DatabaseManager {
         return eventHandle;
     }
 
+    /**
+     * Gets jobs that match the given search parameters
+     * @param coordinate User's current coordinates
+     * @param filter The text filter to apply
+     * @param radius The distance filter to apply
+     * @param listener Fragment to receive jobs
+     * @return The ChildEventListener that is created
+     */
     public ChildEventListener setJobsFromSearchListener(LatLngWrapped coordinate, final String filter, final double radius, final JobDataListener listener){
         final Double maxLat = coordinate.lat + (radius / 69.2);
         final Double maxLng = coordinate.lng + (radius / 55.2);

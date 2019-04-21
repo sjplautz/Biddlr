@@ -37,4 +37,13 @@ public class UserTest {
 
         assertEquals(correctBio, user1.getBio());
     }
+
+    @Test
+    public void getAvgBidderRating_isCorrect(){
+        User user = new User();
+        user.setJobsCompleted(5);
+        user.setBidderRating(25.0);
+
+        assertEquals(5.0, user.getAvgBidderRating(), .01);
+    }
 }
