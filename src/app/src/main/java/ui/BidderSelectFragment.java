@@ -126,7 +126,10 @@ public class BidderSelectFragment extends Fragment implements JobDataListener, U
                     currUser.updateBiddlrPoints(-paymentAmount);
 
                     DatabaseManager.shared.updateJob(job);
-                    getFragmentManager().popBackStack();
+                    //getFragmentManager().popBackStack();
+                    FragmentTransaction trans = getFragmentManager().beginTransaction();
+                    trans.replace(R.id.frameNull, JobsFragment.newInstance(1));
+                    trans.commit();
                 }
             }
         });

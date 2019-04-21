@@ -17,8 +17,14 @@ import adapters.JobsPagerAdapter;
  * Controller that handles the Fragment related to jobs
  */
 public class JobsFragment extends Fragment {
-    public static JobsFragment newInstance() {
-        return new JobsFragment();
+    private static final String PAGE = "page";
+
+    public static JobsFragment newInstance(int page) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(PAGE, page);
+        JobsFragment jf = new JobsFragment();
+        jf.setArguments(bundle);
+        return jf;
     }
 
     /**
@@ -49,6 +55,9 @@ public class JobsFragment extends Fragment {
 
         JobsPagerAdapter adapter = new JobsPagerAdapter(getFragmentManager());
         pagerJobs.setAdapter(adapter);
+
+        int page = getArguments().getInt(PAGE);
+        pagerJobs.setCurrentItem(page);
 
         tabsJobs.setupWithViewPager(pagerJobs);
 

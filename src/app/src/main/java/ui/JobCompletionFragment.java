@@ -6,6 +6,7 @@ import android.media.Rating;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,7 +116,9 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
                         DatabaseManager.shared.markJobCompleted(job);
                         DatabaseManager.shared.updateUser(bidder, null);
 
-                        getFragmentManager().popBackStack();
+                        FragmentTransaction trans = getFragmentManager().beginTransaction();
+                        trans.replace(R.id.frameNull, JobsFragment.newInstance(1));
+                        trans.commit();
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

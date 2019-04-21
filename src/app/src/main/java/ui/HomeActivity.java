@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     case R.id.itemJobs:
                         tag = "JOBS";
-                        selectedFrag = JobsFragment.newInstance();
+                        selectedFrag = JobsFragment.newInstance(0);
                         break;
                     case R.id.itemProfile:
                         tag = "PROFILE";
