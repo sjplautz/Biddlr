@@ -93,7 +93,7 @@ public class CompletedJobAdapter extends RecyclerView.Adapter<CompletedJobAdapte
             holder.jobLocation.setText(job.getLocation());
 
         holder.jobRating.setNumStars(5);
-        holder.jobRating.setRating(3);
+        holder.jobRating.setRating(job.getCurrentRating().floatValue());
 
         String time = timeLeft(job.getExpirationDate().toLocalDateTime());
         holder.jobTime.setText(time);

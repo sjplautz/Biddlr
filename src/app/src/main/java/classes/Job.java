@@ -29,6 +29,7 @@ public class Job implements Parcelable {
     private Double startingPrice;
     private Double currentBid;
     private HashMap<String, Double> bids;  // <bidderID, bidValue>
+    private Double currentRating;
 
     // Initializers
     public Job() { }
@@ -48,6 +49,7 @@ public class Job implements Parcelable {
         this.startingPrice = startingPrice;
         this.currentBid = startingPrice;
         this.bids = null;
+        this.currentRating = 0.0;
     }
 
     // Parcable methods - needed for passing objects between fragments
@@ -70,6 +72,7 @@ public class Job implements Parcelable {
         dest.writeDouble(this.startingPrice);
         dest.writeDouble(this.currentBid);
         dest.writeSerializable(this.bids);
+        dest.writeDouble(this.currentRating);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -94,6 +97,7 @@ public class Job implements Parcelable {
         this.startingPrice = src.readDouble();
         this.currentBid = src.readDouble();
         this.bids = (HashMap<String, Double>) src.readSerializable();
+        this.currentRating = src.readDouble();
     }
 
     // Getters and Setters
@@ -185,6 +189,14 @@ public class Job implements Parcelable {
 
     public void setBids(HashMap<String, Double> bids) {
         this.bids = bids;
+    }
+
+    public void setCurrentRating(Double rating){
+        this.currentRating = rating;
+    }
+
+    public Double getCurrentRating(){
+        return this.currentRating;
     }
 
     // Custom Methods

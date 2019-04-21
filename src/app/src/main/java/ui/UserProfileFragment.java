@@ -1,5 +1,7 @@
 package ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.biddlr.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,7 @@ import static classes.DatabaseManager.*;
 public class UserProfileFragment extends Fragment implements JobDataListener {
     private final static String USER = "user";
     private List<Job> jobList;
+    private List<Bitmap> picList;
     private RecyclerView recycler;
     private Button btnContact;
     private CompletedJobAdapter adapter;
@@ -54,7 +58,8 @@ public class UserProfileFragment extends Fragment implements JobDataListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //need to add method to database manager to get the user's profile
+        User currUser = getArguments().getParcelable(USER);
+        shared.setCompletedJobsForBidderListener(currUser.getUserID(), this);
     }
 
     @Override
@@ -62,7 +67,8 @@ public class UserProfileFragment extends Fragment implements JobDataListener {
                              Bundle savedInstanceState) {
         final User user = getArguments().getParcelable(USER);
         jobList = new ArrayList<>();
-        adapter = new CompletedJobAdapter(jobList, null);
+        picList = new ArrayList<>();
+        adapter = new CompletedJobAdapter(jobList, picList);
 
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
@@ -161,8 +167,19 @@ public class UserProfileFragment extends Fragment implements JobDataListener {
     }
 
     @Override
-    public void newDataReceived(Job job) {
-
+    public void newDataReceived(final Job job) {
+        jobList.add(0, job);
+        picList.add(0, null);
+        DatabaseManager.shared.getImgRef(job.getJobID()).getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                int index = jobList.indexOf(job);
+                picList.set(index, bmp);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.notifyDataSetChanged();
     }
 
     @Override

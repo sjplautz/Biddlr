@@ -121,6 +121,7 @@ public class JobCompletionFragment extends Fragment implements UserDataListener 
                 Double bidAmount = job.getCurrentBid();
                 Double adjustedAmount = 100 * bidAmount;
                 Integer paymentAmount = adjustedAmount.intValue();
+                job.setCurrentRating((double) rtgRateBidder.getRating());
 
                 //add positive amount of points to bidder account
                 bidder.updateBiddlrPoints(paymentAmount);

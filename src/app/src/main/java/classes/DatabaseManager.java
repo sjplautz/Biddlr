@@ -206,11 +206,12 @@ public class DatabaseManager {
     }
 
     public void setCompletedJobsForBidderListener(String userID, final JobDataListener listener) {
+        Log.d("COMPLETED_OUTER", "Query was called at least");
         completedJobRef.orderByChild("selectedBidderID").equalTo(userID).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Job job = dataSnapshot.getValue(Job.class);
-                Log.d("Bidder Completed JOBS QUERY", "job: " + job);
+                Log.d("UNIQUE", "job: " + job);
                 listener.newDataReceived(job);
             }
 

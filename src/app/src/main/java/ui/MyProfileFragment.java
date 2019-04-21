@@ -1,5 +1,7 @@
 package ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +21,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.biddlr.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +34,14 @@ import classes.Job;
 import classes.User;
 import interfaces.JobDataListener;
 
+import static classes.DatabaseManager.shared;
+
 //The fragment that inflates when a user views their own profile
 public class MyProfileFragment extends Fragment implements JobDataListener {
 
+    private final static String USER = "user";
     private List<Job> jobList;
+    private List<Bitmap> picList;
     private RecyclerView recycler;
     private Button btnEdit;
     private CompletedJobAdapter adapter;
@@ -47,6 +54,8 @@ public class MyProfileFragment extends Fragment implements JobDataListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        User currUser = shared.currentUser;
+        shared.setCompletedJobsForBidderListener(currUser.getUserID(), this);
     }
 
     @Override
@@ -54,7 +63,8 @@ public class MyProfileFragment extends Fragment implements JobDataListener {
                              Bundle savedInstanceState) {
         currUser = DatabaseManager.shared.currentUser;
         jobList = new ArrayList<>();
-        adapter = new CompletedJobAdapter(jobList, null);
+        picList = new ArrayList<>();
+        adapter = new CompletedJobAdapter(jobList, picList);
 
         View v = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
@@ -133,23 +143,31 @@ public class MyProfileFragment extends Fragment implements JobDataListener {
         //grabbing handle to empty text view to sub in if recycler is empty
         txtEmpty = v.findViewById(R.id.myTxtEmpty);
 
-        //switches the visibility to either the recycler or empty message based on whether any jobs completed
-        if (jobList.isEmpty()) {
-            recycler.setVisibility(View.GONE);
-            txtEmpty.setVisibility(View.VISIBLE);
-        }
-        else {
-            recycler.setVisibility(View.VISIBLE);
-            txtEmpty.setVisibility(View.GONE);
-        }
+        recycler.setVisibility(View.GONE);
+        txtEmpty.setVisibility(View.VISIBLE);
 
         return v;
     }
 
 
     @Override
-    public void newDataReceived(Job job) {
+    public void newDataReceived(final Job job) {
+        jobList.add(0, job);
 
+        recycler.setVisibility(View.VISIBLE);
+        txtEmpty.setVisibility(View.GONE);
+
+        picList.add(0, null);
+        DatabaseManager.shared.getImgRef(job.getJobID()).getBytes(1024*1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                int index = jobList.indexOf(job);
+                picList.set(index, bmp);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.notifyDataSetChanged();
     }
 
     @Override
