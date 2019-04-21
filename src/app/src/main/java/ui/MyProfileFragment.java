@@ -23,19 +23,21 @@ import com.example.biddlr.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import adapters.CompletedJobAdapter;
 import adapters.JobListAdapter;
 import adapters.ListTouchListener;
 import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
+import interfaces.JobDataListener;
 
 //The fragment that inflates when a user views their own profile
-public class MyProfileFragment extends Fragment {
+public class MyProfileFragment extends Fragment implements JobDataListener {
 
     private List<Job> jobList;
     private RecyclerView recycler;
     private Button btnEdit;
-    private JobListAdapter adapter;
+    private CompletedJobAdapter adapter;
     private TextView txtEmpty;
 
     private User currUser;
@@ -52,7 +54,7 @@ public class MyProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         currUser = DatabaseManager.shared.currentUser;
         jobList = new ArrayList<>();
-        adapter = new JobListAdapter(jobList, null);
+        adapter = new CompletedJobAdapter(jobList, null);
 
         View v = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
@@ -144,4 +146,19 @@ public class MyProfileFragment extends Fragment {
         return v;
     }
 
+
+    @Override
+    public void newDataReceived(Job job) {
+
+    }
+
+    @Override
+    public void dataChanged(Job job) {
+
+    }
+
+    @Override
+    public void dataRemoved(Job job) {
+
+    }
 }

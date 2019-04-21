@@ -24,21 +24,22 @@ import com.example.biddlr.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapters.JobListAdapter;
+import adapters.CompletedJobAdapter;
 import adapters.ListTouchListener;
 import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
+import interfaces.JobDataListener;
 
 import static classes.DatabaseManager.*;
 
 //The Fragment that inflates when viewing another User's profile
-public class UserProfileFragment extends Fragment {
+public class UserProfileFragment extends Fragment implements JobDataListener {
     private final static String USER = "user";
     private List<Job> jobList;
     private RecyclerView recycler;
     private Button btnContact;
-    private JobListAdapter adapter;
+    private CompletedJobAdapter adapter;
     private TextView txtEmpty;
 
     public static UserProfileFragment newInstance(User user) {
@@ -61,7 +62,7 @@ public class UserProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         final User user = getArguments().getParcelable(USER);
         jobList = new ArrayList<>();
-        adapter = new JobListAdapter(jobList, null);
+        adapter = new CompletedJobAdapter(jobList, null);
 
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
@@ -159,4 +160,18 @@ public class UserProfileFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void newDataReceived(Job job) {
+
+    }
+
+    @Override
+    public void dataChanged(Job job) {
+
+    }
+
+    @Override
+    public void dataRemoved(Job job) {
+
+    }
 }
