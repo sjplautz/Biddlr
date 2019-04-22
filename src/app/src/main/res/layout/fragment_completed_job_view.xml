@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true">
+
+    <ImageView
+        android:id="@+id/completed_imgJob"
+        android:layout_width="0dp"
+        android:layout_height="164dp"
+        android:background="@android:color/holo_blue_light"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/completed_txtJobTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Title"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completed_imgProfile" />
+
+    <TextView
+        android:id="@+id/completed_txtJobDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Description"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completed_txtJobTitle" />
+
+    <TextView
+        android:id="@+id/completed_txtFinalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/strFinalPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completed_imageView" />
+
+    <TextView
+        android:id="@+id/completed_txtJobFinalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="$0"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/completed_txtFinalPrice"
+        app:layout_constraintTop_toBottomOf="@+id/completed_txtFinalPrice" />
+
+    <ImageView
+        android:id="@+id/completed_imgProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/completed_imgJob"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/completed_txtPosterName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="Name"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        app:layout_constraintStart_toEndOf="@+id/completed_imgProfile"
+        app:layout_constraintTop_toTopOf="@+id/completed_imgProfile" />
+
+    <RatingBar
+        android:id="@+id/completed_rtgPosterRating"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:progressTint="@color/colorAccent"
+        app:layout_constraintStart_toEndOf="@+id/completed_imgProfile"
+        app:layout_constraintTop_toBottomOf="@+id/completed_txtPosterName" />
+
+    <ImageView
+        android:id="@+id/completed_imageView3"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/baseline_place_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/completed_txtJobLocation" />
+
+    <TextView
+        android:id="@+id/completed_txtJobLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/completed_imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/completed_txtJobDescription" />
+
+    <ImageView
+        android:id="@+id/completed_imageView"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/baseline_schedule_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/completed_txtTimeToExpiration" />
+
+    <TextView
+        android:id="@+id/completed_txtTimeToExpiration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="2dp"
+        android:text="TextView"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/completed_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/completed_txtJobLocation" />
+
+</android.support.constraint.ConstraintLayout>

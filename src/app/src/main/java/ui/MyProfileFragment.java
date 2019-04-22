@@ -111,7 +111,7 @@ public class MyProfileFragment extends Fragment implements JobDataListener {
             @Override
             public void onClick(View v, int pos) {
                 Job job = jobList.get(pos);
-                Fragment jobFrag = JobViewFragment.newInstance(job);
+                Fragment jobFrag = CompletedJobFragment.newInstance(job);
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
                 trans.replace(R.id.frameNull, jobFrag);
