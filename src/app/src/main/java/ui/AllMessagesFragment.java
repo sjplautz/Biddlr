@@ -140,6 +140,7 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
 
     @Override
     public String format(Date date) {
+        if(date == null) return "";
         if (DateFormatter.isToday(date)) {
             return DateFormat.format("h:mm", date).toString();//DateFormatter.format(date, DateFormatter.Template.TIME);
         } else if (DateFormatter.isYesterday(date)) {
