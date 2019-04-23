@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <h1 style="margin-left:15px;text-decoration:underline;">Biddlr Project<br /><span style="font-size:12pt;">(CS 495 Team)</span></h1>
+    <ul style="margin-left:15px;list-style-type: circle;">
+      <li style="margin-left:15px;">
+	<h3></h3><i>Trevor Roest</i><br />
+    </ul>
+</li>
+<ul style="margin-left:15px;list-style-type: circle;">
+  <li style="margin-left:15px;">
+    <h3></h3><i>Abby Smith</i><br />
+</ul>
+</li>
+<ul style="margin-left:15px;list-style-type: circle;">
+  <li style="margin-left:15px;">
+    <h3></h3><i>Stephen Plautz</i><br />
+</ul>
+</li>
+<ul style="margin-left:15px;list-style-type: circle;">
+  <li style="margin-left:15px;">
+    <h3></h3><i>Fahad Aljohani</i><br />
+</ul>
+</li>
+<h1 style="margin-left:15px;text-decoration:underline;">Biddlr Application</h1>
+
+<h1 style="margin-left:15px;text-decoration:underline;"></h1><span style="font-size:12pt;margin-left:15px;">(short description)</span>
+<p style="margin-left:15px;">&nbsp;&nbsp;&nbsp;&nbsp; Biddlr is an application to create a marketplace for workers to complete projects involving unskilled labor at the lowest prices for job posters. Moreover, employers can set a maximum price they will accept before the bidding process begins. Also, job posters can choose not to accept the lowest bid and instead go with a higher bid that has a more satisfactory rating or reviews. In addition, bidders can only bid the prices that they are willing to work for. Furthermore, the application will creates opportunity to build work credibility for non-professionals. There will be a Service fee taken from job poster, not bidders. Also, biddlr will simplify the searching process by using geographical proximity. In addition, the app will reinforce trust between job poster and job bidder with a review and rating process.</p>
+<h1 style="margin-left:15px;text-decoration:underline;">Biddlr Features</h1>
+<ul style="margin-left:15px;list-style-type: circle;">
+<li style="margin-left:15px;">
+  <h3></h3>Job creation:<br />
+</ul>
+</li>
+<ul style="margin-left:15px;list-style-type: dot;">
+  <li style="margin-left:40px;">
+    <h3></h3>Poster will fill out required details about the job.<br />
+</ul>
+</li>
+<ul style="margin-left:15px;list-style-type: dot;">
+  <li style="margin-left:40px;">
+    <h3></h3>Title, location, equipment needed, maximum price willing to pay, etc.<br />
+</ul>
+</li>
+<ul style="margin-left:15px;list-style-type: circle;">
+  <li style="margin-left:15px;">
+    <h3></h3>Job bidding:<br />
+</ul>
+</li>
+
+<ul style="margin-left:15px;list-style-type: dot;">
+  <li style="margin-left:40px;">
+    <h3></h3>Bidders will choose to bid down the price of jobs they are interested in.<br />
+</ul>
+</li>
+<ul style="margin-left:15px;list-style-type: dot;">
+  <li style="margin-left:40px;">
+    <h3></h3>Poster will hire whichever bidder they prefer.<br />
+</ul>
+</li>
+<ul style="margin-left:15px;list-style-type: circle;">
+  <li style="margin-left:15px;">
+    <h3></h3>Job search:<br />
+</ul>
+</li>
+
+<ul style="margin-left:15px;list-style-type: dot;">
+  <li style="margin-left:40px;">
+    <h3></h3>Location and categorical based options for finding available jobs.<br />
+</ul>
+</li>
+<ul style="margin-left:15px;list-style-type: circle;">
+  <li style="margin-left:15px;">
+    <h3></h3>Payment management:<br />
+</ul>
+</li>
+
+<ul style="margin-left:15px;list-style-type: dot;">
+  <li style="margin-left:40px;">
+    <h3></h3>The transaction takes place upon verified completion of a job.<br />
+</ul>
+</li>
+<ul style="margin-left:15px;list-style-type: circle;">
+  <li style="margin-left:15px;">
+    <h3></h3>User messaging system:<br />
+</ul>
+</li>
+
+<ul style="margin-left:15px;list-style-type: dot;">
+  <li style="margin-left:40px;">
+    <h3></h3>Allows job poster to communicate with selected bidder.<br />
+</ul>
+</li>
+
+<ul style="margin-left:15px;list-style-type: circle;">
+  <li style="margin-left:15px;">
+    <h3></h3>User profile with credibility/satisfaction rating:<br />
+</ul>
+</li>
+
+<ul style="margin-left:15px;list-style-type: dot;">
+  <li style="margin-left:40px;">
+    <h3></h3>Allows users to rate each other based on quality of work.<br />
+</ul>
+</li>
+<ul style="margin-left:15px;list-style-type: dot;">
+  <li style="margin-left:40px;">
+    <h3></h3>Helps avoid poor workers/employers.<br />
+</ul>
+</li>
+</li>
+</ol>
+</body>
+</html>
