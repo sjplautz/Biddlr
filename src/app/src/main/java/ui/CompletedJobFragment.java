@@ -1,7 +1,5 @@
 package ui;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -19,18 +17,15 @@ import com.example.biddlr.R;
 import classes.DatabaseManager;
 import classes.Job;
 import classes.User;
-import enums.JobStatus;
-import interfaces.JobDataListener;
 import interfaces.UserDataListener;
 
 /**
  * This controls the ui that allows a poster to mark
  * a job as completed
  */
-public class CompletedJobFragment extends Fragment implements UserDataListener, JobDataListener {
+public class CompletedJobFragment extends Fragment implements UserDataListener{
     private static final String JOB_FRAGMENT_KEY = "job_fragment_key";
     private Job job;
-    private User poster;
 
     private TextView txtPosterName;
     private RatingBar rtgPosterRating;
@@ -55,6 +50,9 @@ public class CompletedJobFragment extends Fragment implements UserDataListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        job = getArguments().getParcelable(JOB_FRAGMENT_KEY);
+        DatabaseManager.shared.setUserFromIDListener(job.getPosterID(), this);
     }
 
     /**
@@ -68,15 +66,9 @@ public class CompletedJobFragment extends Fragment implements UserDataListener, 
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        job = getArguments().getParcelable(JOB_FRAGMENT_KEY);
-        poster = new User();
+        View v = inflater.inflate(R.layout.fragment_completed_job_view, container, false);
 
-        View v = inflater.inflate(R.layout.fragment_job_completion, container, false);
-
-        // Firebase listeners
-        DatabaseManager.shared.setUserFromIDListener(job.getPosterID(), this);
-        DatabaseManager.shared.setJobFromIDListener(job.getJobID(), this);
-
+        //handle to user fields obtained from user listener
         txtPosterName = v.findViewById(R.id.completed_txtPosterName);
         rtgPosterRating = v.findViewById(R.id.completed_rtgPosterRating);
 
@@ -105,28 +97,9 @@ public class CompletedJobFragment extends Fragment implements UserDataListener, 
         return v;
     }
 
-    /* User Listener*/
     @Override
-    public void newDataReceived(User user) {
-        // Set profile info
-        poster = user;
-        txtPosterName.setText(user.getFirstName() + " " + user.getLastName());
-        rtgPosterRating.setRating((float)user.getAvgBidderRating());
+    public void newDataReceived(User poster) {
+        txtPosterName.setText(poster.getName());
+        rtgPosterRating.setRating(poster.getPosterRating().floatValue());
     }
-
-    /* Job Listener*/
-    @Override
-    public void newDataReceived(Job job) {
-    }
-
-    @Override
-    public void dataChanged(Job job) {
-
-    }
-
-    @Override
-    public void dataRemoved(Job job) {
-
-    }
-
 }
