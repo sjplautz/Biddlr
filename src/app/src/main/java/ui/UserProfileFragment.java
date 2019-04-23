@@ -3,6 +3,7 @@ package ui;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +24,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.biddlr.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import adapters.CompletedJobAdapter;
 import adapters.ListTouchListener;
+import classes.ChatMessage;
 import classes.DatabaseManager;
+import classes.Dialog;
 import classes.Job;
 import classes.User;
 import interfaces.JobDataListener;
@@ -133,20 +143,45 @@ public class UserProfileFragment extends Fragment implements JobDataListener {
                     Toast.makeText(getActivity(), "You cannot contact yourself!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                ArrayList<User> users = new ArrayList<>();
-                users.add(DatabaseManager.shared.currentUser);
-                users.add(user);
-                DatabaseManager.shared.addNewDialogForUsers(users);
 
-                BottomNavigationView nav = getActivity().findViewById(R.id.menuNav);
-                nav.setSelectedItemId(R.id.itemMessages);
+                ArrayList<String> userIds = new ArrayList<>();
+                userIds.add(DatabaseManager.shared.currentUser.getId());
+                userIds.add(user.getId());
+                Collections.sort(userIds);
 
-//                Fragment editFrag = AllMessagesFragment.newInstance();
-//                FragmentManager manager = getFragmentManager();
-//                FragmentTransaction trans = manager.beginTransaction();
-//                trans.replace(R.id.frameNull, editFrag);
-//                trans.addToBackStack(null);
-//                trans.commit();
+                DatabaseManager.shared.dialogsRef.whereEqualTo("userIds", userIds).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().isEmpty()) {
+                                Log.d("PROFILE", "Document not found");
+                                ArrayList<User> users = new ArrayList<>();
+                                users.add(DatabaseManager.shared.currentUser);
+                                users.add(user);
+                                DatabaseManager.shared.addNewDialogForUsers(users);
+
+                                BottomNavigationView nav = getActivity().findViewById(R.id.menuNav);
+                                nav.setSelectedItemId(R.id.itemMessages);
+                            } else {
+                                for (QueryDocumentSnapshot doc : task.getResult()) {
+                                    Log.d("PROFILE", "Document found!");
+                                    BottomNavigationView nav = getActivity().findViewById(R.id.menuNav);
+                                    nav.setSelectedItemId(R.id.itemMessages);
+
+                                    Dialog d = Dialog.parse(doc);
+                                    Fragment editFrag = MessageFragment.newInstance(d.getId());
+                                    FragmentManager manager = getFragmentManager();
+                                    FragmentTransaction trans = manager.beginTransaction();
+                                    trans.replace(R.id.frameNull, editFrag);
+                                    trans.addToBackStack(null);
+                                    trans.commit();
+                                }
+                            }
+                        } else {
+                            Log.d("ALL MESSAGES", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
             }
         });
 

@@ -58,6 +58,12 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        dialogsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DatabaseManager.shared.dialogsRef.whereArrayContains("userIds", DatabaseManager.shared.currentUser.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

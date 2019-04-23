@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -38,6 +41,7 @@ import java.util.Map;
 import enums.JobStatus;
 import interfaces.JobDataListener;
 import interfaces.UserDataListener;
+import ui.MessageFragment;
 
 public class DatabaseManager {
 
@@ -589,7 +593,7 @@ public class DatabaseManager {
     }
 
     public void addDialog(ArrayList<User> users) {
-        Dialog d = new Dialog("id", "name", "photo", users, new ChatMessage("id", null, ""), new Date(), 0);
+        Dialog d = new Dialog("id", "name", "photo", users, new ChatMessage("", null, ""), new Date(), 0);
         HashMap<String, Object> data = d.getRepresentation();
         dialogsRef.add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -597,14 +601,7 @@ public class DatabaseManager {
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d("DIALOG", "DocumentSnapshot written with ID: " + documentReference.getId());
                         setDialogId(documentReference.getId());
-                        ChatMessage m = new ChatMessage("id", currentUser,"Chat message");
-                        HashMap<String, Object> mData = m.getRepresentation();
-                        dialogsRef.document(documentReference.getId()).collection("messages").add(mData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d("MESSAGE", "DocumentSnapshot written with ID: " + documentReference.getId());
-                            }
-                        });
+//                        addNewMessage(documentReference.getId(), "Hello!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -637,8 +634,6 @@ public class DatabaseManager {
     public ChatMessage addNewMessage(final String dialogID, final String input) {
         ChatMessage m = new ChatMessage("id", currentUser, input);
         HashMap<String, Object> data = m.getRepresentation();
-
-
 
         dialogsRef.document(dialogID).collection("messages").add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
