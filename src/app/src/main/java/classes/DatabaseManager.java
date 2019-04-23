@@ -27,8 +27,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -587,7 +589,7 @@ public class DatabaseManager {
     }
 
     public void addDialog(ArrayList<User> users) {
-        Dialog d = new Dialog("id", "name", "photo", users, new ChatMessage("id", null, ""), 0);
+        Dialog d = new Dialog("id", "name", "photo", users, new ChatMessage("id", null, ""), new Date(), 0);
         HashMap<String, Object> data = d.getRepresentation();
         dialogsRef.add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -662,7 +664,8 @@ public class DatabaseManager {
         );
 
         dialogsRef.document(dialogID).update(
-                "lastMessage", text
+                "lastMessage", text,
+                "lastMessageTime", new Date()
                 );
     }
 

@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +31,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
+import com.stfalcon.chatkit.utils.DateFormatter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import adapters.ListTouchListener;
@@ -42,7 +45,7 @@ import classes.Job;
 import classes.User;
 import interfaces.DialogDataListener;
 
-public class AllMessagesFragment extends Fragment implements DialogsListAdapter.OnDialogClickListener<Dialog>, DialogsListAdapter.OnDialogLongClickListener<Dialog> {
+public class AllMessagesFragment extends Fragment implements DialogsListAdapter.OnDialogClickListener<Dialog>, DialogsListAdapter.OnDialogLongClickListener<Dialog>, DateFormatter.Formatter {
     private  DialogsListAdapter dialogsAdapter;
     private DialogsList dialogsList;
     private ImageLoader imageLoader;
@@ -109,7 +112,7 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
     private void initAdapter() {
         dialogsAdapter = new DialogsListAdapter<>(imageLoader);
         dialogsAdapter.setItems(DatabaseManager.shared.getDialogs());
-
+        dialogsAdapter.setDatesFormatter(this);
         dialogsAdapter.setOnDialogClickListener(this);
         dialogsAdapter.setOnDialogLongClickListener(this);
 
@@ -129,19 +132,16 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
         dialogsAdapter.addItem(dialog);
     }
 
-//    private void handleDocumentChanges(List<DocumentChange> changes) {
-//        while (!changes.isEmpty()) {
-//            DocumentChange change = changes.remove(0);
-//            Dialog d = new Dialog(change.getDocument());
-//            switch (change.getType()) {
-//                case ADDED:
-//                    addChannelToTable(channel);
-//                case MODIFIED:
-//                    updateChannelInTable(channel);
-//                case REMOVED:
-//                    removeChannelFromTable(channel);
-//        }
-//    }
+    @Override
+    public String format(Date date) {
+        if (DateFormatter.isToday(date)) {
+            return DateFormat.format("h:mm", date).toString();//DateFormatter.format(date, DateFormatter.Template.TIME);
+        } else if (DateFormatter.isYesterday(date)) {
+            return "Yesterday";
+        } else {
+            return DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
+        }
+    }
 
 }
 

@@ -8,6 +8,9 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +37,7 @@ import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
+import com.stfalcon.chatkit.utils.DateFormatter;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -48,14 +52,14 @@ import classes.LocalDateTimeWrapped;
 import classes.User;
 
 public class MessageFragment extends Fragment implements MessagesListAdapter.SelectionListener, MessageInput.InputListener,
-        MessageInput.AttachmentsListener, MessageInput.TypingListener, MessagesListAdapter.OnLoadMoreListener {
+        MessageInput.AttachmentsListener, MessageInput.TypingListener, MessagesListAdapter.OnLoadMoreListener, DateFormatter.Formatter {
     private static final String MESSAGE_FRAGMENT_KEY = "message_fragment_key";
     private static final int TOTAL_MESSAGES_COUNT = 100;
 
     private String dialogID;
     private User user;
 
-    protected final String senderId = "0";
+    protected final String senderId = DatabaseManager.shared.currentUser.getId();
     protected ImageLoader imageLoader;
     protected MessagesListAdapter<ChatMessage> messagesAdapter;
     private MessagesList messagesList;
@@ -213,11 +217,18 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
         messagesAdapter = new MessagesListAdapter<>(senderId, imageLoader);
         messagesAdapter.enableSelectionMode(this);
         messagesAdapter.setLoadMoreListener(this);
+        messagesAdapter.setDateHeadersFormatter(this);
         messagesAdapter.registerViewClickListener(R.id.messageUserAvatar,
                 new MessagesListAdapter.OnMessageViewClickListener<ChatMessage>() {
                     @Override
                     public void onMessageViewClick(View view, ChatMessage message) {
-                        Toast.makeText(getActivity(), message.getUser() + " avatar click", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(), message.getUser() + " avatar click", Toast.LENGTH_LONG).show();
+//                        Fragment userFrag = UserProfileFragment.newInstance(message.getUser());
+//                        FragmentManager manager = getFragmentManager();
+//                        FragmentTransaction trans = manager.beginTransaction();
+//                        trans.replace(R.id.frameNull, userFrag);
+//                        trans.addToBackStack(null);
+//                        trans.commit();
                     }
                 });
         this.messagesList.setAdapter(messagesAdapter);
@@ -233,5 +244,15 @@ public class MessageFragment extends Fragment implements MessagesListAdapter.Sel
         Log.v("Typing listener", "Stop typing");
     }
 
+    @Override
+    public String format(Date date) {
+        if (DateFormatter.isToday(date)) {
+            return "Today";
+        } else if (DateFormatter.isYesterday(date)) {
+            return "Yesterday";
+        } else {
+            return DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
+        }
+    }
 
 }

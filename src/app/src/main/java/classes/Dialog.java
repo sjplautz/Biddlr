@@ -9,6 +9,7 @@ import com.stfalcon.chatkit.commons.models.IDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,17 +20,19 @@ public class Dialog implements IDialog<ChatMessage> {
     private String dialogName;
     private ArrayList<User> users;
     private ChatMessage lastMessage;
+    private Date lastMessageTime;
 
     private int unreadCount;
 
     public Dialog(String id, String name, String photo,
-                  ArrayList<User> users, ChatMessage lastMessage, int unreadCount) {
+                  ArrayList<User> users, ChatMessage lastMessage, Date lastMessageTime, int unreadCount) {
 
         this.id = id;
         this.dialogName = name;
         this.dialogPhoto = photo;
         this.users = users;
         this.lastMessage = lastMessage;
+        this.lastMessageTime = lastMessageTime;
         this.unreadCount = unreadCount;
     }
 
@@ -72,6 +75,14 @@ public class Dialog implements IDialog<ChatMessage> {
         this.unreadCount = unreadCount;
     }
 
+    public Date getLastMessageTime() {
+        return lastMessageTime;
+    }
+
+    public void setLastMessageTime(Date lastMessageTime) {
+        this.lastMessageTime = lastMessageTime;
+    }
+
     public HashMap<String, Object> getRepresentation() {
 
         ArrayList<String> userIds = new ArrayList<String>();
@@ -90,6 +101,7 @@ public class Dialog implements IDialog<ChatMessage> {
         rep.put("userIds", userIds);
         rep.put("userNames", userNames);
         rep.put("lastMessage", lastMessage.getId());
+        rep.put("lastMessageTime", lastMessage.getCreatedAt());
         rep.put("unreadCount", unreadCount);
 
         return rep;
@@ -107,9 +119,12 @@ public class Dialog implements IDialog<ChatMessage> {
         ArrayList<String> userNames = (ArrayList<String>) snapshot.get("userNames");
         int namesIndex = userNames.get(0).equals(DatabaseManager.shared.currentUser.getName()) ? 1 : 0;
 
-        ChatMessage lastMessage = new ChatMessage("id", DatabaseManager.shared.currentUser, snapshot.getString("lastMessage"));
+        Date lastMessageTime = snapshot.getDate("lastMessageTime");
+
+        ChatMessage lastMessage = new ChatMessage("id", DatabaseManager.shared.currentUser, snapshot.getString("lastMessage"), lastMessageTime);
         int unreadCount = snapshot.getLong("unreadCount").intValue();
-        Dialog d = new Dialog(id, userNames.get(namesIndex), userIds.get(idsIndex), users, lastMessage, unreadCount);
+
+        Dialog d = new Dialog(id, userNames.get(namesIndex), userIds.get(idsIndex), users, lastMessage, lastMessageTime, unreadCount);
         return d;
     }
 }
