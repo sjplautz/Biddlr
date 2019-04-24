@@ -1,3 +1,8 @@
+@font-face{
+  font-family: 'Raleway';
+  src: url('https://fonts.googleapis.com/css?family=Raleway:300';
+}
+
 body {
   background-color: #5496a5;
   margin: 60px auto;
@@ -28,12 +33,18 @@ a:hover{
 
 h1{
   font-size: 3em;
-  font-family:  'MS Trebuchet Bold', 'Helvetica', 'Arial', 'Sans-Serif';
+  font-family:  'Trebuchet MS', 'Helvetica', 'Sans-Serif';
+}
+
+h2{
+  font-family: 'Raleway', 'Sans-Serif';
+  font-size: 2em;
 }
 
 p{
-  font-size: 1.5em;
-  line-height: 1.4em;
+  font-size: 1.2em;
+  line-height: 1.5em;
+  font-family: 'Verdana', 'Geneva', 'Sans-Serif';
 }
 
 footer{
