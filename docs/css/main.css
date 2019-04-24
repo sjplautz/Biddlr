@@ -26,6 +26,11 @@ a:hover{
   text-decoration: underline;
 }
 
+.blurb li{
+  font-size: 1.7em;
+  font-family: 'Raleway', 'Sans-Serif';
+}
+
 h1{
   font-size: 3em;
   font-family:  'Trebuchet MS', 'Helvetica', 'Sans-Serif';
