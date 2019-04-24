@@ -15,6 +15,8 @@ public class ChatMessage implements IMessage {
     private Date createdAt;
     private User user;
 
+    public ChatMessage() {};
+
     public ChatMessage(String id, User user, String text) {
         this(id, user, text, new Date());
     }
@@ -46,9 +48,9 @@ public class ChatMessage implements IMessage {
         return this.user;
     }
 
-    public String getStatus() {
-        return "Sent";
-    }
+    public void setId(String id) { this.id = id; }
+
+    public void setUser(User user) { this.user = user; }
 
     public void setText(String text) {
         this.text = text;

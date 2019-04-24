@@ -149,19 +149,4 @@ public class AllMessagesFragment extends Fragment implements DialogsListAdapter.
             return DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR);
         }
     }
-
 }
-
-//    @Override
-//    public void newDataReceived(Dialog dialog) {
-//        dialogsAdapter.addItem(dialog);
-//    }
-
-
-//    public void dataChanged(Dialog dialog) {
-//
-//    }
-
-//
-//    @Override
-//    public void dataRemoved(Dialog dialog) { }
