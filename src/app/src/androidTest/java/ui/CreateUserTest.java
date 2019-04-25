@@ -27,6 +27,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+//Test the create user activity
+
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class CreateUserTest {
@@ -34,6 +36,7 @@ public class CreateUserTest {
     @Rule
     public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(SplashActivity.class);
 
+    //Click the create account button
     @Test
     public void createUserTest() {
         ViewInteraction appCompatButton = onView(
@@ -45,7 +48,7 @@ public class CreateUserTest {
                                 7),
                         isDisplayed()));
         appCompatButton.perform(click());
-
+// Input user info
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.txtFname),
                         childAtPosition(

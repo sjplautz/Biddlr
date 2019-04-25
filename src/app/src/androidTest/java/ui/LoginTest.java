@@ -27,13 +27,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+//Test the login activity
+
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class LoginTest {
 
     @Rule
     public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(SplashActivity.class);
-
+//Input an email and a password for login
     @Test
     public void loginTest() {
         ViewInteraction appCompatEditText = onView(
@@ -55,7 +57,7 @@ public class LoginTest {
                                 3),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("test123"), closeSoftKeyboard());
-
+//Click the login button
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.btnLogin), withText("Login"),
                         childAtPosition(

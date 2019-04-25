@@ -27,6 +27,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+//Test reset password activity
+
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class ResetPassTest {
@@ -34,6 +36,7 @@ public class ResetPassTest {
     @Rule
     public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(SplashActivity.class);
 
+    //Click reset password button
     @Test
     public void resetPassTest() {
         ViewInteraction appCompatButton = onView(
@@ -46,6 +49,7 @@ public class ResetPassTest {
                         isDisplayed()));
         appCompatButton.perform(click());
 
+        //Input user Info
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.txtEnEmail),
                         childAtPosition(
@@ -56,6 +60,7 @@ public class ResetPassTest {
                         isDisplayed()));
         appCompatEditText.perform(replaceText("faljohani@crimson.ua.edu"), closeSoftKeyboard());
 
+            //Click submit button
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.btnSubmit), withText("SUBMIT"),
                         childAtPosition(
